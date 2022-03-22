@@ -20,7 +20,7 @@ use App\Models\CheckIn;
 use App\Models\Role;
 use Exception;
 use Illuminate\Support\Facades\Redirect;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 use App\Repositories\EmailRepository;
