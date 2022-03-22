@@ -1,0 +1,39 @@
+/*           badges             */
+.badge{
+    @extend .m-l-5;
+    @extend .m-r-5;    
+    font-size: $font-size-mini;    
+    background-color: $transparent-bg;
+    border: $border;
+    border-radius: $border-radius-extreme;    
+    padding: 4px 8px;
+    text-transform: uppercase;
+    line-height: 12px;
+}
+.badge-icon{
+    padding: 0.4em 0.55em;
+    i{
+       font-size: 0.8em;
+    }
+}
+.badge-default{
+    @include badge-color($default-color);
+}
+.badge-primary{
+    @include badge-color($primary-color);
+}
+.badge-info{
+    @include badge-color($info-color);
+}
+.badge-success{
+    @include badge-color($success-color);
+}
+.badge-warning{
+    @include badge-color($warning-color);
+}
+.badge-danger{
+    @include badge-color($danger-color);
+}
+.badge-neutral{
+    @include badge-color($white-color);
+}

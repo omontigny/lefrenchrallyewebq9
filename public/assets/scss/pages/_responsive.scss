@@ -1,0 +1,83 @@
+@include max-screen($break-mobile){
+    .fc .fc-view-container .fc-view.fc-basic-view>table>thead tr th.fc-widget-header,
+    .fc .fc-view-container .fc-view.fc-basic-view>table>thead tr td.fc-widget-header,
+    .fc .fc-view-container .fc-view.fc-agenda>table>thead tr th.fc-widget-header,
+    .fc .fc-view-container .fc-view.fc-agenda>table>thead tr td.fc-widget-header{
+        padding: 5px;
+        font-size: 10px;
+    }
+    .fc {
+        .fc-toolbar {
+            h2{
+                font-size: 18px;
+            }
+        }
+    }
+
+    // 
+    .preview {
+        .preview-thumbnail{
+            &.nav-tabs{
+                padding-left: 10px;
+                padding-right: 10px;
+                li{
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    // 
+    .details {
+        .colors {
+            .color{
+                height: 1.5em !important;
+                width: 1.5em !important;
+                line-height: 1.5em !important;
+            }
+        }
+    }
+
+    // 
+    .wizard{
+        >.steps{
+            >ul{
+                >li{
+                    width: 100%;
+                }
+            }
+            a,
+            a:hover,
+            a:active{
+                margin: 0;
+            }
+        }
+    }
+
+    // 
+    .ms-container {
+        background: none;
+        position: relative;
+        &::before{
+            content: "";
+            background: transparent url(../plugins/multi-select/img/switch.png) no-repeat 50% 50%;
+            width: 50px;
+            height: 50px;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+        .ms-selectable{
+            margin-bottom: 50px;
+        }
+    }
+
+    .d-xs-none{
+        display: none;
+    }
+}
+label.error{
+    color: #fa0101;
+}

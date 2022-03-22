@@ -1,0 +1,14 @@
+﻿.collapse,
+.collapse.in,
+.collapsing {
+    .well {
+        @include border-radius(0);
+        @extend .m-b-0;
+    }
+}
+
+@include max-screen($break-medium + 1px){
+    .collapse.collapse-sm, .collapse.collapse-xs {
+        display: block;
+    }
+}

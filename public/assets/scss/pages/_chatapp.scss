@@ -1,0 +1,276 @@
+.chat-app{
+   
+    .people-list{
+        width: 280px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 20px;
+        z-index: 999;
+    }
+    .chat{
+        border-left: 1px solid $grey-200;
+        margin-left: 280px;        
+    }
+
+    .list_btn{
+        @include border-radius(3px);
+        @extend .align-center;
+        @extend .padding-0;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        width: 40px;
+        height: 40px;        
+        line-height: 40px;
+        display: none;
+        box-shadow: 0px 10px 25px 0px rgba(0,0,0,0.3);
+    }
+}
+
+.people-list {
+    @include transition(all .5s ease-in-out);
+    
+    .chat-list {
+        li {
+            @include border-radius(3px);
+            padding: 10px 15px;
+            list-style: none;
+
+            &:hover {
+                background: $grey-300;
+                cursor: pointer;
+            }
+            &.active{
+                background: $grey-300;
+            }
+            .name {
+                @extend .font-15;
+            }
+        }
+        img {
+            @include border-radius(50%);
+            width: 45px;
+        }
+    }
+    img {
+        @include border-radius(50%);
+        float: left;
+    }
+    .about {
+        float: left;
+        padding-left: 8px;
+    }
+    .status {
+        @extend .font-13;
+        color: $grey-500;
+    }
+}
+
+.chat {
+   
+    .chat-header {
+        padding: 20px;
+        border-bottom: 2px solid $white;
+        border-radius: 0 0.55rem 0 0;
+
+        img {
+            @include border-radius(50%);
+            float: left;
+            width: 45px;
+        }
+        .chat-about {
+            @extend .p-l-10;
+            float: left;
+        }
+        .chat-with {
+            @extend .font-16;
+            font-weight: $font-weight-700;
+        }
+        .chat-num-messages {
+            color: $grey-800;
+        }        
+    }
+    .chat-history {
+        padding: 20px;
+        border-bottom: 2px solid $white;
+
+        ul {
+            @extend .padding-0;
+            li {
+                list-style: none;
+            }
+        }
+        .message-data {
+            @extend .font-15;
+
+            .message-data-name {
+                @extend .font-16;
+                font-weight: $font-weight-700;
+            }
+        }
+        .message-data-time {
+            color: $grey-800;
+            padding-left: 6px;
+        }
+
+        .message {
+            @include border-radius(7px);
+            @extend .m-b-30;
+            @extend .font-16;
+            color: $grey-800;
+            padding: 18px 20px;
+            line-height: 26px;
+            width: 90%;
+            position: relative;
+
+            &:after {
+                border-bottom-color: $white;
+                bottom: 100%;
+                left: 7%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;                
+                border-width: 10px;
+                margin-left: -10px;
+            }
+        }
+        .my-message {
+            background: $grey-200;
+
+            &:after {
+                bottom: 100%;
+                left: 7%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+                border-bottom-color: $grey-200;
+                border-width: 10px;
+                margin-left: -10px;
+            }
+        }
+        .other-message {
+            @extend .align-right;
+            background: $grey-100;            
+            &:after {
+                border-bottom-color: $grey-100;
+                left: 93%;
+            }
+        }
+    }
+    .chat-message {
+      padding: 20px;
+
+        textarea {
+            @include border-radius(5px);
+            @extend .m-b-10;
+            width: 100%;
+            border: none;
+            padding: 10px 20px;
+            font: 14px/22px "Lato", Arial, sans-serif;            
+            resize: none;
+        }
+        .fa-file-o,
+        .fa-file-image-o {
+            @extend .font-16;
+            color: $grey-700;
+            cursor: pointer;
+        }
+    }
+}
+
+.online,
+.offline,
+.me {
+    @extend .font-8;
+    margin-right: 3px;
+}
+
+.online {
+    color: $success-color;
+}
+.offline {
+    color: $warning-color;
+}
+.me {
+    color: $info-color;
+}
+
+.float-right {
+    float: right;
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+@include max-screen($break-small - 1px) {
+    .chat-app{
+        margin: 0;
+
+        .list_btn {
+            display: block;
+        }
+        .people-list{
+            height: 465px;
+            width: 100%;
+            overflow-x: auto;
+            background: $white;
+            left: calc(-100% - 15px);
+            
+            &.open{
+                left: 0;
+            }
+        }
+        .chat{
+            margin: 0;
+            .chat-header{
+                border-radius:0.55rem 0.55rem 0 0;
+            }
+        }
+        .chat-history{
+            height: 240px;
+            overflow-x: auto;
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+    .chat-app{
+        margin: 0;
+
+        .chat-list{
+            height: 650px;
+            overflow-x: auto;
+           
+        }
+        .chat-history{
+            height: 600px;
+            overflow-x: auto;
+        }
+    }
+}
+/* Landscape */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .chat-app{
+        margin: 0;
+        .chat-list{
+            height: 450px;
+            overflow-x: auto;
+        }
+        .chat-history{
+            height: 380px;
+            overflow-x: auto;
+        }
+    }
+}

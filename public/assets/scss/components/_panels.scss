@@ -1,0 +1,125 @@
+﻿.panel-group {
+    @each $key, $val in $colors {
+        .panel-col-#{$key} {
+            border: 1px solid $val;
+
+            .panel-title {
+                background-color: $val !important;
+                color: $white;
+                margin: 0;
+            }
+
+            .panel-body {
+                border-top-color: transparent !important;
+            }
+        }
+    }
+    .panel {
+        @include border-radius(0);
+        margin-bottom:1px;
+
+        .panel-title {
+            @extend .margin-0;
+            @extend .font-16;
+            font-weight: $font-weight-400;
+
+            a{
+                color: inherit;
+            }
+            .material-icons {
+                float: left;
+                line-height: 16px;
+                margin-right: 8px;
+            }
+        }
+
+        .panel-heading {
+            @include border-radius(0);
+            padding: 0;            
+
+            a {
+                display: block;
+                padding: 10px 15px;
+
+                &:hover,
+                &:focus,
+                &:active {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+    }
+    .panel-primary {
+
+        .panel-title {
+            @extend .font-16;
+            @extend .margin-0;
+            background-color: $grey-100;
+            font-weight: $font-weight-400;
+            border-bottom: 1px solid $grey-200;
+			color: $grey-600;            
+        }
+    }
+    .panel-success {
+        .panel-title {
+            background-color: $success-color;
+            color: $white;
+        }
+    }
+    .panel-warning {
+        .panel-title {
+            background-color: $warning-color;
+            color: $white;
+        }
+    }
+    .panel-danger {
+        .panel-title {
+            background-color: $danger-color;
+            color: $white;
+        }
+    }
+}
+
+.full-body {
+    @each $key, $val in $colors {
+        .panel-col-#{$key} {
+            .panel-body {
+                border-top-color: $white !important;
+                background-color: $val;
+                color: $white;
+            }
+        }
+    }
+    .panel-primary {
+        .panel-body {
+            border-top-color: $white !important;
+            background-color: $info-color;
+            color: $white;
+        }
+    }
+    .panel-success {
+        .panel-body {
+            border-top-color: $white !important;
+            background-color: $success-color;
+            color: $white;
+        }
+    }
+    .panel-warning {
+        .panel-body {
+            border-top-color: $white !important;
+            background-color: $warning-color;
+            color: $white;
+        }
+    }
+    .panel-danger {
+        .panel-body {
+            border-top-color: $white !important;
+            background-color: $danger-color;
+            color: $white;
+        }
+    }
+}

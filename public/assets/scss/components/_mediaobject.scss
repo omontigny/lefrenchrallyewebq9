@@ -1,0 +1,36 @@
+﻿.media {
+    @extend .m-b-20;
+
+    &.mleft{
+        .media-left{
+            @extend .m-r-20;
+        }
+    }
+    &.mright{
+        .media-body{
+            @extend .align-right;
+        }
+        .media-right{
+            @extend .m-l-20;
+        }
+    }
+
+    .media-body {
+        @extend .font-14;
+        color: $grey-700;
+
+        .media-heading {
+            @extend .margin-0;
+            @extend .font-16;
+            font-weight: $font-weight-700;
+            color: $grey-900;            
+        }
+    }
+}
+.bs-example{
+    .media{
+        .media-left{
+            @extend .m-r-20;
+        }
+    }
+}

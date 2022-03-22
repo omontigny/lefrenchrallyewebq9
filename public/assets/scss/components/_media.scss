@@ -1,0 +1,32 @@
+﻿@include max-screen($break-small) {
+    .navbar {
+        .nav {
+            >li {
+                display: inline-block;
+            }
+        }
+        .navbar-nav {
+            .open {
+                .dropdown-menu {
+                    background-color: $white;
+                    position: absolute;
+                }
+            }
+        }
+        .dropdown-menu {
+            right: -85px;
+            &::before{
+                display: none;
+            }
+        }
+    }
+    .dt-buttons {
+        float: none !important;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .panel-switch-btn {
+        top: 12px;
+        right: 0 !important;
+    }
+}

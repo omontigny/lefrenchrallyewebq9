@@ -1,0 +1,319 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Parent_Group;
+use Illuminate\Http\Request;
+use App\Models\Invitation;
+use App\Models\Venue;
+use App\Models\Parent_Event;
+use App\Models\Parents;
+use App\Models\Parent_Rallye;
+use App\Models\CheckIn;
+use App\Models\Group;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\Children;
+use App\Models\Application;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\ImageRepository;
+use Carbon\Carbon;
+
+# Imports the Google Cloud client library
+use Google\Cloud\Storage\StorageClient;
+
+class InvitationsController extends Controller
+{
+  protected $imageRepository;
+
+  public function __construct(ImageRepository $imageRepository)
+  {
+    // if user is not identified, he will be redirected to the login page
+    $this->middleware('auth');
+    $this->imageRepository = $imageRepository;
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index()
+  {
+    if (Auth::user()->active_profile == config('constants.roles.PARENT')) {
+      $parent = Parents::where('user_id', Auth::user()->id)->first();
+      $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
+      $found = false;
+      if ($parentRallye != null) {
+        $applications = Application::where('parent_id', $parent->id)
+          ->where('rallye_id', $parentRallye->rallye->id)
+          ->where('evented', 1)->get();
+
+        $application = $applications->first();
+
+        if (count($applications) == 1) {
+          $found = true;
+
+          $applications  = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
+
+          $groupsID = collect();
+          foreach ($applications as $application) {
+            $groupsID[] = $application->event_id;
+          }
+
+          $now = new Carbon;
+          $data = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
+          $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
+
+          $groups = Group::orderBy('eventDate', 'asc')->get();
+          $groupsID = $groupsID->unique();
+          $datas = [
+            'application' => $application,
+            'groups' => $groups,
+            'data' => $data,
+            'oldInvitations' => $oldInvitations,
+            'groupsID' => $groupsID,
+            'applications' => $applications
+          ];
+
+          return view('invitations.index')->with($datas);
+        } else if (count($applications) > 1) {
+          $found = true;
+          return redirect('/parentChildren');
+        } else {
+          $found = false;
+        }
+      }
+
+      if (!$found) {
+        return Redirect::back()->withError('E079: You do not belong to any event group for the active rallye.');
+      }
+    } else {
+      return Redirect::back()->withError('E187: This section is reserved to parent only those affected to event group.');
+    }
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create()
+  {
+    //
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request)
+  {
+    //
+    $this->validate($request, [
+      //Rules to validate
+      'calendar_id' => 'required',
+      'venue_address' => 'required',
+      'theme_dress_code' => 'required',
+      'start_time' => 'required',
+      'end_time' => 'required'
+
+    ]);
+
+    try {
+      DB::beginTransaction();
+
+      $invitation = Invitation::where('theme_dress_code', strtoupper($request->input('theme_dress_code')))->first();
+      if ($invitation == null) {
+        // Add an invitation
+        $invitation = new Invitation();
+        $invitation->group_id = $request->input('calendar_id');
+        $invitation->venue_address = $request->input('venue_address');
+        $invitation->user_id = Auth::user()->id;
+        $invitation->theme_dress_code = strtoupper($request->input('theme_dress_code'));
+        $invitation->start_time = strtoupper($request->input('start_time'));
+        $invitation->end_time = strtoupper($request->input('end_time'));
+        $invitation->rallye_id = Group::find($invitation->group_id)->rallye_id;
+
+        $target_filename = basename($_FILES["invitationFile"]["name"]);
+        $target_dir = "/assets/images/";
+
+        $destination_file = public_path() . $target_dir . $target_filename;
+        Log::stack(['single', 'stdout'])->debug('target_filename:' . $destination_file);
+
+        // Select file type
+        $imageFileType = strtolower(pathinfo($destination_file, PATHINFO_EXTENSION));
+        Log::stack(['single', 'stdout'])->debug('imageFileType:' . $imageFileType);
+
+
+        // Valid file extensions
+        $extensions_arr = ["png", "jpg", "jpeg"];
+
+        // Check extension
+        if (in_array($imageFileType, $extensions_arr)) {
+          // // Convert to base64
+          // $image_base64 = base64_encode(file_get_contents($_FILES['invitationFile']['tmp_name']));
+
+          /**  Convert to base64 and resize picture **/
+          $source_file = $_FILES['invitationFile']['tmp_name'];
+          Log::stack(['single', 'stdout'])->debug("source file: " . $source_file);
+
+          // We do resize only if filesize > 150Ko
+          if (filesize($source_file) > 307200) {
+            // $destination_file = public_path() . $target_dir . $target_filename;
+            Log::stack(['single', 'stdout'])->info("***** We have to resize this picture *********");
+            $orientation = @exif_read_data($source_file)['Orientation']; // @ for silent warning exif_read_data(php3KLADx): File not supported for some png files
+            Log::stack(['single', 'stdout'])->debug("exif orientation : $orientation");
+
+            // resize image with a max value for width or height fixed to 500
+            $this->imageRepository->resizeImage(
+              $source_file,
+              $destination_file,
+              $imageFileType,
+              850
+            );
+            // sometimes some pictures change orientation after resizing, that's why next step restoring correction orentation
+            $rotatedFile = $this->imageRepository->rotateImageByExifOrientation($destination_file, $imageFileType, $orientation);
+            if (is_resource($rotatedFile)) {
+              imagejpeg($rotatedFile, $destination_file, 100);
+            }
+            Log::stack(['single', 'stdout'])->info("***** End Resize image *********");
+          } else {
+            $destination_file = $_FILES["invitationFile"]["tmp_name"];
+          }
+
+          // get base64 encoding of the new file to store in database
+          $image_base64 = base64_encode(file_get_contents($destination_file, true));
+          $image = 'data:image/' . $imageFileType . ';base64,' . $image_base64;
+
+          // delete local tempory file
+          if (!unlink($destination_file)) {
+            Log::stack(['single', 'stdout'])->error("$destination_file cannot be deleted due to an error");
+          } else {
+            Log::stack(['single', 'stdout'])->info("$destination_file has been correctly deleted");
+          }
+          /** end convert with resize **/
+
+          $invitation->invitationFile = $image;
+          $invitation->extension = $imageFileType;
+        } else {
+          return Redirect::back()->withError('250: Only .png, jpg, jpeg extensions that are accepted.');
+        }
+
+        $invitation->save();
+
+        $group = Group::find($request->input('calendar_id'));
+
+        if ($invitation->rallye->isPetitRallye) {
+          $applications = Application::where('rallye_id', $invitation->rallye_id)
+            ->where('group_name', $invitation->group->name)
+            ->get();
+          foreach ($applications as $application) {
+            $child = Children::where('application_id', $application->id)->first();
+            $checkin = new CheckIn();
+            $checkin->invitation_id = $invitation->id;
+            $checkin->group_id = $group->id;
+            $checkin->rallye_id = $group->rallye->id;
+            $checkin->child_id = $child->id;
+            $checkin->checkStatus = false;
+            $checkin->save();
+          }
+        } else {
+          $children = Children::where('rallye_id', $invitation->rallye_id)->get();
+          if (count($children) > 0) {
+            foreach ($children as $child) {
+              $checkin = new CheckIn();
+              $checkin->invitation_id = $invitation->id;
+              $checkin->group_id = $group->id;
+              $checkin->rallye_id = $group->rallye->id;
+              $checkin->child_id = $child->id;
+              $checkin->checkStatus = false;
+              $checkin->save();
+            }
+          }
+        }
+
+        DB::commit();
+        return Redirect::back()->with('success', 'M030: The invitation has been added successfully');
+      } else {
+        DB::rollback();
+        return redirect('/invitations')->withErrors('E011: There is already an invitation with the same theme  ' . strtoupper($request->input('theme_dress_code')));
+      }
+    } catch (Exception $e) {
+      DB::rollback();
+      return Redirect::back()->withError('E080: ' . $e->getMessage());
+    }
+  }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function show($id)
+  {
+    //
+    $application = Application::find($id);
+    $applications  = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
+
+    $groupsID = collect();
+    foreach ($applications as $application) {
+      $groupsID[] = $application->event_id;
+    }
+
+    $data = Invitation::all();
+
+    $groups = Group::all();
+    $groupsID = $groupsID->unique();
+    $datas = [
+      'application' => $application,
+      'groups' => $groups,
+      'data' => $data,
+      'groupsID' => $groupsID,
+      'applications' => $applications
+    ];
+
+    return view('invitations.index')->with($datas);
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function edit($id)
+  {
+    //
+  }
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request, $id)
+  {
+    //
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+    //
+  }
+}
