@@ -16,8 +16,6 @@ yarn-error.log
 /public/loadedThumbnailInvitations/*
 public/php_errors.log
 public/upload/*
-/config/session.php
-/config/database.php
 docker-compose.yml
 .DS_store
 redis/*
