@@ -1,0 +1,59 @@
+﻿.taskboard{
+    .new_task{
+        .dd-handle{
+            &::before{
+                background: $grey-500; 
+            }
+        }
+    }
+    .open_task{
+        .dd-handle{
+            &::before{
+                background: $purple-500 !important;
+            }
+        }
+    }
+    .progress_task{
+        .dd-handle{
+            &::before{
+                background: $orange-500 !important;
+            }
+        }
+    }
+    .completed_task{
+        .dd-handle{
+            &::before{
+                background: $green-500 !important;
+            }
+        }
+    }
+    .dd-handle{
+        position: relative;
+        padding: 15px;
+        border: 1px dashed $grey-300;
+        
+        &::before{
+            @include transition(all .3s ease-in-out);
+            position: absolute;
+            top: 0;
+            left: 15px;
+            height: 2px;
+            width: 20px;
+            content: '';
+        }
+        &:hover{
+            &:before{
+                width: 50px;
+            }
+        }
+    }
+}
+.dd-handle {
+    background: $grey-50;    
+}
+.nestable-dark-theme {
+    .dd-handle {
+        background: #ccc !important;
+        border: 1px solid $grey-500 !important;
+    }
+}

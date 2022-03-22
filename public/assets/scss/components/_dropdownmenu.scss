@@ -1,0 +1,117 @@
+﻿
+
+.dropdown-menu {
+    @extend .padding-0;
+    border-radius: $border-radius-large;  
+    border: none;
+    right: 0;
+    left: auto;    
+    overflow: hidden;
+    
+    .divider {
+        margin: 1px 0;
+        border-bottom: 1px solid $grey-200;
+    }
+    .header {
+        @extend .font-13;
+        font-weight: $font-weight-600;
+        min-width: 270px;
+        border-bottom: 1px solid $grey-200;        
+        padding: 10px 15px;
+    }
+    ul.menu {
+        @extend .p-l-0;
+
+        .icon-circle {            
+            @include border-radius(50%);            
+            @extend .align-center;
+            @extend .inlineblock;
+            color: $white;
+            width: 36px;
+            height: 36px;            
+            vertical-align: top;
+
+            i {
+                @extend .font-18;
+                line-height: 36px;
+            }
+        }
+        li {
+            a {
+                @include transition(.5s);
+                @extend .displayblock;
+                padding:15px;
+                text-decoration: none;
+                
+                &:hover {
+                    background-color: $grey-300;
+                }
+            }
+        }
+        .menu-info {
+            @extend .inlineblock;
+            position: relative;
+            top: 0px;
+            left: 5px;
+
+            h4 {
+                @extend .margin-0;
+                @extend .font-14;
+                color: $grey-800;
+                font-weight: $font-weight-400;
+            }
+            p {
+                @extend .margin-0;
+                @extend .font-12;
+                color: $blue-grey-400;
+
+                i {
+                    @extend .font-13;
+                    color: $blue-grey-400;
+                    position: relative;
+                    top: 3px;
+                    vertical-align: top;
+                }
+            }
+        }
+    }
+    .footer {
+        @extend .padding-0;
+        a {
+            color: inherit !important;
+            border-top: 1px solid $grey-200;           
+            @extend .displayblock;
+        }
+    }
+    >li {
+
+        >a {            
+            @include transition(all .5s);
+            @extend .displayblock;
+            @extend .font-14;
+            color: $grey-700;
+            line-height: 25px;
+            padding: 7px 18px;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+                text-decoration: none;
+                color: $grey-900;
+            }
+            i.material-icons {
+                @extend .font-20;
+                float: left;
+                margin-right: 7px;
+                margin-top: 2px;
+            }
+        }
+    }
+}
+
+.dropdown {
+    .dropdown-toggle {
+        &:after {
+            display: none;
+        }
+    }
+}
