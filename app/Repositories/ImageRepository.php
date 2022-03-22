@@ -92,8 +92,6 @@ class ImageRepository
         $image = imagecreatefromjpeg($filePath);
       }
 
-      Log::stack(['single', 'stdout'])->debug(var_dump($image));
-
       if (is_resource($image)) {
         switch ($orientation) {
           case 3:
@@ -107,7 +105,7 @@ class ImageRepository
             break;
         }
       } else {
-        Log::stack(['single', 'stdout'])->error($filePath . ' is not a correct resource');
+        Log::stack(['single'])->error($filePath . ' is not a correct resource');
       }
     }
 
