@@ -86,10 +86,10 @@ class CoordinatorsExtraController extends Controller
     // MAIL 09b: Coordinator Password Reset (MailGun)
     //////////////////////////////////////////////////////////////////////
     // $msgdata = array(
-    //   'from'        => env('MAIL_ADMIN_ADDRESS'],
+    //   'from'        => env('MAIL_ADMIN_ADDRESS'),
     //   'subject'     => '[' . env('APP_NAME') . '] - Coordinator PWD reset',
     //   'to'          => $coordinator->name . ' <' . $coordinator->mail . '>',
-    //   "h:Reply-To"  => env('MAIL_ADMIN_ADDRESS'],
+    //   "h:Reply-To"  => env('MAIL_ADMIN_ADDRESS'),
     // );
 
     // $html = view('mails/CoordinatorPasswordReset', $htmlData)->render();

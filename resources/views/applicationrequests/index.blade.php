@@ -91,10 +91,10 @@
                                     @break
                                     @case(4)
                                     <td><span class="badge badge-info">Approved</span>
-                                    @if($payments->firstWhere('application_id', $application->id) != null)
-                                        <button type="button" class="btn btn-simple btn-sm btn-success btn-filter"><span
-                                                class="glyphicon glyphicon-gbp"></span>
-                                        </button>
+                                    @if(count($payments) > 0 && $payments->firstWhere('application_id', $application->id) != null)
+                                      <div class="badge badge-success">
+                                        <span class="glyphicon glyphicon-gbp"></span>
+                                      </div>
                                     @endif
                                     </td>
                                     @break

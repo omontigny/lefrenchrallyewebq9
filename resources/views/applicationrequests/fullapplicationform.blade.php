@@ -52,7 +52,7 @@
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="is_boarder" name="is_boarder" value="false">
-              <label class="form-check-label" for="is_boarder"><b>Boarder request</b></label>
+              <label class="form-check-label" for="is_boarder"><b>Full Boarder request</b></label>
             </div>
             <hr />
             <h6 class="text-center">Enter Child Information</h6>
@@ -168,12 +168,12 @@
               </div>
 
               <div class="form-group form-float">
-                <label for="schoolyear_id"><b>Last school year/Current school year<span class="text-danger"> *</span></b></label>
+                <label for="schoolyear_id"><b>Scholl Year in September {{\Carbon\Carbon::now()->format('Y')}}<span class="text-danger"> *</span></b></label>
                 <select class="form-control show-tick ms" data-placeholder="Select" name="schoolyear_id"
                   required>
                   <option value="" selected disabled>-- Please select a school level --</option>
                   @foreach ($schoolyears as $schoolyear)
-                  <option value={{$schoolyear->id}}>{{$schoolyear->current_level}} // {{$schoolyear->next_level}}</option>
+                  <option value={{$schoolyear->id}}>{{$schoolyear->current_level}}</option>
                   @endforeach
                 </select>
                 <div class="help-info">You need to select your child's current school year, the child's next school year

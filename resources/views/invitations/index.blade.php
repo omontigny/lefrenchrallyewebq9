@@ -161,7 +161,7 @@
   </div>
 
   <a href="/home" class="btn btn-default float-right">Go back </a>
-  {{form::submit('Add new', ['class' => 'btn btn-primary'])}}
+  {{form::submit('Upload the invitation', ['class' => 'btn btn-primary'])}}
   {{ Form::close() }}
 </div>
 <hr>

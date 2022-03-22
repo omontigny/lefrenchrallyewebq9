@@ -33,6 +33,7 @@
                         <table class="table table-filter table-hover m-b-0">
                             <thead>
                                 <th>ID</th>
+                                <th>Action</th>
                                 <th>Child</th>
                                 <th>Child name</th>
                                 <th>theme dress code</th>
@@ -40,7 +41,6 @@
                                 <th>Starts at</th>
                                 <th>Ends at</th>
                                 <th>Status</th>
-                                <th>Action</th>
                             </thead>
                             <tbody>
                                 @foreach ($data as $row)
@@ -60,7 +60,13 @@
                                     @endswitch
 
                                     <td>{{$row->id}}</td>
+                                    <td>
+                                      <a  href="myinvitations/attending/{{$row->id}}"><button type="button" class="btn btn-primary btn-sm"><span
+                                          class="glyphicon glyphicon-check"></span></button></a>
 
+                                      <a  href="myinvitations/notattending/{{$row->id}}"><button type="button" class="btn btn-danger btn-sm"><span
+                                          class="glyphicon glyphicon-remove"></span></button></a>
+                                    </td>
                                     <td>
                                       <div class="media-object"><img
                                               src="{{$row->childphotopath}}"
@@ -88,13 +94,6 @@
                                     <td><span class="badge badge-danger">Not Attending</span></td>
                                     @break
                                     @endswitch
-                                    <td>
-                                      <a href="myinvitations/attending/{{$row->id}}"><button type="button" class="btn btn-primary btn-sm"><span
-                                        class="glyphicon glyphicon-check"></span></button></a>
-
-                                        <a href="myinvitations/notattending/{{$row->id}}"><button type="button" class="btn btn-danger btn-sm"><span
-                                          class="glyphicon glyphicon-remove"></span></button></a>
-                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

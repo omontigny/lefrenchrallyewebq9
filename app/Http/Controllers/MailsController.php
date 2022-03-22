@@ -393,11 +393,13 @@ class MailsController extends Controller
         // CASE 1: PETIT RALLYE
         if ($app_ID->rallye->isPetitRallye) {
           $applications = Application::where('rallye_id', $app_ID->rallye_id)
+            ->where('status', 1)
             ->where('group_name', strtoupper($app_ID->group_name))
             ->get();
         } else {
           // CASE 2: RALLYE STANDARD
           $applications = Application::where('rallye_id', $app_ID->rallye_id)
+            ->where('status', 1)
             ->get();
         }
 

@@ -270,7 +270,7 @@ class ApplicationRequestsPrivateController extends Controller
       // parent info
 
       $application->parentfirstname  = ($request->has('parentfirstname')) ? ucwords(strtolower($request->input('parentfirstname'))) : $application->parentfirstname;
-      $application->parentlastname  = ($request->has('parentlastname')) ? $request->input('parentlastname') : $application->parentlastname;
+      $application->parentlastname   = ($request->has('parentlastname')) ? $request->input('parentlastname') : $application->parentlastname;
       $application->parentaddress    = ($request->has('parentaddress')) ? $request->input('parentaddress') : $application->parentaddress;
       $application->parenthomephone  = ($request->has('parenthomephone')) ? $request->input('parenthomephone') : $application->parenthomephone;
       $application->parentmobile     = ($request->has('parentmobile')) ? $request->input('parentmobile') : $application->parentmobile;

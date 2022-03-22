@@ -52,7 +52,7 @@
                     <label for=""><b>Subject:<span class="text-danger"> *</span></b></label>
                   </div>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" name="subject" id="subject" value="[{{env('APP_NAME')}}] : " required>
+                    <input type="text" class="form-control" name="subject" id="subject" value="[{{$_ENV['APP_NAME']}}] : " required>
                   </div>
                 </div>
                 <label for="group_id"><b>Mail Body</b></label>

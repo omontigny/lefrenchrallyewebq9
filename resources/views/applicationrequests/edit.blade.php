@@ -254,7 +254,7 @@
                                   </div>
 
                                 <div class="form-group form-float col-lg-3 col-md-6">
-                                    <label for="schoolyear_id"><b>School Year</b></label>
+                                    <label for="schoolyear_id"><b>Scholl Year in September {{\Carbon\Carbon::now()->format('Y')}}</b></label>
                                     <select class="form-control show-tick ms" data-placeholder="Select"
                                         name="schoolyear_id" required>
                                         <option value="" selected disabled>-- Please select a school --</option>
@@ -263,7 +263,7 @@
                                             $schoolyear->id)
                                             selected
                                             @endif
-                                            >{{$schoolyear->current_level}}/{{$schoolyear->next_level}}</option>
+                                            >{{$schoolyear->current_level}}</option>
                                         @endforeach
                                     </select>
                                 </div>

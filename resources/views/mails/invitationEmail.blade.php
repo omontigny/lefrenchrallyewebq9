@@ -20,12 +20,6 @@
 
 <img src={{$invitationFile}} alt="invitationFile" />
 
-<p>
-  <font color='red'>
-    REMINDER: In the interest of health and safety for all members, The French Rallye kindly request that your child is Covid tested prior to each event. If your child shows any signs of Covid symptoms, please ensure they do not attend the event and please notify the party organisers.
-  </font>
-</p>
-
 <p>Kind regards,</p>
 
 <p>The Host Parents</p>

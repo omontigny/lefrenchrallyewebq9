@@ -138,10 +138,10 @@ class CoordinatorsController extends Controller
         // MAIL 09: Coordinator Password Reset (welcome) (MailGun)
         //////////////////////////////////////////////////////////////////////
         // $msgdata = array(
-        //   'from'        => env('APP_NAME') . '<' . env('MAIL_ADMIN_ADDRESS') . '>',
+        //   'from'        => env('APP_NAME') . '<' . env('MAIL_ADMIN_ADDRESS'] . '>',
         //   'subject'     => '[' . env('APP_NAME') . '] - Welcome dear Coordinator',
         //   'to'          => $coordinator->lastname . " " . $coordinator->firstname . ' <' . $coordinator->mail . '>',
-        //   "h:Reply-To"  => env('MAIL_ADMIN_ADDRESS'),
+        //   "h:Reply-To"  => env('MAIL_ADMIN_ADDRESS'],
         // );
 
         // $html = view('mails/CoordinatorPasswordReset', $htmlData)->render();
