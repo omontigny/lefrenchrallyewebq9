@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2.5|^7.3.24",
+        "php": "^7.2.5|^8.0",
         "fideloper/proxy": "^4.4",
         "google/cloud-storage": "^1.20",
         "guzzlehttp/guzzle": "^7.4.2|^6.3.1|^7.0.1",
