@@ -18,7 +18,7 @@ public/php_errors.log
 public/upload/*
 docker-compose.yml
 .DS_store
-redis/*
+redis*/*
 FRDBScripts/*
 storage/debugbar/*
 db2
