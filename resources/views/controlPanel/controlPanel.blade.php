@@ -6,7 +6,7 @@
 
 {{-- ## TinyMCE ##  --}}
 
-<script src="https://cdn.tiny.cloud/1/{{env('TINY_API_KEY')}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/{{$_ENV['TINY_API_KEY']}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 {{-- <script src="//cdn.tinymce.com/4/tinymce.min.js"></script> --}}
 <script>tinymce.init({
   selector:'#myTextarea2',

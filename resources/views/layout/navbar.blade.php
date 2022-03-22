@@ -1,6 +1,6 @@
-@if(env('APP_ENV') == 'local')
+@if(ENV('APP_ENV') == 'local')
   <nav class="navbar navbar-light" style="background-color: #f8a2a2;">
-@elseif(env('APP_ENV') == 'preprod')
+@elseif(ENV('APP_ENV') == 'preprod')
   <nav class="navbar navbar-light" style="background-color: #6cb2eb;">
 @else
   <nav class="navbar">
