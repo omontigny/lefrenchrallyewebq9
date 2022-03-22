@@ -11,7 +11,7 @@ use App\Models\Coordinator_Rallye;
 use App\Models\Application;
 use App\Models\Invitation;
 use App\Models\Admin_Rallye;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;

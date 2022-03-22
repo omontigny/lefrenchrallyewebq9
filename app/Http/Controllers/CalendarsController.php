@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Rallye;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use App\Models\Group;
 use Illuminate\Support\Facades\Config;
 use App\Models\Coordinator;

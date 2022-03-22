@@ -18,7 +18,7 @@ use App\Models\Invitation;
 use App\Models\CheckIn;
 use Exception;
 use Illuminate\Support\Facades\Redirect;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Coordinator;

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\EmailRepository;
 use App\Repositories\ImageRepository;
 use Intervention\Image\Size;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class MailsController extends Controller
 {

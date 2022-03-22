@@ -24,7 +24,7 @@ use App\Models\Role;
 use App\Models\Payment;
 use Exception;
 use Illuminate\Support\Facades\Redirect;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 
