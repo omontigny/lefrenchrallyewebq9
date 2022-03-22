@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\ImageRepository;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 # Imports the Google Cloud client library
 use Google\Cloud\Storage\StorageClient;
