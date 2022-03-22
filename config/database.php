@@ -127,19 +127,21 @@ return [
     ],
 
     'default' => [
+      'scheme' => 'tls',
       'url' => env('SESSION_CONNEXION', ''),
-      'host' => env('REDIS_HOST', ''),
+      'host' => env('REDIS_HOST', '192.168.1.28'),
       'password' => env('REDIS_PASSWORD', ''),
-      'port' => env('REDIS_PORT', 3169),
+      'port' => env('REDIS_PORT', 6379),
       'database' => env('REDIS_DB', 0),
       'read_write_timeout' => -1,
     ],
 
     'cache' => [
+      'scheme' => 'tls',
       'url' => env('SESSION_CONNEXION', ''),
-      'host' => env('REDIS_HOST', ''),
+      'host' => env('REDIS_HOST', '192.168.1.28'),
       'password' => env('REDIS_PASSWORD', ''),
-      'port' => env('REDIS_PORT', 3169),
+      'port' => env('REDIS_PORT', 6379),
       'database' => env('REDIS_CACHE_DB', 1),
       //'read_write_timeout' => -1,
     ],
