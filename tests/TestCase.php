@@ -6,5 +6,11 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+  use CreatesApplication;
+  // protected function setup(): void
+  // {
+  //   $this->withHeaders([
+  //     'X-Requested-With' => 'XMLHttpRequest'
+  //   ]);
+  // }
 }

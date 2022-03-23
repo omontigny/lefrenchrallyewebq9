@@ -30,12 +30,12 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "3.4.2|^3.6",
         "beyondcode/laravel-dump-server": "^1.0",
-        "filp/whoops": "^2.0",
         "facade/ignition": "^1.16.4|^2.0",
         "fakerphp/faker": "^1.9.1",
+        "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0|^4.3",
-        "phpunit/phpunit": "^9.3.3"
+        "phpunit/phpunit": "^9"
     },
     "config": {
         "optimize-autoloader": true,

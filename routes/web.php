@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,10 +15,21 @@
 */
 
 /* Auth */
+
 Auth::routes(['register' => false]);
 
 /* Https */
 URL::forceScheme('https');
+
+/* Le French Rallye */
+Route::get('/', function () {
+  return redirect('welcome');
+});
+Route::get('welcome', 'LeFrenchRallyeController@welcome')->name('welcome');
+Route::get('welcomeRequest', 'LeFrenchRallyeController@welcomeRequest')->name('welcome');
+
+
+Route::get('home', 'LeFrenchRallyeController@home')->name('home');
 
 
 /* Rallyes */
@@ -49,6 +63,8 @@ Route::get('schools/store', 'SchoolsController@store')->name('schools.store');
 Route::get('schools/{id}', 'SchoolsController@edit')->name('schools.edit');
 Route::get('schools/update/{id}', 'SchoolsController@update')->name('schools.update');
 Route::get('schools/delete/{id}', 'SchoolsController@destroy')->name('schools.destroy');
+
+Route::post('schoolsStore', 'SchoolsController@store');
 
 /* SchoolYears */
 Route::get('schoolyears', 'SchoolYearsController@index')->name('schoolyears');
@@ -199,15 +215,6 @@ Route::get('controlPanel', 'ControlPanelExtraController@controlPanel');
 Route::get('accessControl/{id}/reverseAccessControlStatusById', 'AccessControlExtraController@reverseAccessControlStatusById');
 
 
-/* Le French Rallye */
-Route::get('/', function () {
-  return redirect('welcome');
-});
-Route::get('welcome', 'LeFrenchRallyeController@welcome')->name('welcome');
-Route::get('welcomeRequest', 'LeFrenchRallyeController@welcomeRequest')->name('welcome');
-
-
-Route::get('home', 'LeFrenchRallyeController@home')->name('home');
 
 /* AccessControl */
 Route::resource('accessControl', 'AccessControlController');

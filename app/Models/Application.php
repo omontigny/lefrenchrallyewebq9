@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Application extends Model
 {
   // Table Name
+  protected $guarded = [];
 
   public function rallye()
   {
