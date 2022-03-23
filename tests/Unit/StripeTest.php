@@ -19,14 +19,14 @@ class StripeTest extends TestCase
    *
    * @return void
    */
-  public function testItWorks()
+  public function test_ItWorks()
   {
     $stripe = app(Stripe::class);
     $last4 = $stripe->charge('tok_visa', 10 * 100);
     $this->assertEquals(self::LAST4['tok_visa'], $last4);
   }
 
-  public function testItDoesntWorks()
+  public function test_ItDoesntWorks()
   {
 
     $stripe = app(Stripe::class);
