@@ -2,7 +2,7 @@
 
 return [
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
     |--------------------------------------------------------------------------
@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+  'default' => env('FILESYSTEM_DRIVER', 'local'),
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Default Cloud Filesystem Disk
     |--------------------------------------------------------------------------
@@ -26,9 +26,9 @@ return [
     |
     */
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+  'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
@@ -41,38 +41,46 @@ return [
     |
     */
 
-    'disks' => [
+  'disks' => [
 
-        'local' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-        ],
-
-        'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
-
-        's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-        ],
-
-        'gcs' => [
-            'driver' => 'gcs',
-            'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
-            'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET')
-
-        ]
-
-
+    'local' => [
+      'driver' => 'local',
+      'root' => storage_path('app/public'),
     ],
+    'storage_public' => [
+      'driver' => 'local',
+      'root' => storage_path('app/public'),
+      'url' => env('APP_URL') . '/storage',
+      'visibility' => 'public',
+    ],
+    'temp' => [
+      'driver' => 'local',
+      'root' => storage_path('app/temp'),
+      'url' => env('APP_URL') . '/storage',
+      'visibility' => 'public',
+    ],
+    'public' => [
+      'driver' => 'local',
+      'root' => public_path(),
+      'url' => env('APP_URL') . '/',
+      'visibility' => 'public',
+    ],
+
+    's3' => [
+      'driver' => 's3',
+      'key' => env('AWS_ACCESS_KEY_ID'),
+      'secret' => env('AWS_SECRET_ACCESS_KEY'),
+      'region' => env('AWS_DEFAULT_REGION'),
+      'bucket' => env('AWS_BUCKET'),
+      'url' => env('AWS_URL'),
+    ],
+
+    'gcs' => [
+      'driver' => 'gcs',
+      'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
+      'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+      'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET')
+    ]
+  ],
 
 ];

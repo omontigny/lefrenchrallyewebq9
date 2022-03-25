@@ -8,8 +8,8 @@
         @endif
         <p>Dear Parents of [name of child],</p>
         <br />
-        <p>[child first name] is invited to a {{$invitation->group->rallye->title}} event on @if($invitation->group->eventDate != null)
-        {{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}
+        <p>[child first name] is invited to a <b>{{$invitation->group->rallye->title}}<b> event on @if($invitation->group->eventDate != null)
+        <b>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</b>
         @else
           'Unknown Invitation Date'
         @endif . You can view the invitation below.</p>
@@ -18,13 +18,14 @@
 
         <p>To respond to the invitation, connect on your member area on <a href="{{$domainLink}}">{{$domainLink}}</a> then go to “Member/My invitations” tab. </p>
 
-        <img src={{$invitationFile}} alt="invitationFile" />
+        <img src="{{  $message->embed(public_path('/assets/images/invitations/'. $imageName)) }}">
 
-        <p>
-          <font color='red'>
-            REMINDER: In the interest of health and safety for all members, The French Rallye kindly request that your child is Covid tested prior to each event. If your child shows any signs of Covid symptoms, please ensure they do not attend the event and please notify the party organisers.
-          </font>
-        </p>
+        <section>
+        <div align="center">
+          <p> If you don't visualize the attached image you can use the following <a href="{{ $image_url }}" class="btn btn-default float-right" >link</a></p>
+        </div>
+
+        <br>
 
         <p>Kind regards,</p>
 

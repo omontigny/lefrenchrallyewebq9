@@ -3,22 +3,21 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
 
 class ImageRepository
 {
 
-  public function ConvertImage64ToImage($image64, $extension)
+  public function ConvertImage64ToImage($image64, $extension, $image_full_path)
   {
     $image = $image64;  // your base64 encoded
     $image = str_replace('data:image/' . $extension . ';base64,', '', $image);
     $image = str_replace(' ', '+', $image);
-    $imageName = Str::random(10) . '.' . $extension;
-    // Log::stack(['single', 'stdout'])->debug("Image Name in ConvertImage64ToImage() : " . $imageName);
-    Storage::disk('local')->put("uploads/images/" . $imageName, base64_decode($image));
-    return $imageName;
+
+    Log::stack(['single', 'stdout'])->debug("Image Path in ConvertImage64ToImage() : " . $image_full_path);
+
+    Storage::disk('public')->put($image_full_path, base64_decode($image));
+    Log::stack(['single', 'stdout'])->debug("Image stored in ConvertImage64ToImage() : " . public_path($image_full_path));
   }
   /**
    * Rezise an image with a max value
@@ -92,6 +91,8 @@ class ImageRepository
         $image = imagecreatefromjpeg($filePath);
       }
 
+      //Log::stack(['single', 'stdout'])->debug( var_dump($image));
+
       if (is_resource($image)) {
         switch ($orientation) {
           case 3:
@@ -105,7 +106,7 @@ class ImageRepository
             break;
         }
       } else {
-        Log::stack(['single'])->error($filePath . ' is not a correct resource');
+        Log::stack(['single', 'stdout'])->error($image . ' is not a correct resource');
       }
     }
 
