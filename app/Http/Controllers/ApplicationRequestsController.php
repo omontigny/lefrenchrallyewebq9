@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-
-use Illuminate\Http\Request;
+use App\User;
+use DateTime;
+use Exception;
+use Carbon\Carbon;
+use Mailgun\Mailgun;
 use App\Models\Rallye;
 use App\Models\Application;
 use App\Models\School;
 use App\Models\Schoolyear;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Log;
-use App\User;
-use App\Models\Coordinator_Rallye;
-
 use App\Models\Parents;
 use App\Models\Children;
 use App\Models\Admin_Rallye;
@@ -22,19 +20,21 @@ use App\Models\Invitation;
 use App\Models\CheckIn;
 use App\Models\Role;
 use App\Models\Payment;
-use Exception;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use DateTime;
-
-use Illuminate\Support\Facades\Auth;
+use App\Models\Coordinator_Rallye;
 use App\Models\Coordinator;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 use App\Repositories\EmailRepository;
 use App\Repositories\ImageRepository;
-use Mailgun\Mailgun;
 
 class ApplicationRequestsController extends Controller
 {
@@ -59,7 +59,6 @@ class ApplicationRequestsController extends Controller
   public function index()
   {
     try {
-      // Log::stack(['single', 'stdout'])->debug("welcome in  ApplicationRequestControllerIndex");
 
       $girls = null;
       $boys = null;
@@ -73,8 +72,6 @@ class ApplicationRequestsController extends Controller
       $payments = null;
       $rallye_id = null;
       $applications = null;
-
-
 
       if (Auth::user()->active_profile == config('constants.roles.COORDINATOR')) {
         $coordinator = Coordinator::where('user_id', Auth::user()->id)->get()->first();
@@ -96,17 +93,17 @@ class ApplicationRequestsController extends Controller
       }
 
       if ($rallye_id != null) {
-        $girls = count(Application::where('rallye_id', $rallye_id)->where('childgender', 'FEMALE')->get());
-        $boys = count(Application::where('rallye_id', $rallye_id)->where('childgender', 'MALE')->get());
-        $englishs = count(Application::where('rallye_id', $rallye_id)->where('schoolstate', 'ENGLISH')->get());
-        $frenchs = count(Application::where('rallye_id', $rallye_id)->where('schoolstate', 'FRENCH')->get());
+        $girls        = count(Application::where('rallye_id', $rallye_id)->where('childgender', 'FEMALE')->get());
+        $boys         = count(Application::where('rallye_id', $rallye_id)->where('childgender', 'MALE')->get());
+        $englishs     = count(Application::where('rallye_id', $rallye_id)->where('schoolstate', 'ENGLISH')->get());
+        $frenchs      = count(Application::where('rallye_id', $rallye_id)->where('schoolstate', 'FRENCH')->get());
         $applications = Application::where('rallye_id', $rallye_id)->get();
 
-        $appReceived = count(Application::where('rallye_id', $rallye_id)->where('status', 0)->get());
+        $appReceived    = count(Application::where('rallye_id', $rallye_id)->where('status', 0)->get());
         $appWaitingList = count(Application::where('rallye_id', $rallye_id)->where('status', 3)->get());
-        $appApproved = count(Application::where('rallye_id', $rallye_id)->where('status', 4)->get());
-        $appMembered = count(Application::where('rallye_id', $rallye_id)->where('status', 1)->get());
-        $payments = Payment::where('rallye_id', $rallye_id)->get();
+        $appApproved    = count(Application::where('rallye_id', $rallye_id)->where('status', 4)->get());
+        $appMembered    = count(Application::where('rallye_id', $rallye_id)->where('status', 1)->get());
+        $payments       = Payment::where('rallye_id', $rallye_id)->get();
       }
 
       $rallyes = Rallye::orderBy('title', 'asc')->get();
@@ -168,27 +165,26 @@ class ApplicationRequestsController extends Controller
         $application = new Application();
 
         // rallye info
-        $application->rallye_id = $request->input('rallye_id');
+        $application->rallye_id  = $request->input('rallye_id');
         $application->is_boarder = ($request->has('is_boarder')) ? true : false;
 
         // child info
-        $application->childfirstname = ucwords(strtolower($request->input('childfirstname')));
-        $application->childlastname = strtoupper($request->input('childlastname'));
-        $application->childbirthdate = $this->formatDateToMySQLFormat($request->input('childbirthdate'));
-        $application->childgender = strtoupper($request->input('childgender'));
-        $application->childemail = strtoupper($request->input('childemail'));
-        $application->simblingList = strtoupper($request->input('simblingList'));
-
+        $application->childfirstname  = ucwords(strtolower($request->input('childfirstname')));
+        $application->childlastname   = strtoupper($request->input('childlastname'));
+        $application->childbirthdate  = $this->formatDateToMySQLFormat($request->input('childbirthdate'));
+        $application->childgender     = strtoupper($request->input('childgender'));
+        $application->childemail      = strtoupper($request->input('childemail'));
+        $application->simblingList    = strtoupper($request->input('simblingList'));
 
         // Child Photo upload and resize
         // chek Valid file extensions
         $extensions_arr = ["png", "jpg", "jpeg"];
         $target_file = basename($_FILES["childphotopath"]["name"]);
-        Log::stack(['single', 'stdout'])->debug('target_file:' . $target_file);
+        Log::stack(['single', 'stdout'])->debug('target_file: ' . $target_file);
 
         // Select file type
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        Log::stack(['single', 'stdout'])->debug('imageFileType:' . $imageFileType);
+        Log::stack(['single', 'stdout'])->debug('imageFileType: ' . $imageFileType);
 
         // if extension correct
         if (in_array($imageFileType, $extensions_arr)) {
@@ -196,14 +192,15 @@ class ApplicationRequestsController extends Controller
           /**  Convert to base64 and resize picture **/
           $source_file = $_FILES['childphotopath']['tmp_name'];
           Log::stack(['single', 'stdout'])->debug("source file: " . $source_file);
-          // Log::stack(['single', 'stdout'])->debug(realpath('.') . PHP_EOL);
-          // Log::stack(['single', 'stdout'])->debug("file: " . $source_file);
-
           //$image_base64 = base64_encode(file_get_contents($source_file));
 
           // We do resize only if filesize > 150Ko
           if (filesize($source_file) > 152400) {
-            $destination_file = "assets/images/" . $target_file;
+            $destination_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/childphoto/";
+            if (!File::isDirectory($destination_dir)) {
+              File::makeDirectory($destination_dir, 0777, true, true);
+            };
+            $destination_file = $destination_dir . $application->id . '_' . $target_file;
             Log::stack(['single', 'stdout'])->info("***** We have to resize this picture *********");
             $orientation = @exif_read_data($source_file)['Orientation']; // @ for silent warning exif_read_data(php3KLADx): File not supported for some png files
             Log::stack(['single', 'stdout'])->debug("exif orientation : $orientation");
@@ -228,11 +225,6 @@ class ApplicationRequestsController extends Controller
           // get base64 encoding of the new file to store in database
           $image_base64 = base64_encode(file_get_contents($destination_file, true));
           $image = 'data:image/' . $imageFileType . ';base64,' . $image_base64;
-
-          // this is big debug info, so log it only on debug Mode
-          // if (env('APP_DEBUG')) {
-          //   Log::stack(['single', 'stdout'])->info("new image in base64: $image");
-          // }
 
           // delete local tempory file
           if (!unlink($destination_file)) {
@@ -259,11 +251,11 @@ class ApplicationRequestsController extends Controller
 
         // parent info
         $application->parentfirstname  = ucwords(strtolower($request->input('parentfirstname')));
-        $application->parentlastname  = strtoupper($request->input('parentlastname'));
+        $application->parentlastname   = strtoupper($request->input('parentlastname'));
         $application->parentaddress    = strtoupper($request->input('parentaddress'));
         $application->parenthomephone  = $request->input('parenthomephone');
         $application->parentmobile     = $request->input('parentmobile');
-        $application->parentemail     = strtolower($request->input('parentemail'));
+        $application->parentemail      = strtolower($request->input('parentemail'));
 
         $application->signingcodeconduct = strtoupper($request->input('signingcodeconduct'));
 
@@ -299,14 +291,12 @@ class ApplicationRequestsController extends Controller
 
         $application->save();
       } catch (QueryException $e) {
-        //var_dump($e->errorInfo);
+        Log::stack(['single'])->error("[APPLICATION REQUEST] - [store] : ça passe  pas !" .  $e->getMessage());
         /*
-
-                0 => string '23000' (length=5)
-                1 => int 1452
-                2 => string 'Cannot add or update a child row: a foreign key constraint fails (...)
-
-                */
+          0 => string '23000' (length=5)
+          1 => int 1452
+          2 => string 'Cannot add or update a child row: a foreign key constraint fails (...)
+        */
         return redirect('/welcome')->withErrors('E001: Integrity constraint violation: 1062 Duplicate ');
       }
 

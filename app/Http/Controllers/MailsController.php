@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
-use Illuminate\Support\Facades\Redirect;
 use Exception;
+use Carbon\Carbon;
 use App\Models\Invitation;
 use App\Models\Application;
 use App\Models\Group;
@@ -14,18 +13,21 @@ use App\Models\Coordinator;
 use App\Models\Admin_Rallye;
 use App\Models\Coordinator_Rallye;
 use App\Models\Parents;
-use Illuminate\Support\Facades\Hash;
 use App\Models\KeyValue;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use App\Repositories\EmailRepository;
 use App\Repositories\ImageRepository;
 use Intervention\Image\Size;
-use Illuminate\Support\Carbon;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 class MailsController extends Controller
 {
@@ -387,8 +389,13 @@ class MailsController extends Controller
       #$invitation = Invitation::with('group')->where('user_id', $user->id)->get()->where('group.eventDate', '>=', $now)->sortBy('group.eventDate', SORT_REGULAR, false)->first();
 
       if ($invitation != null) {
-        $imageName = $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension);
-        // Log::stack(['single'])->debug("imageName from ConvertImage64ToImage " . $imageName);
+        $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
+        $destination_dir = "/assets/images/invitations/";
+        $full_image_path = $destination_dir . $imageName;
+        $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension, $full_image_path);
+
+        $image_url = URL::asset($full_image_path);
+        Log::stack(['single', 'stdout'])->debug("[MAIL] - image_url: " . $image_url);
 
         // CASE 1: PETIT RALLYE
         if ($app_ID->rallye->isPetitRallye) {
@@ -438,7 +445,8 @@ class MailsController extends Controller
             'invitation' => $invitation,
             'domainLink' => $domainLink,
             'imageName' => $imageName,
-            'invitationFile' => $invitation->invitationFile
+            'invitationFile' => $invitation->invitationFile,
+            'image_url' => $image_url
           ];
 
           //////////////////////////////////////////////////////////////////////
@@ -499,15 +507,22 @@ class MailsController extends Controller
       //$invitation = Invitation::with('group')->where('user_id', $user->id)->get()->sortBy('group.eventDate', SORT_REGULAR, false)->first();
       $invitation = Invitation::with('group')->where('user_id', $user->id)->get()->where('group.eventDate', '>=', $now)->sortBy('group.eventDate', SORT_REGULAR, false)->first();
 
-
       if ($invitation != null) {
+        $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
+        $destination_dir = "/assets/images/invitations/";
+        $full_image_path = $destination_dir . $imageName;
         $domainLink = $this->emailRepository->getKeyValue('OFFICIAL_LINK');
-        // $imageName = $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension);
+        $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension, $full_image_path);
+
+        $image_url = URL::asset($full_image_path);
+        Log::stack(['single', 'stdout'])->debug("[MAIL] - image_url: " . $image_url);
 
         $htmlData = [
           'invitation' => $invitation,
           'domainLink' => $domainLink,
-          'invitationFile' => $invitation->invitationFile
+          'invitationFile' => $invitation->invitationFile,
+          'imageName' => $imageName,
+          'image_url' => $image_url
         ];
 
         //////////////////////////////////////////////////////////////////////
