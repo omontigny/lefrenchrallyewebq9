@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Parent_Group;
 use App\Models\Invitation;
 use App\Models\Venue;
@@ -11,13 +10,14 @@ use App\Models\Parents;
 use App\Models\Parent_Rallye;
 use App\Models\CheckIn;
 use App\Models\Group;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\DB;
-use Exception;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\Children;
 use App\Models\Application;
 use App\Models\KeyValue;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\EmailRepository;
 use App\Repositories\ImageRepository;
+use Intervention\Image\Facades\Image;
+use Exception;
 
 class GuestsListController extends Controller
 {
@@ -76,7 +78,6 @@ class GuestsListController extends Controller
           foreach ($applications as $application) {
             $groupsID[] = $application->event_id;
           }
-
 
           $data = Invitation::where('rallye_id', $parentRallye->rallye->id)->get();
 
@@ -244,17 +245,6 @@ class GuestsListController extends Controller
     //
   }
 
-  // public function ConvertImage64ToImage($image64, $extension)
-  // {
-  //   $image = $image64;  // your base64 encoded
-  //   $image = str_replace('data:image/' . $extension . ';base64,', '', $image);
-  //   $image = str_replace(' ', '+', $image);
-  //   $imageName = Str::random(10) . '.' . $extension;
-  //   // Log::stack(['single', 'stdout'])->debug("Image Name in ConvertImage64ToImage() : " . $imageName);
-  //   Storage::disk('local')->put("uploads/images/" . $imageName, base64_decode($image));
-  //   return $imageName;
-  // }
-
   public function reminderInvitationMail($id)
   {
     if (Auth::user()->active_profile == config('constants.roles.PARENT')) {
@@ -327,12 +317,14 @@ class GuestsListController extends Controller
           'invitation' => $invitation
         ];
 
-        $imageName = $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension);
+        $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
+        $destination_dir = "/assets/images/invitations/";
+        $full_image_path = $destination_dir . $imageName;
+        $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension, $full_image_path);
 
-        // DEBUG return $bcclistmails;
-        // $key = 'DOMAIN_LINK';
-        // $keyValue = KeyValue::where('key', $key)->first();
-        // $domainLink = ($keyValue != null) ? $keyValue->value : $key;
+        $image_url = URL::asset($full_image_path);
+        Log::stack(['single', 'stdout'])->debug("[MAIL] - image_url: " . $image_url);
+
         $domainLink = $this->emailRepository->getKeyValue('DOMAIN_LINK');
 
         // Sending the invitation to each parent/child
@@ -342,7 +334,8 @@ class GuestsListController extends Controller
             'checkin'    => $checkin,
             'domainLink' => $domainLink,
             'imageName'  => $imageName,
-            'invitationFile' => $invitation->invitationFile
+            'invitationFile' => $invitation->invitationFile,
+            'image_url' => $image_url
           ];
 
           //////////////////////////////////////////////////////////////////////
