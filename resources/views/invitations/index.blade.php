@@ -12,8 +12,8 @@
     highlighted in green</span>. Scroll down to set your event venue and theme in the next section.</p>
 
 <!-- Exportable Table -->
-@if(count($data) > 0)
-<!--{{var_dump($data)}} -->
+@if(count($invitations) > 0)
+<!--{{var_dump($invitations)}} -->
 <div class="row clearfix">
   <div class="col-lg-12">
     <div class="card">
@@ -55,9 +55,10 @@
               </tr>
 
               @endforeach
-              @foreach ($data as $invitation)
+              @foreach ($invitations as $invitation)
 
               @if($invitation->group_id == $application->event_id)
+
               <tr class="bg-success text-white">
                 @else
               <tr>
@@ -65,9 +66,9 @@
                 <td><strong>{{$invitation->id}}</strong></td>
 
                 <td>
-                    <div class="media-object"><img
-                      src="{{$invitation->invitationFile}}"
-                      alt="" width="35" class="rounded-circle"></div>
+                  <div class="media-object">
+                    <img src="{{$invitation->invitationFile}}" alt="" width="35" class="rounded-circle">
+                  </div>
                 </td>
                 @if($invitation->group != null)
                   <td>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
@@ -167,9 +168,9 @@
 <hr>
 
 <a href={{secure_url("/sendInvitationToMyself")}}><button type="button" class="btn btn-primary btn-md"><span
-      class="glyphicon glyphicon-plus"></span> Send test to myself</button></a>
+  class="glyphicon glyphicon-plus"></span> Send test to myself</button></a>
 
-      <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
+<a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
   class="glyphicon glyphicon-plus"></span> Send to all rallyes members/Invitation already sent</button></a>
 
 

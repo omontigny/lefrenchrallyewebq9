@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\User;
+use DateTime;
+use Exception;
+use Carbon\Carbon;
+use App\Models\Coordinator;
+use App\Models\Coordinator_Rallye;
+use App\Models\Admin_Rallye;
 use App\Models\Rallye;
+use App\Models\Children;
 use App\Models\Application;
 use App\Models\School;
 use App\Models\Schoolyear;
-use App\User;
-use App\Models\Coordinator_Rallye;
-
 use App\Models\Parents;
-use App\Models\Children;
-use App\Models\Admin_Rallye;
 use App\Models\Parent_Rallye;
 use App\Models\Role_User;
 use App\Models\Invitation;
 use App\Models\CheckIn;
 use App\Models\Role;
-use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use DateTime;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use App\Repositories\EmailRepository;
 use App\Repositories\ImageRepository;
-use App\Models\Coordinator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
@@ -118,7 +119,13 @@ class ApplicationRequestsPrivateController extends Controller
           // We do resize only if filesize > 150Ko
           if (filesize($source_file) > 152400) {
             Log::stack(['single', 'stdout'])->info("***** We have to resize this picture *********");
-            $destination_file = "assets/images/" . $target_file;
+
+            $destination_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/childphoto/";
+            if (!File::isDirectory($destination_dir)) {
+              File::makeDirectory($destination_dir, 0777, true, true);
+            };
+            $destination_file = $destination_dir . $application->id . '_' . $target_file;
+
             $orientation = @exif_read_data($source_file)['Orientation']; // @ for silent warning exif_read_data(php3KLADx): File not supported for some png files
             Log::stack(['single', 'stdout'])->debug("exif orientation : $orientation");
 

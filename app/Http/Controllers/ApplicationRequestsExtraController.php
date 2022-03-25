@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Config;
+use App\User;
 use App\Models\Application;
 use App\Models\CheckIn;
 use App\Models\Parents;
@@ -14,14 +10,18 @@ use App\Models\Children;
 use App\Models\Role_User;
 use App\Models\Role;
 use App\Models\Invitation;
-use App\User;
 use App\Models\Parent_Rallye;
-use Illuminate\Http\Request;
 use App\Models\KeyValue;
-use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\EmailRepository;
+use Exception;
 
 class ApplicationRequestsExtraController extends Controller
 {
@@ -155,12 +155,12 @@ class ApplicationRequestsExtraController extends Controller
         // parent info
         $parent = new Parents();
         $parent->parentfirstname  = ucfirst($application->parentfirstname);
-        $parent->parentlastname      = strtoupper($application->parentlastname);
+        $parent->parentlastname   = strtoupper($application->parentlastname);
         $parent->parentaddress    = strtoupper($application->parentaddress);
         $parent->parenthomephone  = $application->parenthomephone;
         $parent->parentmobile     = $application->parentmobile;
-        $parent->parentemail        = strtolower($application->parentemail);
-        $parent->user_id            = $user->id;
+        $parent->parentemail      = strtolower($application->parentemail);
+        $parent->user_id          = $user->id;
         $parent->save();
       } else {
         $parent = Parents::where('user_id', $user->id)->get()->first();
@@ -256,15 +256,8 @@ class ApplicationRequestsExtraController extends Controller
         $application->status = 4;
         $application->mailto = 1;
 
-        // $key = 'PAYMENT_LINK';
-        // $keyValue = KeyValue::where('key', $key)->first();
-        // $paymentLink = ($keyValue != null) ? $keyValue->value : $key;
         $paymentLink = $this->emailRepository->getKeyValue('PAYMENT_LINK');
-
-        // $key = 'DOMAIN_LINK';
-        // $keyValue = KeyValue::where('key', $key)->first();
-        // $domainLink = ($keyValue != null) ? $keyValue->value : $key;
-        $domainLink = $this->emailRepository->getKeyValue('DOMAIN_LINK');
+        $domainLink  = $this->emailRepository->getKeyValue('DOMAIN_LINK');
 
         //////////////////////////////////////////////////////////////////////
         // MAIL 02: Acceptance Email (SMTP)
@@ -272,7 +265,7 @@ class ApplicationRequestsExtraController extends Controller
         $data = [
           'application' => $application,
           'paymentLink' => $paymentLink,
-          'domainLink' => $domainLink
+          'domainLink'  => $domainLink
         ];
 
         Mail::send('mails/acceptanceEmail', $data, function ($m) use ($application) {
@@ -321,7 +314,6 @@ class ApplicationRequestsExtraController extends Controller
       $parentRallye->save();
 
       DB::commit();
-
 
       return redirect('/applicationrequests')->with('success', 'M009: The application has been approved');
     } catch (Exception $e) {
@@ -436,7 +428,7 @@ class ApplicationRequestsExtraController extends Controller
       }
       // parent can not update his request/must done by coordinator
       // $application->submitted = true;
-      //$application->approvedby = Auth::user();
+      // $application->approvedby = Auth::user();
       $application->save();
       return redirect('/applicationrequests')->with('success', 'M012: The application request >> Waiting status');
     } catch (Exception $e) {

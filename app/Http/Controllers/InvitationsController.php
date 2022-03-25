@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Parent_Group;
-use Illuminate\Http\Request;
 use App\Models\Invitation;
 use App\Models\Venue;
 use App\Models\Parent_Event;
@@ -11,17 +10,22 @@ use App\Models\Parents;
 use App\Models\Parent_Rallye;
 use App\Models\CheckIn;
 use App\Models\Group;
-use Illuminate\Support\Facades\DB;
-use Exception;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\Children;
 use App\Models\Application;
-use Intervention\Image\Facades\Image;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Config;
 use App\Repositories\ImageRepository;
-use Illuminate\Support\Carbon;
+use Exception;
+use Carbon\Carbon;
+
 
 # Imports the Google Cloud client library
 use Google\Cloud\Storage\StorageClient;
@@ -66,21 +70,21 @@ class InvitationsController extends Controller
           }
 
           $now = new Carbon;
-          $data = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
+          $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
           $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
 
           $groups = Group::orderBy('eventDate', 'asc')->get();
           $groupsID = $groupsID->unique();
-          $datas = [
+          $data = [
             'application' => $application,
             'groups' => $groups,
-            'data' => $data,
+            'invitations' => $invitations,
             'oldInvitations' => $oldInvitations,
             'groupsID' => $groupsID,
             'applications' => $applications
           ];
 
-          return view('invitations.index')->with($datas);
+          return view('invitations.index')->with($data);
         } else if (count($applications) > 1) {
           $found = true;
           return redirect('/parentChildren');
@@ -141,16 +145,21 @@ class InvitationsController extends Controller
         $invitation->end_time = strtoupper($request->input('end_time'));
         $invitation->rallye_id = Group::find($invitation->group_id)->rallye_id;
 
+        // Log::stack(['single', 'stdout'])->debug('fichier uploadé: ' . $_FILES["invitationFile"]["name"]);
         $target_filename = basename($_FILES["invitationFile"]["name"]);
-        $target_dir = "/assets/images/";
+        // Log::stack(['single', 'stdout'])->debug('target_filename: ' . $target_filename);
 
-        $destination_file = public_path() . $target_dir . $target_filename;
-        Log::stack(['single', 'stdout'])->debug('target_filename:' . $destination_file);
+        $temp_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/invitations/";
+        if (!File::isDirectory($temp_dir)) {
+          File::makeDirectory($temp_dir, 0777, true, true);
+        };
+
+        $temp_file = $temp_dir . Str::random(10) . "_" . $target_filename;
+        Log::stack(['single', 'stdout'])->debug('full path temp file: ' . $temp_file);
 
         // Select file type
-        $imageFileType = strtolower(pathinfo($destination_file, PATHINFO_EXTENSION));
+        $imageFileType = strtolower(pathinfo($temp_file, PATHINFO_EXTENSION));
         Log::stack(['single', 'stdout'])->debug('imageFileType:' . $imageFileType);
-
 
         // Valid file extensions
         $extensions_arr = ["png", "jpg", "jpeg"];
@@ -162,11 +171,10 @@ class InvitationsController extends Controller
 
           /**  Convert to base64 and resize picture **/
           $source_file = $_FILES['invitationFile']['tmp_name'];
-          Log::stack(['single', 'stdout'])->debug("source file: " . $source_file);
+          // Log::stack(['single', 'stdout'])->debug("source file: " . $source_file);
 
-          // We do resize only if filesize > 150Ko
+          // We do resize only if filesize > 300Ko
           if (filesize($source_file) > 307200) {
-            // $destination_file = public_path() . $target_dir . $target_filename;
             Log::stack(['single', 'stdout'])->info("***** We have to resize this picture *********");
             $orientation = @exif_read_data($source_file)['Orientation']; // @ for silent warning exif_read_data(php3KLADx): File not supported for some png files
             Log::stack(['single', 'stdout'])->debug("exif orientation : $orientation");
@@ -174,34 +182,35 @@ class InvitationsController extends Controller
             // resize image with a max value for width or height fixed to 500
             $this->imageRepository->resizeImage(
               $source_file,
-              $destination_file,
+              $temp_file,
               $imageFileType,
               850
             );
             // sometimes some pictures change orientation after resizing, that's why next step restoring correction orentation
-            $rotatedFile = $this->imageRepository->rotateImageByExifOrientation($destination_file, $imageFileType, $orientation);
+            $rotatedFile = $this->imageRepository->rotateImageByExifOrientation($temp_file, $imageFileType, $orientation);
             if (is_resource($rotatedFile)) {
-              imagejpeg($rotatedFile, $destination_file, 100);
+              imagejpeg($rotatedFile, $temp_file, 100);
             }
             Log::stack(['single', 'stdout'])->info("***** End Resize image *********");
           } else {
-            $destination_file = $_FILES["invitationFile"]["tmp_name"];
+            $temp_file = $_FILES["invitationFile"]["tmp_name"];
           }
 
           // get base64 encoding of the new file to store in database
-          $image_base64 = base64_encode(file_get_contents($destination_file, true));
+          $image_base64 = base64_encode(file_get_contents($temp_file, true));
           $image = 'data:image/' . $imageFileType . ';base64,' . $image_base64;
+          // copy file into public folder for link
 
           // delete local tempory file
-          if (!unlink($destination_file)) {
-            Log::stack(['single', 'stdout'])->error("$destination_file cannot be deleted due to an error");
+          if (!unlink($temp_file)) {
+            Log::stack(['single', 'stdout'])->error("$temp_file cannot be deleted due to an error");
           } else {
-            Log::stack(['single', 'stdout'])->info("$destination_file has been correctly deleted");
+            Log::stack(['single', 'stdout'])->info("$temp_file has been correctly deleted");
           }
           /** end convert with resize **/
 
           $invitation->invitationFile = $image;
-          $invitation->extension = $imageFileType;
+          $invitation->extension      = $imageFileType;
         } else {
           return Redirect::back()->withError('250: Only .png, jpg, jpeg extensions that are accepted.');
         }
