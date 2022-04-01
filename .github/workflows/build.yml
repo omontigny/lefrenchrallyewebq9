@@ -1,9 +1,10 @@
 name: Build
 on:
-push:
-    branches: [ main ]
+  push:
+    branches:
+      - main # or the name of your main branch
   pull_request:
-    branches: [ main ]
+      - main # or the name of your main branch
 jobs:
   build:
     name: Build
