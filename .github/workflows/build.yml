@@ -2,9 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - main # or the name of your main branch
-  pull_request:
-      - main # or the name of your main branch
+      - man # or the name of your main branch
 jobs:
   build:
     name: Build
