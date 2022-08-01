@@ -49,7 +49,7 @@
                                     <td><strong>{{$application->rallye->title}}</strong></td>
                                     <td><strong>{{$application->group_name}}</strong></td>
                                     @if($application->event != null)
-                                      <td><strong>{{\Carbon\Carbon::parse($application->event->eventDate)->format('d-m-Y')}}</strong></td>
+                                      <td><strong>{{\Illuminate\Support\Carbon::parse($application->event->eventDate)->format('d-m-Y')}}</strong></td>
                                     @else
                                       <td><strong>-</strong></td>
                                     @endif

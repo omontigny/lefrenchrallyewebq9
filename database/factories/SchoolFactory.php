@@ -1,17 +1,35 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\Models\School;
-use Faker\Generator as Faker;
+use \App\Models\School;
+use \App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-$factory->define(School::class, function (Faker $faker) {
-  return [
-    'name' => $faker->name,
-    'state' => $faker->state,
-    'user_id' => factory(App\User::class),
-    'added_by' => function (array $name) {
-      return App\User::find($name['user_id'])->name;
-    },
-  ];
-});
+class SchoolFactory extends Factory
+{
+  /**
+   * The name of the factory's corresponding model.
+   *
+   * @var string
+   */
+  protected $model = School::class;
+
+  /**
+   * Define the model's default state.
+   *
+   * @return array
+   */
+  public function definition()
+  {
+    return [
+      'name' => $this->faker->name,
+      'state' => $this->faker->state,
+      'user_id' => User::factory()->create(),
+      'added_by' => function (array $name) {
+        return User::find($name['user_id'])->name;
+      },
+    ];
+  }
+}

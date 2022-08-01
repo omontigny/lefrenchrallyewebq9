@@ -71,7 +71,7 @@
                                     <td>{{$application->childfirstname}} {{$application->childlastname}}</td>
                                     <td>{{$application->parentfirstname}} {{$application->parentlastname}}</td>
                                     <td>{{$application->rallye->title}}</td>
-                                    <td>{{\Carbon\Carbon::parse($application->childbirthdate)->format('d/m/Y')}}</td>
+                                    <td>{{\Illuminate\Support\Carbon::parse($application->childbirthdate)->format('d/m/Y')}}</td>
                                     <td>{{\App\Http\Middleware\TrimStrings::middle_dots($application->school->name)}}</td>
                                     <td>{{$application->schoolstate}}</td>
                                     @if($application->is_boarder)

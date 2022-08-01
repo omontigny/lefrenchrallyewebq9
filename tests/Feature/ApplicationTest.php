@@ -26,7 +26,8 @@ class ApplicationTest extends TestCase
   {
     // Run the DatabaseSeeder...
     // $this->seed();
-    $user = factory(User::class)->create();
+    $user = User::factory()->create();
+    // $user = factory(User::class)->create();
 
 
     Rallye::create([
@@ -40,7 +41,7 @@ class ApplicationTest extends TestCase
     $stdrallye1   = Rallye::where('title', 'STD 1')->first();
     $this->assertCount(1, \App\Models\Rallye::all());
 
-    $user_admin = factory(User::class)->create([
+    $user_admin = User::factory()->create([
       'email' => 'admin@myapp.fr',
       'name' => 'admin',
       'email_verified_at' => now(),
@@ -52,14 +53,15 @@ class ApplicationTest extends TestCase
       'parent'  => 0,
     ]);
 
-    factory(School::class)->create([
+    School::factory()->create([
       'name' => 'SCHOOL C',
       'state' => 'ENGLISH',
       'added_by' => $user_admin->name,
       'user_id' => $user_admin->id
     ]);
 
-    $school       = School::find(1);
+
+    $school  = School::find(1);
 
     Schoolyear::create([
       'current_level'  => '3eme - Year 10',

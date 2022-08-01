@@ -95,7 +95,7 @@
                   <td>
                     <p class="petit">
                       @if($checkin != null)
-                        {{\Carbon\Carbon::parse($checkin->eventDate)->format('d-m-Y')}}
+                        {{\Illuminate\Support\Carbon::parse($checkin->eventDate)->format('d-m-Y')}}
                       @else
 	                      -
                       @endif

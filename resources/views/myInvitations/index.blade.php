@@ -76,7 +76,7 @@
                                     <td>{{$row->childfirstname}}</td>
                                     <td>{{$row->theme_dress_code}}</td>
                                     @if($row->eventDate != null)
-                                      <td>{{\Carbon\Carbon::parse($row->eventDate)->format('d-m-Y')}}</td>
+                                      <td>{{\Illuminate\Support\Carbon::parse($row->eventDate)->format('d-m-Y')}}</td>
                                     @else
                                       <td></td>
                                     @endif
