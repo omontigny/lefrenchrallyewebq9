@@ -51,14 +51,13 @@ class SchoolSeeder extends Seeder
           'approved'  => 0
         ]);
 
-        School::create([
-          'name'      => 'SCHOOL B',
-          'state'     => 'FRENCH',
-          'added_by'  => $coordinator->name,
-          'user_id'   => $coordinator->id,
-          'approved'  => 0
-        ]);
-      }
+      School::create([
+        'name'      => 'SCHOOL B',
+        'state'     => 'FRENCH',
+        'added_by'  => $coordinator->name,
+        'user_id'   => $coordinator->id,
+        'approved'  => 0
+      ]);
     }
   }
 }
