@@ -30,3 +30,4 @@ stripe-ori.blade.php
 stripe-first.blade.php
 /listfiles.lst
 /listJSfiles.lst
+composer.lock.ori

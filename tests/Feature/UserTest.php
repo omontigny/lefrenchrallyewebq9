@@ -20,7 +20,7 @@ class UserTest extends TestCase
 
   public function test_as_one_user()
   {
-    factory(User::class)->create([
+    User::factory()->create([
       'email' => 'sally@example.com',
     ]);
 
@@ -39,7 +39,7 @@ class UserTest extends TestCase
    */
   public function test_creating_a_new_user()
   {
-    factory(User::class)->create([
+    User::factory()->create([
       'email' => 'lucky.luke@myapp.fr',
       'name' => 'lucky',
       'active_profile' => 'COORDINATOR',
@@ -48,7 +48,7 @@ class UserTest extends TestCase
       'parent'  => 0,
     ]);
 
-    factory(User::class)->create([
+    User::factory()->create([
       'email' => 'ma.dalton@myapp.fr',
       'name' => 'madalton',
       'active_profile' => 'SUPERADMIN',
@@ -57,7 +57,7 @@ class UserTest extends TestCase
       'parent'  => 0,
     ]);
 
-    factory(User::class)->create([
+    User::factory()->create([
       'email' => 'webmaster@myapp.fr',
       'name' => 'webadmin',
       'active_profile' => 'SUPERADMIN',

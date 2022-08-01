@@ -20,7 +20,7 @@ use App\Models\Children;
 use App\Models\Application;
 use Twilio\Rest\Client;
 use Exception;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class MultiCheckinController extends Controller
 {

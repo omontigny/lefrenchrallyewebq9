@@ -21,7 +21,8 @@ class RallyeTest extends TestCase
    */
   public function test_as_one_rallye()
   {
-    $user = factory(User::class)->create();
+    $user = User::factory()->create();
+
 
 
     Rallye::create([
