@@ -49,8 +49,6 @@
         },
         "paas": {
             "php-config": [
-                "session.save_handler = redis",
-                "session.save_path = 'tcp://frenchrallye-preprod-8168.redis.a.osc-fr1.scalingo-dbs.com:38319?auth=P4qgSjpg4fBZo7yQyU_y'",
                 "post_max_size = 150M",
                 "memory_limit = 1024M"
             ]
