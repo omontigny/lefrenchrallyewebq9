@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Coordinator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use App\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,7 @@ use App\Models\Role;
 use App\Models\Role_User;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\EmailRepository;
-
+use Exception;
 
 class CoordinatorsController extends Controller
 {
