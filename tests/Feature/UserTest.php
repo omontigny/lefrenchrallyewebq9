@@ -4,15 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
-use \App\Models\School;
 use \App\User;
-use \App\Models\Coordinator;
-use CoordinatorSeeder;
-use Faker\Generator as Faker;
-use UserSeeder;
+
 
 class UserTest extends TestCase
 {
@@ -46,7 +39,36 @@ class UserTest extends TestCase
    */
   public function test_creating_a_new_user()
   {
-    $this->seed(UserSeeder::class);
+    factory(User::class)->create([
+      'email' => 'lucky.luke@myapp.fr',
+      'name' => 'lucky',
+      'active_profile' => 'COORDINATOR',
+      'admin' => 1,
+      'coordinator' => 2,
+      'parent'  => 0,
+    ]);
+
+    factory(User::class)->create([
+      'email' => 'ma.dalton@myapp.fr',
+      'name' => 'madalton',
+      'active_profile' => 'SUPERADMIN',
+      'admin' => 2,
+      'coordinator' => 1,
+      'parent'  => 0,
+    ]);
+
+    factory(User::class)->create([
+      'email' => 'webmaster@myapp.fr',
+      'name' => 'webadmin',
+      'active_profile' => 'SUPERADMIN',
+      'admin' => 2,
+      'coordinator' => 1,
+      'parent'  => 0,
+    ]);
+
     $this->assertCount(3, User::all());
+    $this->assertDatabaseHas('users', [
+      'email' => 'lucky.luke@myapp.fr',
+    ]);
   }
 }
