@@ -1,6 +1,6 @@
 <?php
 
-namespace DDatabase\Seeders\Prod;
+namespace Database\Seeders\Prod;
 
 use Illuminate\Database\Seeder;
 use App\Models\KeyValue;
