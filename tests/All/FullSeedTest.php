@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\All;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class SeedTest extends TestCase
+class FullSeedTest extends TestCase
 {
   use RefreshDatabase;
   /**
@@ -23,8 +23,8 @@ class SeedTest extends TestCase
 
     $this->assertCount(3, \App\User::all());
     $this->assertCount(2, \App\Models\Coordinator::all());
-    $this->assertEquals('omontigny', \App\Models\Coordinator::find(1)->username);
-    $this->assertEquals('elfi', \App\Models\Coordinator::find(2)->username);
+    $this->assertEquals('madalton', \App\Models\Coordinator::all()->first()->username);
+    $this->assertEquals('lucky', \App\Models\Coordinator::all()[1]->username);
     $this->assertCount(2, \App\Models\School::all());
     $this->assertCount(3, \App\Models\Schoolyear::all());
     $this->assertCount(3, \App\Models\Role::all());
@@ -35,5 +35,6 @@ class SeedTest extends TestCase
     $this->assertCount(4, \App\Models\Coordinator_Rallye::all());
     $this->assertCount(6, \App\Models\MembershipPrice::all());
     $this->assertCount(3, \App\Models\KeyValue::all());
+    $this->assertCount(1, \App\Models\Application::all());
   }
 }
