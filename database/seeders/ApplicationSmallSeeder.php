@@ -20,7 +20,7 @@ class ApplicationSmallSeeder extends Seeder
    */
   public function run()
   {
-    $smallrallye1   = Rallye::where('title', 'SMALL 1')->first();
+    $smallrallye1   = Rallye::where('isPetitRallye', true)->first();
 
     $school       = School::all()->first();
     $schoolyear2  = Schoolyear::where('current_level', '3eme - Year 10')->first();
