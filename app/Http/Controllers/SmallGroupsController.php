@@ -220,7 +220,7 @@ class SmallGroupsController extends Controller
 
       $group = Group::find($id);
       if ($group->rallye->isPetitRallye) {
-        $data = null;
+        $results = null;
         $applications = [];
 
         $applications = Application::where('rallye_id', $group->rallye->id)
@@ -233,9 +233,17 @@ class SmallGroupsController extends Controller
           $bcclist = $this->emailRepository->GetListBccMails($applications);
           Log::stack(['single', 'stdout'])->debug('bcclist:' . $bcclist);
 
+          $rallye_email = $group->rallye->rallyemail;
+          $rallye_title = $group->rallye->title;
+
+          $mailBodyPlacehodeler = $this->getMailbody($rallye_title);
+
           $results = [
             'applications'  => $applications,
-            'bcclist' => $bcclist
+            'bcclist'       => $bcclist,
+            'rallye_title'  => $rallye_title,
+            'rallye_email'  => $rallye_email,
+            'mail_body'     => $mailBodyPlacehodeler,
           ];
 
           return view('members.myeventgroup')->with($results);
@@ -254,7 +262,7 @@ class SmallGroupsController extends Controller
       $group = Group::find($id);
 
       if ($group->rallye->isPetitRallye) {
-        $data = null;
+        $results = null;
         $applications = [];
 
         $applications = Application::where('rallye_id', $group->rallye->id)
@@ -267,9 +275,18 @@ class SmallGroupsController extends Controller
           $bcclist = $this->emailRepository->GetListBccMails($applications);
           Log::stack(['single', 'stdout'])->debug('bcclist:' . $bcclist);
 
+          $rallye_email = $group->rallye->rallyemail;
+          $rallye_title = $group->rallye->title;
+
+          $mailBodyPlacehodeler = $this->getMailbody($rallye_title);
+
           $results = [
             'applications'  => $applications,
-            'bcclist' => $bcclist
+            'bcclist'       => $bcclist,
+            'rallye_title'  => $rallye_title,
+            'rallye_email'  => $rallye_email,
+            'mail_body'     => $mailBodyPlacehodeler,
+
           ];
 
           return view('members.mygroup')->with($results);
@@ -285,8 +302,7 @@ class SmallGroupsController extends Controller
   public function showGroupMembers($id)
   {
 
-
-    $data = null;
+    $results = null;
     $applications = [];
 
     $group = Group::find($id);
@@ -322,7 +338,7 @@ class SmallGroupsController extends Controller
    */
   public function show($id)
   {
-    $data = null;
+    $results = null;
     $applications = [];
     $group = Group::find($id);
 
@@ -360,7 +376,7 @@ class SmallGroupsController extends Controller
   {
     try {
       //
-      $group = Group::find($id);
+      $group   = Group::find($id);
       $rallyes = Rallye::orderBy('title', 'asc')->get();
 
       $data = [
@@ -384,7 +400,6 @@ class SmallGroupsController extends Controller
   public function update(Request $request, $id)
   {
     try {
-
 
       $group = Group::find($id);
       // Check if there is already a grouyp with the same eventDate for the same rallye
@@ -467,5 +482,19 @@ class SmallGroupsController extends Controller
     } catch (Exception $e) {
       return Redirect::back()->withError('E172: ' . $e->getMessage());
     }
+  }
+
+  private function getMailbody($rallye_title)
+  {
+    $mailBodyPlacehodeler = "<p>Dear Parents</p>
+       <p><font color=\"grey\">Enter Your email body here...</font></p>
+       <br>
+       <br>
+       <br>
+       ---------------
+       <p>See you,</p>
+       <p>The $rallye_title Coordinators</p>
+       ";
+    return $mailBodyPlacehodeler;
   }
 }

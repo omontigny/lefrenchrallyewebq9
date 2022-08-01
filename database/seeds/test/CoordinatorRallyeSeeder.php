@@ -1,5 +1,7 @@
 <?php
 
+namespace Seeds\Test;
+
 use Illuminate\Database\Seeder;
 use App\Models\Coordinator_Rallye;
 use App\Models\Rallye;
@@ -15,12 +17,12 @@ class CoordinatorRallyeSeeder extends Seeder
   public function run()
   {
 
-    $rallye1 = Rallye::find(1);
-    $rallye2 = Rallye::find(2);
-    $rallye3 = Rallye::find(3);
-    $rallye4 = Rallye::find(4);
+    $rallye1 = Rallye::where('title', 'STD 1')->first();
+    $rallye2 = Rallye::where('title', 'STD 2')->first();
+    $rallye3 = Rallye::where('title', 'SMALL 1')->first();
+    $rallye4 = Rallye::where('title', 'SMALL 2')->first();
 
-    $coordinator = Coordinator::find(1);
+    $coordinator = Coordinator::all()->first();
 
     if ($coordinator && $rallye3) {
       Coordinator_Rallye::create([

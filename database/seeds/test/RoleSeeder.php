@@ -1,5 +1,7 @@
 <?php
 
+namespace Seeds\Test;
+
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 

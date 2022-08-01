@@ -30,13 +30,15 @@
                     <button type="button" class="btn  btn-simple btn-sm btn-danger btn-filter"
                         data-target="application">Application</button>
                     <div class="table-responsive m-t-20">
-                        <table class="table table-filter table-hover m-b-0">
+                        <table class="table table-filter table-hover m-b-0 dataTable js-exportable"">
                             <thead>
                                 <th>ID</th>
                                 <th>Child</th>
                                 <th>Child name</th>
                                 <th>Parent name</th>
                                 <th>Rallye</th>
+                                <th>Birth Date <br> <font size="1">(DD-MM-YYYY)</font></th>
+                                <th>School Name</th>
                                 <th>School System</th>
                                 <th>Boarder</th>
                                 <th>Status</th>
@@ -69,6 +71,8 @@
                                     <td>{{$application->childfirstname}} {{$application->childlastname}}</td>
                                     <td>{{$application->parentfirstname}} {{$application->parentlastname}}</td>
                                     <td>{{$application->rallye->title}}</td>
+                                    <td>{{\Carbon\Carbon::parse($application->childbirthdate)->format('d/m/Y')}}</td>
+                                    <td>{{\App\Http\Middleware\TrimStrings::middle_dots($application->school->name)}}</td>
                                     <td>{{$application->schoolstate}}</td>
                                     @if($application->is_boarder)
                                     <td><span class="badge badge-light">Boarder</span></td>
@@ -344,6 +348,23 @@
         e.preventDefault();
       });
       //when clicked on mobile-menu, normal menu is shown as a list, classic rwd menu story (thanks mwl from stackoverflow)
+
+      // features / options : https://datatables.net/reference/option/
+      $('.table').DataTable({
+        //retrieve: true,
+        destroy: true,
+        ordering: true,
+        filtering: true,
+        searching: true,
+        "displayStart": 150,
+        "lengthMenu": [ 150, 200],
+        dom: 'Bfrtip',
+        buttons: [
+        'copy',
+        'csv',
+        'print'
+        ]
+      });
     });
 </script>
 <script>

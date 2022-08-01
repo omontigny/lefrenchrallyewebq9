@@ -3,14 +3,15 @@
 @section('page-style')
 <link rel="stylesheet" href="{{secure_asset('assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{secure_asset('assets/plugins/sweetalert/sweetalert.css')}}" />
-
 <link rel="stylesheet" href="{{secure_asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css')}}" />
-<link rel="stylesheet" href="{{secure_asset('assets/plugins/morrisjs/morris.css')}}" />
-<link rel="stylesheet" href="{{secure_asset('assets/css/ecommerce.css')}}">
+
+{{-- <link rel="stylesheet" href="{{secure_asset('assets/plugins/morrisjs/morris.css')}}" /> --}}
+{{-- <link rel="stylesheet" href="{{secure_asset('assets/css/ecommerce.css')}}"> --}}
+{{-- @include('components.head.tinymce-config') {{-- ## TinyMCE ##  --}}
 @stop
 @section('content')
-@if(count($data) > 0)
 
+@if(count($guestList) > 0)
 <div class="container-fluid">
   <div class="row clearfix">
     <div class="col-lg-12">
@@ -26,16 +27,13 @@
             data-target="Expected">Expected</button>
           <button type="button" class="btn  btn-simple btn-sm btn-danger btn-filter"
             data-target="Absent">Absent</button>
-
+          <!-- SMS   -->
+          {{-- <a href="sms: {{$missingChildrenList ?? ''}}"><button type="button" class="btn btn-warning btn-sm float-right"><span
+                class="glyphicon glyphicon-envelope"></span> SMS</button></a> --}}
           <!-- SMS -->
-          <a href="sms:
-                    @foreach($data as $row)
-                    @if($row->child_present == 0)
-                    {{$row->parentmobile}};
-                    @endif
-                    @endforeach "><button type="button" class="btn btn-warning btn-sm float-right"><span
-                class="glyphicon glyphicon-envelope"></span> SMS</button></a>
-          <!-- SMS -->
+          <!-- MAIL MODAL -->
+           {{-- <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#sendSMSModal"><span class="glyphicon glyphicon-send"></span> TWILIO</button> --}}
+          <!-- MAIL -->
 
           <div class="table-responsive m-t-20">
             <table class="table table-filter table-hover m-b-0 js-exportable">
@@ -50,7 +48,7 @@
                 <th>Present</th>
               </thead>
               <tbody>
-                @foreach ($data as $row)
+                @foreach ($guestList as $row)
                 @switch($row->child_present)
                 @case(0)
                 <tr data-status="Expected">
@@ -95,7 +93,6 @@
                   @break
                   @endswitch
 
-
                   @switch($row->child_present)
                   @case(0)
                   <td><span class="badge badge-info">Expected</span></td>
@@ -111,65 +108,16 @@
                   @break
                   @endswitch
 
-
-                  <!-- +AJO : Model section begin -->
-                  <div class="modal fade" id="CancelingCheckInModal_{{$row->id}}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content bg-danger">
-                        <div class="modal-header">
-                          <h4 class="title col-white text-center" id="defaultModalLabel">Checking decline</h4>
-                        </div>
-                        <div class="media-object"><img src="{{$row->childphotopath}}" alt="" width="150"
-                            class="rounded-circle"></div>
-                        <div class="modal-body col-white">
-                          {{ Form::open(['action' => ['CheckinEventExtraController@update', $row->id], 'method' => 'POST']) }}
-                          @csrf
-                          <div class="form-group">
-                            <label for="action"><b>Are you sure your {{$row->childfirstname}} will NOT be attending
-                                ?</b></label>
-                            <input name="action" type="hidden" value="0">
-                          </div>
-                        </div>
-                        {{Form::hidden('_method', 'PUT')}}
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-link waves-effect col-white">Yes</button>
-                          <button type="button" class="btn btn-link waves-effect col-white" data-dismiss="modal">No,
-                            cancel</button>
-                        </div>
-                        {{ Form::close() }}
-                      </div>
-                    </div>
-                  </div>
+                  <!-- Modal Cancel Checkin -->
+                  {{-- @include('checkinEvent.partials.cancelCheckinModal') --}}
                   <!-- END MODAL-->
 
-                  <!-- +AJO : Model section begin -->
-                  <div class="modal fade" id="ConfirmCheckInModal_{{$row->id}}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content bg-green">
-                        <div class="modal-header">
-                          <h4 class="title col-white text-center" id="defaultModalLabel">Checking - Confirmation</h4>
-                        </div>
-                        <div class="media-object"><img src="{{$row->childphotopath}}" alt="" width="150"
-                            class="rounded-circle"></div>
-                        <div class="modal-body col-white">
-                          {{ Form::open(['action' => ['CheckinEventExtraController@update', $row->id], 'method' => 'POST']) }}
-                          @csrf
-                          {{Form::hidden('_method', 'PUT')}}
-                          <div class="form-group">
-                            <label for="action"><b>Do you really want to confirm {{$row->childfirstname}}
-                                presence?</b></label>
-                            <input name="action" type="hidden" value="1">
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-link waves-effect col-white">Yes</button>
-                          <button type="button" class="btn btn-link waves-effect col-white" data-dismiss="modal">No,
-                            cancel</button>
-                        </div>
-                        {{ Form::close() }}
-                      </div>
-                    </div>
-                  </div>
+                  <!--  Modal Confirm Checkin -->
+                  {{-- @include('checkinEvent.partials.confirmCheckinModal') --}}
+                  <!-- END MODAL-->
+
+                  <!--  Modal Send SMS -->
+                  {{-- @include('checkinEvent.partials.sendSMSModal') --}}
                   <!-- END MODAL-->
 
 
@@ -191,7 +139,7 @@
 
 @stop
 @section('page-script')
-<script src="{{secure_asset('assets/bundles/morrisscripts.bundle.js')}}"></script>
+{{-- <script src="{{secure_asset('assets/bundles/morrisscripts.bundle.js')}}"></script> --}}
 <script src="{{secure_asset('assets/bundles/jvectormap.bundle.js')}}"></script>
 <script src="{{secure_asset('assets/bundles/flotscripts.bundle.js')}}"></script>
 <script src="{{secure_asset('assets/bundles/sparkline.bundle.js')}}"></script>

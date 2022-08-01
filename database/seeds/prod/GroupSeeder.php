@@ -1,5 +1,7 @@
 <?php
 
+namespace Seeds\Prod;
+
 use Illuminate\Database\Seeder;
 use App\Models\Rallye;
 use App\Models\Group;
@@ -7,6 +9,7 @@ use App\User;
 
 class GroupSeeder extends Seeder
 {
+  /* TODO: Modifier au Reset nouvelle année */
   /**
    * Run the database seeds.
    *
@@ -14,15 +17,15 @@ class GroupSeeder extends Seeder
    */
   public function run()
   {
-    $admin = User::where('admin', 2)->first();
+    $coordinator = User::where('active_profile', 'COORDINATOR')->first();
     $petitrallye1 = Rallye::where('isPetitRallye', 1)->first();
-    $stdrallye1 = Rallye::find(1);
-    $stdrallye2 = Rallye::find(2);
+    $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY 2021 2022')->first();
+    $stdrallye2   = Rallye::where('title', 'RALLYE MOUNTBATTEN 2021 2022')->first();
 
-    if ($admin && $petitrallye1) {
+    if ($coordinator && $petitrallye1) {
       Group::create([
         'name'        => 'RED',
-        'user_id'     => $admin->id,
+        'user_id'     => $coordinator->id,
         'rallye_id'   => $petitrallye1->id,
         'eventDate'   => '2022-05-13',
         'start_year'  => 2021,
@@ -30,32 +33,32 @@ class GroupSeeder extends Seeder
       ]);
     }
 
-    if ($admin && $petitrallye1) {
+    if ($coordinator && $petitrallye1) {
       Group::create([
         'name'        => 'GREEN',
-        'user_id'     => $admin->id,
+        'user_id'     => $coordinator->id,
         'rallye_id'   => $petitrallye1->id,
         'eventDate'   => '2022-05-14',
         'start_year'  => 2021,
         'end_year'    => 2022
       ]);
     }
-    if ($admin && $stdrallye1) {
+    if ($coordinator && $stdrallye1) {
       Group::create([
-        'name'        => '',
-        'user_id'     => $admin->id,
+        'name'        => 'Party1',
+        'user_id'     => $coordinator->id,
         'rallye_id'   => $stdrallye1->id,
-        'eventDate'   => '2022-04-01',
+        'eventDate'   => '2021-11-13',
         'start_year'  => 2021,
         'end_year'    => 2022
       ]);
     }
-    if ($admin && $stdrallye2) {
+    if ($coordinator && $stdrallye2) {
       Group::create([
-        'name'        => '',
-        'user_id'     => $admin->id,
+        'name'        => 'Party1',
+        'user_id'     => $coordinator->id,
         'rallye_id'   => $stdrallye2->id,
-        'eventDate'   => '2022-05-02',
+        'eventDate'   => '2021-11-13',
         'start_year'  => 2021,
         'end_year'    => 2022
       ]);

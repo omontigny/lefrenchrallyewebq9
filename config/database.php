@@ -127,9 +127,8 @@ return [
     ],
 
     'default' => [
-      #      'scheme' => 'tls',
       'url' => env('SESSION_CONNEXION', ''),
-      'host' => env('REDIS_HOST', '192.168.1.28'),
+      'host' => env('REDIS_HOST', 'localhost'),
       'password' => env('REDIS_PASSWORD', ''),
       'port' => env('REDIS_PORT', 6379),
       'database' => env('REDIS_DB', 0),
@@ -137,9 +136,8 @@ return [
     ],
 
     'cache' => [
-      #   'scheme' => 'tls',
       'url' => env('SESSION_CONNEXION', ''),
-      'host' => env('REDIS_HOST', '192.168.1.28'),
+      'host' => env('REDIS_HOST', 'localhost'),
       'password' => env('REDIS_PASSWORD', ''),
       'port' => env('REDIS_PORT', 6379),
       'database' => env('REDIS_CACHE_DB', 1),

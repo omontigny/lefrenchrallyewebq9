@@ -1,8 +1,11 @@
 <?php
 
+namespace Seeds\Prod;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use App\Models\Coordinator;
-use \App\User;
+use App\User;
 
 class CoordinatorSeeder extends Seeder
 {
@@ -13,8 +16,13 @@ class CoordinatorSeeder extends Seeder
    */
   public function run()
   {
-    $elfi = User::where('name', 'elfi')->first();
-    $oli = User::where('name', 'omontigny')->first();
+    // Schema::disableForeignKeyConstraints();
+    // Coordinator::truncate();
+    // Schema::enableForeignKeyConstraints();
+
+    $oli    = User::where('name', 'omontigny')->first();
+    $cylia  = User::where('name', 'cylia')->first();
+    $elfi   = User::where('name', 'elfi')->first();
 
     if ($oli) {
       Coordinator::create([
@@ -24,6 +32,16 @@ class CoordinatorSeeder extends Seeder
         'mail' => $oli->email,
         'status' => 0,
         'user_id'  => $oli->id
+      ]);
+    }
+    if ($cylia) {
+      Coordinator::create([
+        'firstname' => 'ADMIN',
+        'lastname' => 'SUPER',
+        'username' => $cylia->name,
+        'mail' => $cylia->email,
+        'status' => 0,
+        'user_id'  => $cylia->id
       ]);
     }
     if ($elfi) {

@@ -4,20 +4,52 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Cloudinary\Cloudinary;
 
 class ImageRepository
 {
 
-  public function ConvertImage64ToImage($image64, $extension, $image_full_path)
+  public function setImageInfo($invitation)
+  {
+    $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
+    $imageExpirationDate = Carbon::create($invitation->group->eventDate)->addMonths(2);
+    $imageMetadata = ["dress code" => $invitation->theme_dress_code, "name" => $imageName, "expiration date" => $imageExpirationDate];
+    $fullImagePath = "/assets/images/invitations/" . $imageName;
+    return ["imageName" => $imageName, "imagePath" => $fullImagePath, "imageMetadata" => $imageMetadata];
+  }
+
+  public function UploadFromImage64($image64, $extension, $image_full_path, $imageMetadata)
   {
     $image = $image64;  // your base64 encoded
     $image = str_replace('data:image/' . $extension . ';base64,', '', $image);
     $image = str_replace(' ', '+', $image);
 
-    Log::stack(['single', 'stdout'])->debug("Image Path in ConvertImage64ToImage() : " . $image_full_path);
+    Log::stack(['single', 'stdout'])->debug("Image Path in UploadFromImage64() : " . $image_full_path);
 
+    # upload in local filesystem
     Storage::disk('public')->put($image_full_path, base64_decode($image));
-    Log::stack(['single', 'stdout'])->debug("Image stored in ConvertImage64ToImage() : " . public_path($image_full_path));
+    Log::stack(['single', 'stdout'])->debug("Image stored in UploadFromImage64() : " . public_path($image_full_path));
+
+    # upload in Cloudinary
+    $expression = $imageMetadata["name"] . ' AND folder=Invitations';
+
+    $cloudinary = new Cloudinary();
+    $resultSearch = $cloudinary->searchApi()
+      ->expression($expression)
+      ->maxResults(1)
+      ->execute();
+    # dd($resultSearch);
+    # Log::stack(['single'])->debug("[MYSELF MAIL] : Search result count" . $resultSearch["total_count"]);
+
+    if ($resultSearch["total_count"] > 0) {
+      $imageURL = $resultSearch["resources"][0]["secure_url"];
+    } else {
+      $imageURL = cloudinary()->upload($image64, ["folder" => "Invitations",  "filename_override" => $imageMetadata["name"], "tags" => [$imageMetadata["name"], $imageMetadata["dress code"]], "context" => $imageMetadata])->getSecurePath();
+    }
+    Log::stack(['single', 'stdout'])->debug("Public Image URL in UploadFromImage64() : " . public_path($image_full_path));
+
+    return $imageURL;
   }
   /**
    * Rezise an image with a max value
@@ -93,7 +125,7 @@ class ImageRepository
 
       //Log::stack(['single', 'stdout'])->debug( var_dump($image));
 
-      if (is_resource($image)) {
+      if (is_resource($image) || $this->is_gd_image($image)) {
         switch ($orientation) {
           case 3:
             $result = imagerotate($image, 180, 0);
@@ -106,7 +138,7 @@ class ImageRepository
             break;
         }
       } else {
-        Log::stack(['single', 'stdout'])->error($image . ' is not a correct resource');
+        Log::stack(['single', 'stdout'])->error(dd($image) . ' is not a correct resource');
       }
     }
 
@@ -127,5 +159,10 @@ class ImageRepository
     } else if ($number >= 1048576) {
       return round(($number / 1048576), 1) . ' Mo';
     }
+  }
+
+  private function is_gd_image($var): bool
+  {
+    return (gettype($var) == "object" && get_class($var) == "GdImage");
   }
 }

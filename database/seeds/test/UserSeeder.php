@@ -1,5 +1,7 @@
 <?php
 
+namespace Seeds\Test;
+
 use Illuminate\Database\Seeder;
 use App\User;
 
@@ -15,8 +17,8 @@ class UserSeeder extends Seeder
 
     //factory(App\User::class, 50)->create();
     factory(User::class)->create([
-      'email' => 'olivier.wagon498@free.fr',
-      'name' => 'omontigny',
+      'email' => 'lucky.luke@myapp.fr',
+      'name' => 'lucky',
       'active_profile' => 'COORDINATOR',
       'admin' => 1,
       'coordinator' => 2,
@@ -24,8 +26,8 @@ class UserSeeder extends Seeder
     ]);
 
     factory(User::class)->create([
-      'email' => 'montigno.ecommerce@free.fr',
-      'name' => 'elfi',
+      'email' => 'ma.dalton@myapp.fr',
+      'name' => 'madalton',
       'active_profile' => 'SUPERADMIN',
       'admin' => 2,
       'coordinator' => 1,
@@ -33,8 +35,8 @@ class UserSeeder extends Seeder
     ]);
 
     factory(User::class)->create([
-      'email' => 'webmaster@lefrenchrallye.com',
-      'name' => 'cylia',
+      'email' => 'webmaster@myapp.fr',
+      'name' => 'webadmin',
       'active_profile' => 'SUPERADMIN',
       'admin' => 2,
       'coordinator' => 1,

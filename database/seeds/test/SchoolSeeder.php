@@ -1,8 +1,11 @@
 <?php
 
+namespace Seeds\Test;
+
 use Illuminate\Database\Seeder;
 use App\Models\School;
 use App\User;
+
 
 class SchoolSeeder extends Seeder
 {

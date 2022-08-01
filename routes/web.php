@@ -204,8 +204,10 @@ Route::get('multicheckin/{id}', 'MultiCheckinController@show')->name('multicheck
 Route::get('/multicheckin/edit/{id}/{invitation_id}', 'MultiCheckinController@edit')->name('multicheckin.edit');
 Route::get('multicheckin/attending/{id}/{invitation_id}', 'MultiCheckinController@attending')->name('multicheckin.attending');
 Route::get('multicheckin/notattending/{id}/{invitation_id}', 'MultiCheckinController@notattending')->name('multicheckin.notattending');
+Route::post('multicheckin/sms/{id}', 'MultiCheckinController@sendSMSMissingChildren')->name('multicheckin.sms');;
 
 Route::get('guestsList/{id}/reminderInvitationMail', 'GuestsListController@reminderInvitationMail');
+
 Route::resource('guestsList', 'GuestsListController');
 
 Route::get('member/invitations', 'MembersController@invitations');
@@ -283,8 +285,10 @@ Route::get('member/myeventgroup', 'MembersController@myEventGroup');
 
 /* Mailing */
 Route::get('sendInvitationToMyself', 'MailsController@sendInvitationToMySelf');
+Route::get('sendToMyself/{id}', 'MailsController@sendToMySelf');
 Route::get('sendInvitationToAllRallyeMembers', 'MailsController@sendInvitationToAllRallyeMembers');
 Route::get('sendCustomMails', 'MailsController@sendCustomMails');
+Route::post('sendMailToAllRallyeMembers', 'MailsController@sendMailToAllRallyeMembers');
 Route::get('waitingListEmail', 'MailsController@waitingListEmail');
 Route::get('paymentReminderEmail', 'MailsController@paymentReminderEmail');
 Route::get('MailsController/{id}/membershipConfirmedEmail', 'MailsController@membershipConfirmedEmail');
@@ -331,3 +335,7 @@ Route::get('redis', 'ConnectionCheckerController@redisTest');
 
 /* GuestList */
 Route::resource('guestLists', 'GuestsListController');
+
+/* Upload */
+Route::get('/upload', 'FileUploadController@showUploadForm');
+Route::post('/upload', 'FileUploadController@storeUploads');

@@ -7,7 +7,6 @@ use App\Models\KeyValue;
 use Mailgun\Mailgun;
 use Exception;
 
-
 class EmailRepository
 {
 
@@ -20,35 +19,43 @@ class EmailRepository
         Log::stack(['single'])->debug(" - " . $email_address);
       }
     } else {
-      Log::stack(['single'])->debug("[Mail] : email " . $mailName . " Sent Successfully to " . $to . ". Action made by <" . $userName . ">");
-    }
-  }
-
-  public function GetListBccMails($applications)
-  {
-    $compteur = 0;
-    $bcclist = "";
-
-    foreach ($applications as $row) {
-      if ($compteur < (count($applications) - 1)) {
-        $bcclist .= $row->parentemail . ",";
+      if (is_array($to)) {
+        $email_list = implode(',', $to);
       } else {
-        $bcclist .=  $row->parentemail;
+        $email_list = $to;
       }
-      $compteur++;
+      Log::stack(['single', 'stdout'])->debug("[Mail] : email " . $mailName . " Sent Successfully to " . $email_list . ". Action made by <" . $userName . ">");
     }
-
-    return $bcclist;
   }
 
-  public function generatePassword()
+  public function cleanMailList($emails)
   {
-    //Add password to user otherwise the user has no password until membership confirmed
-    $str_result = '**$$$$####???????0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    // Shufle the $str_result and returns substring
-    // of specified length
-    $userPassword =  substr(str_shuffle($str_result),  0, 12);
-    return $userPassword;
+    $emailsArray = explode(',', $emails);
+
+    foreach ($emailsArray as $email) {
+      Log::stack(['single', 'stdout'])->debug("ORIGIN: <" . $email . ">");
+    }
+
+    $cleanedEmails = array_map('trim', $emailsArray);
+
+    foreach ($cleanedEmails as $email) {
+      Log::stack(['single', 'stdout'])->debug("CLEANED: <" . $email . ">");
+    }
+
+    return $cleanedEmails;
+  }
+
+  public function validateEmails($emails)
+  {
+    foreach ($emails as $email) {
+
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        Log::stack(['single'])->debug("L'adresse email '$email' est considérée comme invalide.");
+        throw new Exception("L'adresse email '$email' est considérée comme invalide.");
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -79,16 +86,30 @@ class EmailRepository
     $message_id    = $response->getId();
   }
 
-  public function validateEmails($emails)
+  public function GetListBccMails($applications)
   {
-    foreach ($emails as $email) {
+    $compteur = 0;
+    $bcclist = "";
 
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        Log::stack(['single'])->debug("L'adresse email '$email' est considérée comme invalide.");
-        throw new Exception("L'adresse email '$email' est considérée comme invalide.");
-        return false;
+    foreach ($applications as $row) {
+      if ($compteur < (count($applications) - 1)) {
+        $bcclist .= $row->parentemail . ",";
+      } else {
+        $bcclist .=  $row->parentemail;
       }
+      $compteur++;
     }
-    return true;
+
+    return $bcclist;
+  }
+
+  public function generatePassword()
+  {
+    //Add password to user otherwise the user has no password until membership confirmed
+    $str_result = '**$$$$####???????0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    // Shufle the $str_result and returns substring
+    // of specified length
+    $userPassword =  substr(str_shuffle($str_result),  0, 12);
+    return $userPassword;
   }
 }

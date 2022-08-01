@@ -1,5 +1,7 @@
 <?php
 
+namespace Seeds\Prod;
+
 use Illuminate\Database\Seeder;
 use App\Models\KeyValue;
 
@@ -19,12 +21,12 @@ class KeyvalueSeeder extends Seeder
 
     KeyValue::create([
       'key' => 'DOMAIN_LINK',
-      'value' => env('APP_URL')
+      'value' => env('APP_URL') . '/'
     ]);
 
     KeyValue::create([
       'key' => 'OFFICIAL_LINK',
-      'value' => env('APP_URL')
+      'value' => 'https://www.lefrenchrallye.com/'
     ]);
   }
 }

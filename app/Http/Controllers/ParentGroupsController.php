@@ -123,28 +123,11 @@ class ParentGroupsController extends Controller
     }
   }
 
-  // public function GetListBccMails($applications)
-  // {
-  //   $compteur = 0;
-  //   $bcclist = "";
-
-  //   foreach ($applications as $row) {
-  //     if ($compteur < (count($applications) - 1)) {
-  //       $bcclist .= $row->parentemail . ",";
-  //     } else {
-  //       $bcclist .=  $row->parentemail;
-  //     }
-  //     $compteur++;
-  //   }
-
-  //   return $bcclist;
-  // }
-
   public function showGroupMembersSameApplicationEvent($id)
   {
     if (Auth::user()->active_profile == config('constants.roles.COORDINATOR') || Auth::user()->active_profile == config('constants.roles.SUPERADMIN')) {
-      $data = null;
-      $applications = [];
+
+      $results = null;
       $group = Group::find($id);
 
       $applications = Application::where('rallye_id', $group->rallye->id)
@@ -152,14 +135,23 @@ class ParentGroupsController extends Controller
         ->where('event_id', strtoupper($group->id))
         ->get();
 
-      Log::stack(['single', 'stdout'])->debug('nbAppblications:' . count($applications));
+      Log::stack(['single', 'stdout'])->debug('nbAppblications: ' . count($applications));
+
       if (count($applications) > 0) {
         $bcclist = $this->emailRepository->GetListBccMails($applications);
-        Log::stack(['single', 'stdout'])->debug('bcclist:' . $bcclist);
+        Log::stack(['single', 'stdout'])->debug('bcclist: ' . $bcclist);
+
+        $rallye_email = $group->rallye->rallyemail;
+        $rallye_title = $group->rallye->title;
+
+        $mailBodyPlacehodeler = $this->getMailbody($rallye_title);
 
         $results = [
           'applications'  => $applications,
-          'bcclist' => $bcclist
+          'bcclist'       => $bcclist,
+          'rallye_title'  => $rallye_title,
+          'rallye_email'  => $rallye_email,
+          'mail_body'     => $mailBodyPlacehodeler,
         ];
 
         return view('members.myeventgroup')->with($results);
@@ -180,7 +172,7 @@ class ParentGroupsController extends Controller
           ->first();
         if ($group != null) {
 
-          $data = null;
+          $results = null;
           $applications = [];
 
           $applications = Application::where('rallye_id', $group->rallye->id)
@@ -188,16 +180,23 @@ class ParentGroupsController extends Controller
             ->where('group_name', strtoupper($group->name))
             ->get();
 
-          Log::stack(['single', 'stdout'])->debug('nbAppblications:' . count($applications));
+          Log::stack(['single', 'stdout'])->debug('nbAppblications: ' . count($applications));
 
           if (count($applications) > 0) {
             $bcclist = $this->emailRepository->GetListBccMails($applications);
-            Log::stack(['single', 'stdout'])->debug('bcclist:' . $bcclist);
+            Log::stack(['single', 'stdout'])->debug('bcclist: ' . $bcclist);
+
+            $rallye_email = $group->rallye->rallyemail;
+            $rallye_title = $group->rallye->title;
+
+            $mailBodyPlacehodeler = $this->getMailbody($rallye_title);
 
             $results = [
               'applications'  => $applications,
-              'bcclist' => $bcclist
-
+              'bcclist'       => $bcclist,
+              'rallye_title'  => $rallye_title,
+              'rallye_email'  => $rallye_email,
+              'mail_body'     => $mailBodyPlacehodeler,
             ];
 
             return view('members.mygroup')->with($results);
@@ -421,5 +420,19 @@ class ParentGroupsController extends Controller
    */
   public function destroy($id)
   {
+  }
+
+  private function getMailbody($rallye_title)
+  {
+    $mailBodyPlacehodeler = "<p>Dear Parents</p>
+       <p><font color=\"grey\">Enter Your email body here...</font></p>
+       <br>
+       <br>
+       <br>
+       ---------------
+       <p>See you,</p>
+       <p>The $rallye_title Coordinators</p>
+       ";
+    return $mailBodyPlacehodeler;
   }
 }

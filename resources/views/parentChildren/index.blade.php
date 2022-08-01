@@ -57,8 +57,8 @@
                                         <a href="/parentChildren/{{$application->id}}"><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon  glyphicon-info-sign"></span></button></a>
                                         @if($application->event != null)
                                         <a href="/checkinkids/{{$application->id}}"><button type="button" class="btn btn-dark btn-sm"><span class="glyphicon  glyphicon-random"></span></button></a>
-                                        <a href="/invitations/{{$application->id}}"><button type="button" class="btn btn-danger btn-sm"><span class="glyphicon  glyphicon-send"></span></button></a>
-                                        <a href="/checkin/{{$application->id}}"><button type="button" class="btn btn-warning btn-sm"><span class="glyphicon  glyphicon-check"></span></button></a>
+                                        <a href="invitations/{{$application->id}}"><button type="button" class="btn btn-danger btn-sm"><span class="glyphicon  glyphicon-send"></span></button></a>
+                                        <a href="/checkin/{{$application->id}}/checkIn"><button type="button" class="btn btn-warning btn-sm"><span class="glyphicon  glyphicon-check"></span></button></a>
                                         @endif
                                     </td>
                                 </tr>

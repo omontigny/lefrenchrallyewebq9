@@ -15,7 +15,7 @@
 @if(count($invitations) > 0)
 <!--{{var_dump($invitations)}} -->
 <div class="row clearfix">
-  <div class="col-lg-12">
+  <div class=""> <!-- Enlarge central pannel to have access to buttons but not centered (old value : col-lg-12 -->
     <div class="card">
       <div class="header">
         <h2><strong>Invitations</strong> List</h2>
@@ -32,6 +32,7 @@
                 <th>Venue</th>
                 <th>Theme</td>
                 <th>Status</td>
+                <th>Actions</td>
               </tr>
             </thead>
             <tbody>
@@ -52,6 +53,7 @@
                 <td>{{$invitation->venue_address}}</td>
                 <td>{{$invitation->theme_dress_code}}</td>
                 <td class="text-warning">Finished</td>
+                <td> - </td>
               </tr>
 
               @endforeach
@@ -78,8 +80,44 @@
                 <td>{{$invitation->venue_address}}</td>
                 <td>{{$invitation->theme_dress_code}}</td>
                 <td>Incoming</td>
-              </tr>
+                <td>
+                  <a href={{secure_url("/sendToMyself/".$invitation->id)}}>
+                    <button type="button" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-envelope"></span> Mail to myself</button>
+                  </a>
+                  <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal" data-target="#DeletingInvitation_{{$invitation->id}}"><span class="glyphicon glyphicon-remove"></span></button>
+                </td>
 
+                <!-- +AJO : Model section begin -->
+                <div class="modal fade" id="DeletingInvitation_{{$invitation->id}}" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                  <div class="modal-content bg-danger">
+                      <div class="modal-header">
+                      <h4 class="title col-white text-center" id="defaultModalLabel">Delete Invitation</h4>
+                      </div>
+                      <div class="modal-body col-white">
+                          {{ Form::open(['method' => 'GET', 'url' => route('invitations.destroy', $invitation->id)]) }}
+                      @csrf
+
+                      <p for=""><b>Event Date : </b>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</p>
+                      <p for=""><b>Theme: </b>{{$invitation->theme_dress_code}}</p>
+                      <p for=""><b>Rallye: </b>{{$invitation->rallye->title}}</p>
+
+                      <div class="form-group">
+                          <label for="action"><b>Are you sure you want to delete this invitation ?</b></label>
+                      </div>
+                      </div>
+                      {{Form::hidden('_method', 'DELETE')}}
+                      <div class="modal-footer">
+                      <button type="submit" class="btn btn-link waves-effect col-white">Yes</button>
+                      <button type="button" class="btn btn-link waves-effect col-white" data-dismiss="modal">No,
+                          cancel</button>
+                      </div>
+                      {{ Form::close() }}
+                  </div>
+                  </div>
+              </div>
+              <!-- END MODAL-->
+            </tr>
               @endforeach
             </tbody>
           </table>
@@ -118,10 +156,19 @@
     {{form::text('venue_address', '', ['class' => 'form-control', 'placeholder' => 'Venue Address'])}}
   </div>
 
-  <div class="form-group form-float">
+  <div class="form-group form-float ">
+    <label for="theme_dress_code"><b>Theme/Dress Code</b></label>
+    <input type="text" name="theme_dress_code" placeholder="Theme/Dress Code"
+           pattern="^[ A-Za-z0-9_.-]*$" class="form-control">
+    <div class="help-info">
+      <p>Avoid some special caracters like (&\/$€`()[]@#+%?!~). You can use (-_.)</p>
+    </div>
+  </div>
+
+  {{-- <div class="form-group form-float">
     <label for="theme_dress_code"><b>Theme/Dress Code</b></label>
     {{form::text('theme_dress_code', '', ['class' => 'form-control', 'placeholder' => 'Theme/Dress Code'])}}
-  </div>
+  </div> --}}
 
   <div class="form-group form-float">
     <label for="start_time"><b>Start time</b></label>

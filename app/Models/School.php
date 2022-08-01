@@ -12,10 +12,10 @@ class School extends Model
    *
    * @var array
    */
-  // protected $fillable = [
-  //   'name', 'state', 'added_by', 'user_id', 'approved'
-  // ];
-  protected $guarded = [];
+  protected $fillable = [
+    'name', 'state', 'added_by', 'user_id', 'approved'
+  ];
+  // protected $guarded = [];
 
   public function user()
   {
