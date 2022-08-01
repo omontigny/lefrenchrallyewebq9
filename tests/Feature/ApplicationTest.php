@@ -4,12 +4,13 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 use \App\Models\Application;
 use \App\Models\Rallye;
 use \App\Models\School;
 use \App\Models\Schoolyear;
-
+use \App\User;
 
 class ApplicationTest extends TestCase
 {
@@ -24,13 +25,59 @@ class ApplicationTest extends TestCase
   public function test_add_an_application()
   {
     // Run the DatabaseSeeder...
-    $this->seed();
+    // $this->seed();
+    $user = factory(User::class)->create();
+
+
+    Rallye::create([
+      'title'         => 'STD 1',
+      'isPetitRallye' => 0,
+      'user_id'       => $user->id,
+      'status'        => 1,
+      'rallyemail'    => "std1@lefrenchrallye-qual.com"
+    ]);
 
     $stdrallye1   = Rallye::where('title', 'STD 1')->first();
-    $this->assertCount(4, \App\Models\Rallye::all());
+    $this->assertCount(1, \App\Models\Rallye::all());
 
+    $user_admin = factory(User::class)->create([
+      'email' => 'admin@myapp.fr',
+      'name' => 'admin',
+      'email_verified_at' => now(),
+      'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+      'remember_token' => Str::random(10),
+      'active_profile' => 'SUPERADMIN',
+      'admin' => 2,
+      'coordinator' => 1,
+      'parent'  => 0,
+    ]);
+
+    factory(School::class)->create([
+      'name' => 'SCHOOL C',
+      'state' => 'ENGLISH',
+      'added_by' => $user_admin->name,
+      'user_id' => $user_admin->id
+    ]);
 
     $school       = School::find(1);
+
+    Schoolyear::create([
+      'current_level'  => '3eme - Year 10',
+      'next_level' => '',
+      'user_id' => $user->id
+    ]);
+    Schoolyear::create([
+      'current_level'  => '2nde - Year 11',
+      'next_level' => '',
+      'user_id' => $user->id
+    ]);
+    Schoolyear::create([
+      'current_level'  => '1ere - Year 12',
+      'next_level' => '',
+      'user_id' => $user->id
+    ]);
+
+
     $schoolyear1  = Schoolyear::where('current_level', '3eme - Year 10')->first();
 
     $application = Application::create(
@@ -52,7 +99,7 @@ class ApplicationTest extends TestCase
         'parentaddress' => 'MON ADRESS, 75000 PARIS',
         'parenthomephone' => '+33201010101',
         'parentmobile' => '+33601010101',
-        'parentemail' => 'monimmo49@free.fr',
+        'parentemail' => 'parent@myapp.fr',
         'signingcodeconduct' => 'I accept',
         'dpp1' => 1,
         'dpp2' => 1,
