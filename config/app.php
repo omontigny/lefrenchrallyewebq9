@@ -167,6 +167,8 @@ return [
     Intervention\Image\ImageServiceProvider::class,
     /** _AJO */
 
+    /** Cloudinary */
+    CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
     /*
     * Package Service Providers...
     */
@@ -237,6 +239,10 @@ return [
     'Form' => Collective\Html\FormFacade::class,
     'Html' => Collective\Html\HtmlFacade::class,
     /** _AJO */
+
+    /* Cloudinary */
+    'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+    'Client' => Twilio\Rest\Client::class,
 
     /* Services */
     // 'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,

@@ -72,7 +72,7 @@ return [
     |
     */
 
-  'connection' => env('SESSION_CONNECTION', 'default'),
+  'connection' => env('SESSION_CONNECTION', null),
 
   /*
     |--------------------------------------------------------------------------
@@ -153,7 +153,7 @@ return [
     |
     */
 
-  'domain' => env('SESSION_DOMAIN', 'app.lefrenchrallyequal7.local'),
+  'domain' => env('SESSION_DOMAIN', 'app.lefrenchrallye.com'),
 
   /*
     |--------------------------------------------------------------------------

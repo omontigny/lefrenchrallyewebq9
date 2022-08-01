@@ -9,9 +9,9 @@
 <hr>
 
 <!-- Exportable Table -->
-@if(count($data) > 0)
+@if(count($invitations) > 0)
 <p>Since you are part of more than one event group, please select the event group you want to make the check IN on.</p>
-<!--{{var_dump($data)}} -->
+<!--{{var_dump($invitations)}} -->
 <div class="row clearfix">
   <div class="col-lg-12">
     <div class="card">
@@ -33,7 +33,7 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($data as $invitation)
+              @foreach ($invitations as $invitation)
 
               @if($invitation->group_id == $application->event_id)
               <tr>

@@ -317,13 +317,20 @@ class GuestsListController extends Controller
           'invitation' => $invitation
         ];
 
-        $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
-        $destination_dir = "/assets/images/invitations/";
-        $full_image_path = $destination_dir . $imageName;
-        $this->imageRepository->ConvertImage64ToImage($invitation->invitationFile, $invitation->extension, $full_image_path);
+        $imageInfo          = $this->imageRepository->setImageInfo($invitation);
+        $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
 
-        $image_url = URL::asset($full_image_path);
-        Log::stack(['single', 'stdout'])->debug("[MAIL] - image_url: " . $image_url);
+        // $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
+        // $imageExpirationDate = Carbon::create($invitation->group->eventDate)->addMonths(2);
+        // $imageMetadata = ["name" => $imageName, "expirationDate" => $imageExpirationDate];
+        // $destination_dir = "/assets/images/invitations/";
+        // $full_image_path = $destination_dir . $imageName;
+        // $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $full_image_path);
+
+        $imageUrl = URL::asset($imageInfo["imagePath"]);
+        Log::stack(['single', 'stdout'])->debug("[REMINDER MAIL] - image_url: " . $imageUrl);
+        Log::stack(['single', 'stdout'])->debug("[REMINDER MAIL] - cloudinary_image_url: " . $cloudinaryImageUrl);
+
 
         $domainLink = $this->emailRepository->getKeyValue('DOMAIN_LINK');
 
@@ -333,9 +340,10 @@ class GuestsListController extends Controller
           $htmlData = [
             'checkin'    => $checkin,
             'domainLink' => $domainLink,
-            'imageName'  => $imageName,
+            'imageName'  => $imageInfo["imageName"],
             'invitationFile' => $invitation->invitationFile,
-            'image_url' => $image_url
+            'imageUrl' => $imageUrl,
+            'cloudinaryImageUrl' => $cloudinaryImageUrl
           ];
 
           //////////////////////////////////////////////////////////////////////

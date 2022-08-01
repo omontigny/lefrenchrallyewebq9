@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Models\Parent_Group;
 use App\Models\Invitation;
 use App\Models\Venue;
@@ -69,9 +70,10 @@ class InvitationsController extends Controller
             $groupsID[] = $application->event_id;
           }
 
-          $now = new Carbon;
-          $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
-          $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $now)->sortBy('group.eventDate', SORT_REGULAR, false);
+          $limitDate = Carbon::now()->sub(1, 'day');
+
+          $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
+          $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
 
           $groups = Group::orderBy('eventDate', 'asc')->get();
           $groupsID = $groupsID->unique();
@@ -301,6 +303,7 @@ class InvitationsController extends Controller
   public function edit($id)
   {
     //
+    Log::stack(['single', 'stdout'])->debug('Je suis dans InvitationControlle:EDIT - empty Method');
   }
 
   /**
@@ -323,6 +326,41 @@ class InvitationsController extends Controller
    */
   public function destroy($id)
   {
-    //
+    try {
+      //
+      $deleted = false;
+      $errorMsg = '';
+      DB::beginTransaction();
+      $invitation = Invitation::find($id);
+
+      if ($invitation != null) {
+        $invitations = invitation::where('user_id', $invitation->user_id)->get();
+        $countinvitations = count($invitations);
+
+        $invitationOwner = User::where('id', $invitation->user_id)->first();
+
+        // The current user is the invitation owner
+        if ($invitationOwner->id == Auth::user()->id) {
+          $invitation->checkins()->delete();
+          $invitation->delete();
+          $deleted = true;
+        } else {
+          $errorMsg = "E300: you are not owner, you can't delete, please contact your admin.";
+        }
+      } else {
+        $errorMsg = 'E301: invitation not found, please contact your admin.';
+      }
+
+      if ($deleted) {
+        DB::commit();
+        return redirect('/invitations')->with('success', 'M007: invitation deleted');
+      } else {
+        DB::rollback();
+        return Redirect::back()->withError($errorMsg);
+      }
+    } catch (Exception $e) {
+      DB::rollback();
+      return Redirect::back()->withError('E039: ' . $e->getMessage());
+    }
   }
 }

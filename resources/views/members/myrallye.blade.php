@@ -3,14 +3,17 @@
 @section('page-style')
 <link rel="stylesheet" href="{{secure_asset('assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{secure_asset('assets/plugins/sweetalert/sweetalert.css')}}"/>
+@include('components.head.tinymce-config') {{-- ## TinyMCE ##  --}}
 @stop
 @section('content')
 
 @if(count($applications) > 0 )
 <div class="btn-group-vertical float-right" role="group" aria-label="...">
   @if(Auth::user()->active_profile == Config::get('constants.roles.COORDINATOR') || Auth::user()->active_profile == Config::get('constants.roles.SUPERADMIN'))
-    <!-- MAIL -->
+    <!-- MAIL DIRECT -->
     <a href="mailto:?bcc={{$bcclist}}"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mail</button></a>
+    <!-- MAIL MODAL -->
+    {{-- <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#sendMail"><span class="glyphicon glyphicon-send"></span> Message</button> --}}
     <!-- MAIL -->
   @endif
     <!-- BACK -->
@@ -76,7 +79,8 @@
         </div>
     </div>
     <!-- #END# Exportable Table -->
-
+    @include('members.partials.sendMailModal')
+    <!-- END MODAL-->
 </div>
       @endif
     <br />

@@ -22,7 +22,7 @@
 
 <section>
 <div align="center">
-  <p> If you don't visualize the attached image you can use the following <a href="{{ $image_url }}" class="btn btn-default float-right" >link</a></p>
+  <p> If you don't visualize the attached image you can use the following <a href="{{ $cloudinaryImageUrl }}" class="btn btn-default float-right" >link</a></p>
 </div>
 
 <p>Kind regards,</p>
