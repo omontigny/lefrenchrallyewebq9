@@ -14,7 +14,7 @@ class SchoolTest extends TestCase
 {
 
   use RefreshDatabase;
-  use WithoutMiddleware;
+  # use WithoutMiddleware;
   /**
    *
    * @return void
@@ -23,10 +23,10 @@ class SchoolTest extends TestCase
    */
   public function test_add_a_school()
   {
-    $this->withoutExceptionHandling();
+    # $this->withoutExceptionHandling();
 
     $user_admin = factory(User::class)->create([
-      'email' => 'sally@example.com',
+      'email' => 'admin@myapp.fr',
       'name' => 'admin',
       'email_verified_at' => now(),
       'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -50,7 +50,6 @@ class SchoolTest extends TestCase
     $this->assertDatabaseHas('schools', [
       'name' => 'SCHOOL C',
       'added_by' => 'admin',
-      'user_id' => 1,
     ]);
   }
 
