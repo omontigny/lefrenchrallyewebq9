@@ -25,7 +25,7 @@ class SchoolTest extends TestCase
   {
     # $this->withoutExceptionHandling();
 
-    $user_admin = factory(User::class)->create([
+    $user_admin = User::factory()->create([
       'email' => 'admin@myapp.fr',
       'name' => 'admin',
       'email_verified_at' => now(),
@@ -39,7 +39,7 @@ class SchoolTest extends TestCase
 
     $this->assertCount(1, User::all());
     # dd($user->name);
-    factory(School::class)->create([
+    School::factory()->create([
       'name' => 'SCHOOL C',
       'state' => 'SPANISH',
       'added_by' => $user_admin->name,
