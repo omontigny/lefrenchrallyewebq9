@@ -49,7 +49,7 @@
           <span class="input-group-addon">
               <i class="zmdi zmdi-calendar"></i>
           </span>
-          <input type="text" id="date" value="{{\Carbon\Carbon::parse($group->eventDate)->format('d/m/Y')}}" name="eventDate" class="form-control floating-label" placeholder="Date">
+          <input type="text" id="date" value="{{\Illuminate\Support\Carbon::parse($group->eventDate)->format('d/m/Y')}}" name="eventDate" class="form-control floating-label" placeholder="Date">
           
       </div>
   </div>

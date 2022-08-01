@@ -25,7 +25,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Config;
 use App\Repositories\ImageRepository;
 use Exception;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 
 # Imports the Google Cloud client library

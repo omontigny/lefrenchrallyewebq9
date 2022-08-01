@@ -168,7 +168,7 @@
               </div>
 
               <div class="form-group form-float">
-                <label for="schoolyear_id"><b>Scholl Year in September {{\Carbon\Carbon::now()->format('Y')}}<span class="text-danger"> *</span></b></label>
+                <label for="schoolyear_id"><b>Scholl Year in September {{\Illuminate\Support\Carbon::now()->format('Y')}}<span class="text-danger"> *</span></b></label>
                 <select class="form-control show-tick ms" data-placeholder="Select" name="schoolyear_id"
                   required>
                   <option value="" selected disabled>-- Please select a school level --</option>

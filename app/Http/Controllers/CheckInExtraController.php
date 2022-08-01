@@ -12,7 +12,7 @@ use App\Models\Invitation;
 use App\Models\Parents;
 use App\Models\Parent_Rallye;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 
 class CheckInExtraController extends Controller

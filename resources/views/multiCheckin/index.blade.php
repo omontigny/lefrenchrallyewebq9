@@ -45,7 +45,7 @@
                       alt="" width="35" class="rounded-circle"></div>
                 </td>
                 @if($invitation->group->eventDate != null)
-                  <td>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
+                  <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
                 @else
                   <td></td>
                 @endif

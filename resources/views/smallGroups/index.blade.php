@@ -44,7 +44,7 @@
                       @endif
                       <td><strong>{{$group->name}}</strong></td>
                       @if($group->eventDate != null)
-                        <td><strong>{{\Carbon\Carbon::parse($group->eventDate)->format('d-m-Y')}}</strong></td>
+                        <td><strong>{{\Illuminate\Support\Carbon::parse($group->eventDate)->format('d-m-Y')}}</strong></td>
                       @else
                         <td></td>
                       @endif

@@ -9,7 +9,7 @@
         <p>Dear Parents of [name of child],</p>
         <br />
         <p>[child first name] is invited to a <b>{{$invitation->group->rallye->title}}<b> event on @if($invitation->group->eventDate != null)
-        <b>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</b>
+        <b>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</b>
         @else
           'Unknown Invitation Date'
         @endif . You can view the invitation below.</p>

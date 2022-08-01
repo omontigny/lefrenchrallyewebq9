@@ -46,7 +46,7 @@
                       alt="" width="35" class="rounded-circle"></div>
                 </td>
                 @if($invitation->group != null)
-                  <td>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
+                  <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
                 @else
                   <td>-</td>
                 @endif
@@ -73,7 +73,7 @@
                   </div>
                 </td>
                 @if($invitation->group != null)
-                  <td>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
+                  <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
                 @else
                   <td>-</td>
                 @endif
@@ -98,7 +98,7 @@
                           {{ Form::open(['method' => 'GET', 'url' => route('invitations.destroy', $invitation->id)]) }}
                       @csrf
 
-                      <p for=""><b>Event Date : </b>{{\Carbon\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</p>
+                      <p for=""><b>Event Date : </b>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</p>
                       <p for=""><b>Theme: </b>{{$invitation->theme_dress_code}}</p>
                       <p for=""><b>Rallye: </b>{{$invitation->rallye->title}}</p>
 
@@ -144,7 +144,7 @@
       @foreach ($groups as $group)
         @foreach($groupsID as $groupID)
             @if($group->id == $groupID)
-              <option value={{$group->id}}>{{$group->rallye->title . ' ' . $group->name . ' ' . \Carbon\Carbon::parse($group->eventDate)->format('d-m-Y')}}</option>
+              <option value={{$group->id}}>{{$group->rallye->title . ' ' . $group->name . ' ' . \Illuminate\Support\Carbon::parse($group->eventDate)->format('d-m-Y')}}</option>
             @endif
       @endforeach
       @endforeach
