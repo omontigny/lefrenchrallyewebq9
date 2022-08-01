@@ -1,44 +1,21 @@
 <?php
 
-namespace Tests\Feature;
+namespace Database\Seeders\Test;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use \App\User;
+use Illuminate\Database\Seeder;
+use App\User;
 
-
-class UserTest extends TestCase
+class UserSeeder extends Seeder
 {
-
-  use RefreshDatabase;
   /**
+   * Run the database seeds.
    *
    * @return void
-   * @test
-   * @group user
    */
-
-  public function test_as_one_user()
+  public function run()
   {
-    User::factory()->create([
-      'email' => 'sally@example.com',
-    ]);
 
-    $this->assertCount(1, User::all());
-
-    $this->assertDatabaseHas('users', [
-      'email' => 'sally@example.com',
-    ]);
-  }
-
-  /**
-   *
-   * @return void
-   * @test
-   * @group user
-   */
-  public function test_creating_a_new_user()
-  {
+    //factory(App\User::class, 50)->create();
     User::factory()->create([
       'email' => 'lucky.luke@myapp.fr',
       'name' => 'lucky',
@@ -64,11 +41,6 @@ class UserTest extends TestCase
       'admin' => 2,
       'coordinator' => 1,
       'parent'  => 0,
-    ]);
-
-    $this->assertCount(3, User::all());
-    $this->assertDatabaseHas('users', [
-      'email' => 'lucky.luke@myapp.fr',
     ]);
   }
 }
