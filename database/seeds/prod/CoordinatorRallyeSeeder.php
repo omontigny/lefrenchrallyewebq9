@@ -18,8 +18,8 @@ class CoordinatorRallyeSeeder extends Seeder
   {
 
     $petitrallye1 = Rallye::where('isPetitRallye', 1)->first();
-    $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY 2021 2022')->first();
-    $stdrallye2   = Rallye::where('title', 'RALLYE MOUNTBATTEN 2021 2022')->first();
+    $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY 2022 2023')->first();
+    $stdrallye2   = Rallye::where('title', 'RALLYE MOUNTBATTEN 2022 2023')->first();
 
     $oli    = Coordinator::where('username', 'omontigny')->first();
     $cylia  = Coordinator::where('username', 'cylia')->first();

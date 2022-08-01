@@ -26,9 +26,9 @@ class GroupSeeder extends Seeder
         'name'        => 'RED',
         'user_id'     => $coordinator->id,
         'rallye_id'   => $petitrallye1->id,
-        'eventDate'   => '2022-05-13',
-        'start_year'  => 2021,
-        'end_year'    => 2022
+        'eventDate'   => '2022-09-13',
+        'start_year'  => 2022,
+        'end_year'    => 2023
       ]);
     }
 
@@ -37,29 +37,29 @@ class GroupSeeder extends Seeder
         'name'        => 'GREEN',
         'user_id'     => $coordinator->id,
         'rallye_id'   => $petitrallye1->id,
-        'eventDate'   => '2022-05-14',
-        'start_year'  => 2021,
-        'end_year'    => 2022
+        'eventDate'   => '2022-09-14',
+        'start_year'  => 2022,
+        'end_year'    => 2023
       ]);
     }
     if ($coordinator && $stdrallye1) {
       Group::create([
-        'name'        => 'Party1',
+        'name'        => 'Group1',
         'user_id'     => $coordinator->id,
         'rallye_id'   => $stdrallye1->id,
-        'eventDate'   => '2022-05-06',
-        'start_year'  => 2021,
-        'end_year'    => 2022
+        'eventDate'   => '2022-10-13',
+        'start_year'  => 2022,
+        'end_year'    => 2023
       ]);
     }
     if ($coordinator && $stdrallye2) {
       Group::create([
-        'name'        => 'Party1',
+        'name'        => 'Group2',
         'user_id'     => $coordinator->id,
         'rallye_id'   => $stdrallye2->id,
-        'eventDate'   => '2022-05-10',
-        'start_year'  => 2021,
-        'end_year'    => 2022
+        'eventDate'   => '2022-10-13',
+        'start_year'  => 2022,
+        'end_year'    => 2023
       ]);
     }
   }

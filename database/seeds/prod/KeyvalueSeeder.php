@@ -4,6 +4,7 @@ namespace Seeds\Prod;
 
 use Illuminate\Database\Seeder;
 use App\Models\KeyValue;
+use Illuminate\Support\Facades\App;
 
 class KeyvalueSeeder extends Seeder
 {
@@ -24,9 +25,15 @@ class KeyvalueSeeder extends Seeder
       'value' => env('APP_URL') . '/'
     ]);
 
+
+    if (App::environment() === 'prod') {
+      $public_url = 'https://www.lefrenchrallye.com';
+    } else {
+      $public_url = env('APP_URL');
+    };
     KeyValue::create([
       'key' => 'OFFICIAL_LINK',
-      'value' => 'https://www.lefrenchrallye.com/'
+      'value' => $public_url . '/'
     ]);
   }
 }

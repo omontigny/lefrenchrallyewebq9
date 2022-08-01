@@ -22,7 +22,7 @@ class RallyeSeeder extends Seeder
     if ($coordinator) {
 
       Rallye::create([
-        'title'         => 'RALLYE NOTTING HILL 2021-2022',
+        'title'         => 'RALLYE NOTTING HILL 2022-2023',
         'isPetitRallye' => 1,
         'user_id'       => $coordinator->id,
         'status'        => 0,
@@ -30,7 +30,7 @@ class RallyeSeeder extends Seeder
       ]);
 
       Rallye::create([
-        'title'         => 'RALLYE BERKELEY 2021 2022',
+        'title'         => 'RALLYE BERKELEY 2022-2023',
         'isPetitRallye' => 0,
         'user_id'       => $coordinator->id,
         'status'        => 0,
@@ -38,7 +38,7 @@ class RallyeSeeder extends Seeder
       ]);
 
       Rallye::create([
-        'title'         => 'RALLYE MOUNTBATTEN 2021 2022',
+        'title'         => 'RALLYE MOUNTBATTEN 2022-2023',
         'isPetitRallye' => 0,
         'user_id'       => $coordinator->id,
         'status'        => 0,
