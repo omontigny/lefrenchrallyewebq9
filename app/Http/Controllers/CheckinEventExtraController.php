@@ -93,7 +93,7 @@ class CheckinEventExtraController extends Controller
         'data'   => $data
       ];
 
-      Log::stack(['single', 'stdout'])->debug('$results: ' . count($results->data));
+      // Log::stack(['single', 'stdout'])->debug('$results: ' . count($results->data));
 
       //$rallyes = Rallye::orderBy('title', 'asc')->get();
       return view('checkinEvent.index')->with($results);
