@@ -4,6 +4,7 @@ namespace Seeds\Prod;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use App\User;
 
 class UserSeeder extends Seeder
@@ -21,7 +22,10 @@ class UserSeeder extends Seeder
     // Schema::enableForeignKeyConstraints();
 
     //factory(App\User::class, 50)->create();
-    factory(User::class)->create([
+    User::create([
+      'email_verified_at' => now(),
+      'password' => '',
+      'remember_token' => Str::random(10),
       'email' => 'olivier@it-r.fr',
       'name' => 'omontigny',
       'active_profile' => 'SUPERADMIN',
@@ -30,7 +34,10 @@ class UserSeeder extends Seeder
       'parent'  => 0,
     ]);
 
-    factory(User::class)->create([
+    User::create([
+      'email_verified_at' => now(),
+      'password' => '',
+      'remember_token' => Str::random(10),
       'email' => 'webmaster@lefrenchrallye.com',
       'name' => 'cylia',
       'active_profile' => 'COORDINATOR',
@@ -39,7 +46,10 @@ class UserSeeder extends Seeder
       'parent'  => 0,
     ]);
 
-    factory(User::class)->create([
+    User::create([
+      'email_verified_at' => now(),
+      'password' => '',
+      'remember_token' => Str::random(10),
       'email' => 'thierry@1516.fr',
       'name' => "tbuisson",
       'active_profile' => 'SUPERADMIN',
@@ -48,7 +58,10 @@ class UserSeeder extends Seeder
       'parent'  => 0,
     ]);
 
-    factory(User::class)->create([
+    User::create([
+      'email_verified_at' => now(),
+      'password' => '',
+      'remember_token' => Str::random(10),
       'email' => 'elfiartero@hotmail.com',
       'name' => 'elfi',
       'active_profile' => 'COORDINATOR',
