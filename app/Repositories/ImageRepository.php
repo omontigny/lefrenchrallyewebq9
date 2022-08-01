@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Cloudinary\Cloudinary;
 
 class ImageRepository

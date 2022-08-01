@@ -44,7 +44,7 @@
                                     <td><b><a href="tel:{{$application->parenthomephone}}">{{$application->parenthomephone}}</a></b></td>
                                     <td><b><a href="sms:{{$application->parentmobile}}">{{$application->parentmobile}}</a></b></td>
                                     @if($application->evented == 1)
-                                      <td><b>{{\Carbon\Carbon::parse($application->event->eventDate)->format('d-m-Y')}}</b></td>
+                                      <td><b>{{\Illuminate\Support\Carbon::parse($application->event->eventDate)->format('d-m-Y')}}</b></td>
                                     @else
                                       <td>-</td>
                                     @endif

@@ -24,7 +24,7 @@
                   <td><b>{{$row->title}} - {{$row->start_year . ' ' . $row->end_year}}</b></td>
                   <td><b>{{$row->name}}</b></td>
                   @if($row->eventDate != null)
-                    <td><b>{{\Carbon\Carbon::parse($row->eventDate)->format('d-m-Y')}}</b></td>
+                    <td><b>{{\Illuminate\Support\Carbon::parse($row->eventDate)->format('d-m-Y')}}</b></td>
                   @else
                     <td></td>
                   @endif

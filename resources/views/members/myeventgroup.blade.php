@@ -62,7 +62,7 @@
                                     <td>-</td>
                                     @endif
                                     @if($application->evented == 1)
-                                    <td><b>{{\Carbon\Carbon::parse($application->event->eventDate)->format('d-m-Y')}}</b></td>
+                                    <td><b>{{\Illuminate\Support\Carbon::parse($application->event->eventDate)->format('d-m-Y')}}</b></td>
                                   @else
                                     <td>-</td>
                                   @endif

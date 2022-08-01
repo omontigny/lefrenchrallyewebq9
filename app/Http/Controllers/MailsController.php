@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Exception;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use App\Models\Invitation;
 use App\Models\Application;
 use App\Models\Group;
