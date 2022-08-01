@@ -21,7 +21,7 @@ class ApplicationStdSeeder extends Seeder
   public function run()
   {
     //
-    $stdrallye1     = Rallye::where('title', 'STD 1')->first();
+    $stdrallye1     = Rallye::where('isPetitRallye', false)->first();
 
 
     $school       = School::all()->first();
