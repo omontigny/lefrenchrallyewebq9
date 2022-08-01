@@ -4,12 +4,11 @@ namespace Database\Seeders;
 
 
 use Illuminate\Database\Seeder;
-use App\Models\Rallye;
-use App\Models\School;
-use App\Models\SchoolYear;
-use App\Models\Application;
-use App\Models\Group;
-use App\User;
+use \App\Models\Rallye;
+use \App\Models\School;
+use \App\Models\SchoolYear;
+use \App\Models\Application;
+
 
 class ApplicationSmallSeeder extends Seeder
 {
