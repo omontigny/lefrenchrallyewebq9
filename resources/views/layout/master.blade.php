@@ -6,7 +6,7 @@
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <meta name="description" content="{{ config('app.name') }}">
         <link rel="icon" href="{{ secure_asset('favicon.ico') }}" type="image/x-icon"> <!-- Favicon-->
-        <title>:: {{ config('app.title') }} :: @yield('title')</title>
+        <title>:: {{ config('app.name') }} :: @yield('title')</title>
         <meta name="description" content="@yield('meta_description', config('app.name'))">
         <meta name="author" content="@yield('meta_author', config('app.name'))">
         @yield('meta')
