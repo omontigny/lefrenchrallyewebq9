@@ -10,7 +10,9 @@ class Stripe
   //
   public function charge($token, $amount, $description)
   {
-    \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+    // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+    \Stripe\Stripe::setApiKey('rk_test_51Jf7KeDn4MIo6ZX2VHZ0I5pB3U38BVunNbbdqG6fJId7xyPe7gaMbnsrJ58pBOEl56O0WKyqbt8e45moRNTCdLhr00kLI5KFTL');
+
     try {
 
       $charge = \Stripe\Charge::create([
