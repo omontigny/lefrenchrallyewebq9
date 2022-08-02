@@ -22,7 +22,7 @@ class StripeTest extends TestCase
   public function test_ItWorks()
   {
     $stripe = app(Stripe::class);
-    $last4 = $stripe->charge('tok_visa', 10 * 100);
+    $last4 = $stripe->charge('tok_visa', 10 * 100, "This is a corect charge for testing");
     $this->assertEquals(self::LAST4['tok_visa'], $last4);
   }
 
@@ -31,7 +31,7 @@ class StripeTest extends TestCase
 
     $stripe = app(Stripe::class);
     try {
-      $stripe->charge('token_invalid', 10 * 100);
+      $stripe->charge('token_invalid', 10 * 100, "This is a voluntary charge error for testing");
     } catch (StripeException $e) {
       $this->assertTrue(true);
       return;
