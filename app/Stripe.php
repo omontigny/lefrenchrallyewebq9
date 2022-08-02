@@ -8,15 +8,18 @@ use Stripe\Exception\InvalidRequestException;
 class Stripe
 {
   //
-  public function charge($token, $amount)
+  public function charge($token, $amount, $description)
   {
-    \Stripe\Stripe::setApiKey('sk_test_51Jf7KeDn4MIo6ZX2mNl6ppKCzIpwDEKLGVU7plvB61IwADeAFKllM5BsuvZ4Kd75VCOjLNhcxHEfiuce9PARF8VI00IcnAEjHS');
+    // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+    \Stripe\Stripe::setApiKey('rk_test_51Jf7KeDn4MIo6ZX2VHZ0I5pB3U38BVunNbbdqG6fJId7xyPe7gaMbnsrJ58pBOEl56O0WKyqbt8e45moRNTCdLhr00kLI5KFTL');
+
     try {
 
       $charge = \Stripe\Charge::create([
         "amount" => $amount,
         "currency" => "eur",
         "source" => $token,
+        "description" => $description
       ]);
       return $charge->source->last4;
     } catch (InvalidRequestException $e) {
