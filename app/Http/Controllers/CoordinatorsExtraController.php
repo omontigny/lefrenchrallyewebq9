@@ -97,7 +97,7 @@ class CoordinatorsExtraController extends Controller
     //////////////////////////////////////////////////////////////////////
 
     //Use CheckMailSent to log and check if sending OK
-    $this->emailRepository->CheckMailSent($coordinator->mail, Mail::failures(), "CoordinatorPasswordReset", Auth::user()->name);
+    $this->emailRepository->CheckMailSent($coordinator->mail, Mail::flushMacros(), "CoordinatorPasswordReset", Auth::user()->name);
     return redirect('/coordinators')->with('success', 'M022: The coordinator password has been reset');
   }
 

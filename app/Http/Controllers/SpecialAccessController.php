@@ -54,12 +54,12 @@ class SpecialAccessController extends Controller
       ]);
 
       // Creating a coordinator user account
-      $specialAccess = SpecialAccess::where('email', strtoupper($request->input('email')))->first();
+      $specialAccess = SpecialAccess::where('email', Str::upper($request->input('email')))->first();
       if ($specialAccess == null) {
         // create new access control
         $specialAccess = new SpecialAccess();
-        $specialAccess->fullname = strtoupper($request->input('fullname'));
-        $specialAccess->email = strtoupper($request->input('email'));
+        $specialAccess->fullname = Str::upper($request->input('fullname'));
+        $specialAccess->email = Str::upper($request->input('email'));
         $specialAccess->status = false;
         $specialAccess->save();
 
@@ -67,7 +67,7 @@ class SpecialAccessController extends Controller
 
         return Redirect::back()->with('success', 'M066: new special access has been added successfully!');
       } else {
-        return Redirect::back()->withError('E173: ' . 'an access control is already exists for ' . strtoupper($request->input('email')));
+        return Redirect::back()->withError('E173: ' . 'an access control is already exists for ' . Str::upper($request->input('email')));
       }
     } catch (Exception $e) {
       return Redirect::back()->withError('E174: ' . $e->getMessage());

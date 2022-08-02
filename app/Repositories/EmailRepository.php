@@ -12,7 +12,7 @@ class EmailRepository
 
   public function CheckMailSent($to, $failures, $mailName, $userName)
   {
-    if (count($failures) > 0) {
+    if ($failures) {
 
       Log::stack(['single'])->error("[Mail ERROR] : email " . $mailName . ": There was one or more failures: ");
       foreach ($failures as $email_address) {

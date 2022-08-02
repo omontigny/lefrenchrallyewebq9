@@ -58,13 +58,13 @@ class UserRoleController extends Controller
       ]);
 
       // Creating a coordinator user account
-      $user = User::where('email', strtolower($request->input('email')))->first();
+      $user = User::where('email', Str::lower($request->input('email')))->first();
       if ($user == null) {
         // create user
         $user = new User();
-        $user->name = strtolower($request->input('username'));
+        $user->name = Str::lower($request->input('username'));
         $user->password = Hash::make('userpassword');
-        $user->email = strtolower($request->input('email'));
+        $user->email = Str::lower($request->input('email'));
       }
 
       $user->active_profile = config('constants.roles.SUPERADMIN');
