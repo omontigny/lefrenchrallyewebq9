@@ -31,9 +31,9 @@ class RallyeCoordinatorsController extends Controller
       // Checking if the user is allowed to go here
       if (Auth::user()->active_profile == config('constants.roles.SUPERADMIN')) {
         //
-        $rallyeCoordinators = Coordinator_Rallye::orderBy('id', 'asc')->get();
-        $coordinators = Coordinator::orderBy('firstname', 'asc')->get();
-        $rallyes = Rallye::orderBy('title', 'asc')->get();
+        $rallyeCoordinators = Coordinator_Rallye::oldest('id')->get();
+        $coordinators = Coordinator::oldest('firstname')->get();
+        $rallyes = Rallye::oldest('title')->get();
 
         $data = [
           'rallyeCoordinators' => $rallyeCoordinators,
@@ -59,8 +59,8 @@ class RallyeCoordinatorsController extends Controller
   {
     try {
       //
-      $coordinators = Coordinator::orderBy('firstname', 'asc')->get();
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
+      $coordinators = Coordinator::oldest('firstname')->get();
+      $rallyes = Rallye::oldest('title')->get();
 
       $data = [
         'rallyes'  => $rallyes,
@@ -146,8 +146,8 @@ class RallyeCoordinatorsController extends Controller
     try {
       //
       //
-      $coordinators = Coordinator::orderBy('firstname', 'asc')->get();
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
+      $coordinators = Coordinator::oldest('firstname')->get();
+      $rallyes = Rallye::oldest('title')->get();
       $coordinatorRallye = Coordinator_Rallye::find($id);
       $data = [
         'rallyes'  => $rallyes,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use DateTime;
 use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Mailgun\Mailgun;
 use App\Models\Rallye;
@@ -106,7 +107,7 @@ class ApplicationRequestsController extends Controller
         $payments       = Payment::where('rallye_id', $rallye_id)->get();
       }
 
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
 
       $data = [
         'rallyes'   => $rallyes,
@@ -137,7 +138,7 @@ class ApplicationRequestsController extends Controller
   {
     try {
 
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
       return view('applicationrequests.create')->with('rallyes', $rallyes);
     } catch (Exception $e) {
       return Redirect::back()->withError('E035: ' . $e->getMessage());

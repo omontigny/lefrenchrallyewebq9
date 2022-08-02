@@ -16,7 +16,7 @@ class ContactsExtraController extends Controller
     //
     public function contacts()
     {
-        $waitingList = Application::where('status', 3)->orderby('parentlastname', 'asc')->orderBy('parentfirstname', 'asc')->get();
+        $waitingList = Application::where('status', 3)->oldest('parentlastname')->oldest('parentfirstname')->get();
         $userRoles = DB::table('role_user')
         ->join('roles', 'roles.id', '=', 'role_user.role_id')
         ->join('users', 'users.id', '=', 'role_user.user_id')
@@ -41,7 +41,7 @@ class ContactsExtraController extends Controller
 
         $accessControl = AccessControl::all(); 
         $specialAccess = SpecialAccess::all();
-        $parentGroups = Parent_Group::orderBy('id', 'asc')->get();
+        $parentGroups = Parent_Group::oldest('id')->get();
         
         $EmailsByGroupId = [];
 

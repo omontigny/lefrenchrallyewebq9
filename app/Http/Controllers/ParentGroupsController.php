@@ -94,7 +94,7 @@ class ParentGroupsController extends Controller
         // }
       }
 
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
 
       $groups = DB::table('groups')
         ->leftJoin('applications', 'applications.group_id', '=', 'groups.id')
@@ -224,10 +224,10 @@ class ParentGroupsController extends Controller
   {
     try {
       //
-      $parents = Parents::orderBy('parentlastname', 'asc')->orderBy('parentfirstname', 'asc')->get();
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
-      $groups = Group::orderBy('name', 'asc')->get();
-      $children = Children::orderBy('childlastname', 'asc')->orderBy('childfirstname', 'asc')->get();
+      $parents = Parents::oldest('parentlastname')->oldest('parentfirstname')->get();
+      $rallyes = Rallye::oldest('title')->get();
+      $groups = Group::oldest('name')->get();
+      $children = Children::oldest('childlastname')->oldest('childfirstname')->get();
       $parentGroups = Parent_Group::all();
 
       $data = [
@@ -369,9 +369,9 @@ class ParentGroupsController extends Controller
   public function edit($id)
   {
     try {
-      $parents = Parents::orderBy('parentlastname', 'asc')->orderBy('parentfirstname', 'asc')->get();
-      $groups = Group::orderBy('name', 'asc')->get();
-      $children = Children::orderBy('childlastname', 'asc')->orderBy('childfirstname', 'asc')->get();
+      $parents = Parents::oldest('parentlastname')->oldest('parentfirstname')->get();
+      $groups = Group::oldest('name')->get();
+      $children = Children::oldest('childlastname')->oldest('childfirstname')->get();
       $parentGroup = Parent_Group::find($id);
       $data = [
         'parentGroup'   => $parentGroup,

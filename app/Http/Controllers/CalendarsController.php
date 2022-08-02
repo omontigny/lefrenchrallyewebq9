@@ -41,21 +41,21 @@ class CalendarsController extends Controller
         ->join('rallyes', 'rallyes.id', '=', 'groups.rallye_id')
         ->select('rallyes.title', 'groups.start_year', 'groups.end_year', 'groups.name', 'groups.eventDate')
         ->where('rallyes.id', $rallye_id)
-        ->orderby('rallyes.title', 'ASC')
-        ->orderby('groups.start_year', 'ASC')
-        ->orderby('groups.end_year', 'ASC')
+        ->oldest('rallyes.title')
+        ->oldest('groups.start_year')
+        ->oldest('groups.end_year')
         ->get();
     } else {
       $datas = DB::table('groups')
         ->join('rallyes', 'rallyes.id', '=', 'groups.rallye_id')
         ->select('rallyes.title', 'groups.start_year', 'groups.end_year', 'groups.name', 'groups.eventDate')
-        ->orderby('rallyes.title', 'ASC')
-        ->orderby('groups.start_year', 'ASC')
-        ->orderby('groups.end_year', 'ASC')
+        ->oldest('rallyes.title')
+        ->oldest('groups.start_year')
+        ->oldest('groups.end_year')
         ->get();
     }
 
-    $rallyes = Rallye::orderBy('title', 'asc')->get();
+    $rallyes = Rallye::oldest('title')->get();
     $groups = Group::all();
 
     $data = [

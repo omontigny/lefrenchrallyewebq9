@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use DateTime;
 use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Models\Coordinator;
 use App\Models\Coordinator_Rallye;
@@ -59,9 +60,9 @@ class ApplicationRequestsPrivateController extends Controller
 
       //
       $application = Application::find($id);
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
-      $schools = School::orderBy('name', 'asc')->get();
-      $schoolyears = Schoolyear::orderBy('id', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
+      $schools = School::oldest('name')->get();
+      $schoolyears = Schoolyear::oldest('id')->get();
       $userDebug = $application->parentemail;
       $data = [
         'application' => $application,

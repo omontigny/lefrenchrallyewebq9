@@ -87,7 +87,7 @@ class RallyeCoordinatorsExtraController extends Controller
         $coordinator = Coordinator::where('user_id', Auth::user()->id)->first();
         if ($coordinator != null) {
           // Get coordinator's rallyes
-          $coordinatorRallyes = Coordinator_Rallye::where('coordinator_id', $coordinator->id)->orderBy('id', 'asc')->get();
+          $coordinatorRallyes = Coordinator_Rallye::where('coordinator_id', $coordinator->id)->oldest('id')->get();
         }
 
         $data = [
@@ -103,7 +103,7 @@ class RallyeCoordinatorsExtraController extends Controller
         $parents = Parents::where('user_id', Auth::user()->id)->first();
         if ($parents != null) {
           // Get parent's rallyes
-          $parentsRallyes = Parent_Rallye::where('parent_id', $parents->id)->orderBy('id', 'asc')->get();
+          $parentsRallyes = Parent_Rallye::where('parent_id', $parents->id)->oldest('id')->get();
         }
 
 

@@ -78,7 +78,7 @@ class SmallGroupsController extends Controller
 
       if ($rallye_id != '') {
         $groups = Group::where('rallye_id', $rallye_id)
-          ->orderBy('name', 'asc')->paginate(100);
+          ->oldest('name')->paginate(100);
         return view('smallGroups.index')->with('groups', $groups);
       } else {
         return Redirect::back()->withError('E233: This section is for administor/Coordinator only - Check your active rallye');
@@ -125,7 +125,7 @@ class SmallGroupsController extends Controller
       if ($rallye_id != '') {
         // only (Petit Rallye)
         $rallyes = Rallye::where('id', $rallye_id)
-          ->where('isPetitRallye', '1')->orderBy('title', 'asc')->get();
+          ->where('isPetitRallye', '1')->oldest('title')->get();
         $data = [
           'rallyes'  => $rallyes
         ];
@@ -377,7 +377,7 @@ class SmallGroupsController extends Controller
     try {
       //
       $group   = Group::find($id);
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
 
       $data = [
         'rallyes'  => $rallyes,
