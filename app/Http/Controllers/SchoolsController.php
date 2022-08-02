@@ -30,7 +30,7 @@ class SchoolsController extends Controller
       //
       //$rallyes = Rallye::all();
       //$rallyes = Rallye::orderBy('title', 'asc')->take(1)->get();
-      $schools = School::orderBy('name', 'asc')->paginate(3);
+      $schools = School::oldest('name')->paginate(10);
       //$rallyes = Rallye::orderBy('title', 'asc')->get();
       return view('schools.index')->with('schools', $schools);
     } catch (Exception $e) {
