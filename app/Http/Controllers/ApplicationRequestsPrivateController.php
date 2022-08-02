@@ -104,7 +104,7 @@ class ApplicationRequestsPrivateController extends Controller
         ];
         $target_file = basename($_FILES["childphotopath"]["name"]);
         // Select file type
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $imageFileType = Str::lower(pathinfo($target_file, PATHINFO_EXTENSION));
 
         // Check extension
         if (in_array($imageFileType, $extensions_arr)) {
@@ -265,7 +265,7 @@ class ApplicationRequestsPrivateController extends Controller
       $application->is_boarder = ($request->has('is_boarder')) ? true : false;
 
       // child info
-      $application->childfirstname    = ($request->has('childfirstname')) ? ucwords(strtolower($request->input('childfirstname'))) : $application->childfirstname;
+      $application->childfirstname    = ($request->has('childfirstname')) ? ucwords(Str::lower($request->input('childfirstname'))) : $application->childfirstname;
       $application->childlastname     = ($request->has('childlastname')) ? $request->input('childlastname') : $application->childlastname;
       $application->childbirthdate    = ($request->has('childbirthdate')) ? Carbon::createFromFormat('d/m/Y', $request->input('childbirthdate'))->format('Y-m-d') : $application->childbirthdate;
       $application->childgender       = ($request->has('childgender')) ? $request->input('childgender') : $application->childgender;
@@ -277,14 +277,14 @@ class ApplicationRequestsPrivateController extends Controller
 
       // parent info
 
-      $application->parentfirstname  = ($request->has('parentfirstname')) ? ucwords(strtolower($request->input('parentfirstname'))) : $application->parentfirstname;
+      $application->parentfirstname  = ($request->has('parentfirstname')) ? ucwords(Str::lower($request->input('parentfirstname'))) : $application->parentfirstname;
       $application->parentlastname   = ($request->has('parentlastname')) ? $request->input('parentlastname') : $application->parentlastname;
       $application->parentaddress    = ($request->has('parentaddress')) ? $request->input('parentaddress') : $application->parentaddress;
       $application->parenthomephone  = ($request->has('parenthomephone')) ? $request->input('parenthomephone') : $application->parenthomephone;
       $application->parentmobile     = ($request->has('parentmobile')) ? $request->input('parentmobile') : $application->parentmobile;
 
       if ($request->has('parentemail') && $application->parentemail != $request->input('parentemail')) {
-        $user = User::where('email', strtolower($application->parentemail))->first();
+        $user = User::where('email', Str::lower($application->parentemail))->first();
         if ($user != null) {
           $application->parentemail = $request->input('parentemail');
           $user->email = $application->parentemail;
@@ -295,9 +295,9 @@ class ApplicationRequestsPrivateController extends Controller
 
       if ($request->has('schoolState')) {
         $school = School::find($application->school_id);
-        $school->state = strtoupper($request->input('schoolState'));
+        $school->state = Str::upper($request->input('schoolState'));
         $school->save();
-        $application->schoolstate = strtoupper($request->input('schoolState'));
+        $application->schoolstate = Str::upper($request->input('schoolState'));
       }
 
       $application->schoolyear_id     = ($request->has('schoolyear_id')) ? $request->input('schoolyear_id') : $application->schoolyear_id;
@@ -324,7 +324,7 @@ class ApplicationRequestsPrivateController extends Controller
       //     $m->subject('[' . env('APP_NAME') . '] - Your child is transferred from one rallye to another one');
       //   });
       //  // Use CheckMailSent to log and check if sending OK
-      //  $this->emailRepository->CheckMailSent($application->childfirstname . " " . $application->childlastname, Mail::failures(), "applicationReceived", "Guest");
+      //  $this->emailRepository->CheckMailSent($application->childfirstname . " " . $application->childlastname, Mail::flushMacros(), "applicationReceived", "Guest");
       //////////////////////////////////////////////////////////////////////
       //}
 

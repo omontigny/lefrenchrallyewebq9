@@ -46,24 +46,28 @@ return [
     'local' => [
       'driver' => 'local',
       'root' => storage_path('app/public'),
+      'throw' => true
     ],
     'storage_public' => [
       'driver' => 'local',
       'root' => storage_path('app/public'),
       'url' => env('APP_URL') . '/storage',
       'visibility' => 'public',
+      'throw' => true
     ],
     'temp' => [
       'driver' => 'local',
       'root' => storage_path('app/temp'),
       'url' => env('APP_URL') . '/storage',
       'visibility' => 'public',
+      'throw' => true
     ],
     'public' => [
       'driver' => 'local',
       'root' => public_path(),
       'url' => env('APP_URL') . '/',
       'visibility' => 'public',
+      'throw' => true
     ],
 
     's3' => [
@@ -73,13 +77,15 @@ return [
       'region' => env('AWS_DEFAULT_REGION'),
       'bucket' => env('AWS_BUCKET'),
       'url' => env('AWS_URL'),
+      'throw' => true
     ],
 
     'gcs' => [
       'driver' => 'gcs',
       'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
       'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
-      'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET')
+      'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET'),
+      'throw' => true
     ]
   ],
 

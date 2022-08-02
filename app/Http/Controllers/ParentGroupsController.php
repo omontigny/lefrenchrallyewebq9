@@ -132,7 +132,7 @@ class ParentGroupsController extends Controller
 
       $applications = Application::where('rallye_id', $group->rallye->id)
         ->where('status', '1')
-        ->where('event_id', strtoupper($group->id))
+        ->where('event_id', Str::upper($group->id))
         ->get();
 
       Log::stack(['single', 'stdout'])->debug('nbAppblications: ' . count($applications));
@@ -177,7 +177,7 @@ class ParentGroupsController extends Controller
 
           $applications = Application::where('rallye_id', $group->rallye->id)
             ->where('status', '1')
-            ->where('group_name', strtoupper($group->name))
+            ->where('group_name', Str::upper($group->name))
             ->get();
 
           Log::stack(['single', 'stdout'])->debug('nbAppblications: ' . count($applications));
@@ -280,7 +280,7 @@ class ParentGroupsController extends Controller
       else if ($group->rallye->id == $application->rallye->id) {
         $application->grouped = 1;
         $application->group_id = $group->id;
-        $application->group_name = strtoupper($group->name);
+        $application->group_name = Str::upper($group->name);
         $application->evented = 0;
         $application->event_id = null;
 

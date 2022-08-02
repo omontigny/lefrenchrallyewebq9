@@ -76,8 +76,8 @@ class SchoolYearsController extends Controller
 
       // Add a school year level
       $schoolyear = new  SchoolYear;
-      $schoolyear->current_level = strtoupper($request->input('current_level'));
-      $schoolyear->next_level = strtoupper($request->input('next_level'));
+      $schoolyear->current_level = Str::upper($request->input('current_level'));
+      $schoolyear->next_level = Str::upper($request->input('next_level'));
       $schoolyear->user_id = Auth::user()->id;
       $schoolyear->save();
 
@@ -135,8 +135,8 @@ class SchoolYearsController extends Controller
 
       // Add a school level
       $schoolYear = SchoolYear::find($id);
-      $schoolYear->current_level = strtoupper($request->input('current_level'));
-      $schoolYear->next_level = strtoupper($request->input('next_level'));
+      $schoolYear->current_level = Str::upper($request->input('current_level'));
+      $schoolYear->next_level = Str::upper($request->input('next_level'));
 
       $schoolYear->user_id = Auth::user()->id;
       $schoolYear->save();
