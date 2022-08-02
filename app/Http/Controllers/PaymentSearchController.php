@@ -48,9 +48,9 @@ class PaymentSearchController extends Controller
         'childfirstname' => 'required'
       ]);
 
-      $application = Application::where('parentemail', strtolower($request->input('parentemail')))
-        ->where('childlastname', strtoupper($request->input('childlastname')))
-        ->where('childfirstname', ucwords(strtolower($request->input('childfirstname'))))
+      $application = Application::where('parentemail', trim(strtolower($request->input('parentemail'))))
+        ->where('childlastname', trim(strtoupper($request->input('childlastname'))))
+        ->where('childfirstname', ucwords(trim(strtolower($request->input('childfirstname')))))
         ->where('status', 4)
         ->get()
         ->first();
