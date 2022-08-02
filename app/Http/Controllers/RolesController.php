@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Role_User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
-use Exception;
 use Illuminate\Support\Facades\Redirect;
+use Exception;
 
 
 class RolesController extends Controller

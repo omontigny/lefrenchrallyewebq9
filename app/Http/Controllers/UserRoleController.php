@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
-use App\Models\Role_User;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\Role;
-use Exception;
+use App\Models\Role_User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Config;
+use Exception;
 
 class UserRoleController extends Controller
 {

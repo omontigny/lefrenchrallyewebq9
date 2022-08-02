@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Schoolyear;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Application;
-use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use App\Models\MembershipPrice;
+use Exception;
 
 
 class SchoolYearsController extends Controller

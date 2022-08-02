@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\School;
 use Illuminate\Support\Facades\Auth;
-use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
+use Exception;
 
 
 class SchoolsController extends Controller

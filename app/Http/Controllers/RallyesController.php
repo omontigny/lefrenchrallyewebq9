@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\User;
 use App\Models\Rallye;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Admin_Rallye;
 use App\Models\Coordinator_Rallye;
 use App\Models\Application;
 use App\Models\Group;
-
-use App\User;
-use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
+use Exception;
+
 
 class RallyesController extends Controller
 {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SpecialAccess;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use Exception;
