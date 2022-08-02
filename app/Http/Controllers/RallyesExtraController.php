@@ -132,7 +132,7 @@ class RallyesExtraController extends Controller
         'success'  => 'All rallyes have been switched to the closed status'
       ];
 
-      return redirect()->route('rallyes.index')->with($data);
+      return to_route('rallyes.index')->with($data);
     } catch (Exception $e) {
       return Redirect::back()->withError('E140: ' . $e->getMessage());
     }
@@ -155,7 +155,7 @@ class RallyesExtraController extends Controller
         'success'   => 'All rallyes have been switched to the opened status'
       ];
 
-      return redirect()->route('rallyes.index')->with($data);
+      return to_route('rallyes.index')->with($data);
     } catch (Exception $e) {
       return Redirect::back()->withError('E141: ' . $e->getMessage());
     }
@@ -191,7 +191,7 @@ class RallyesExtraController extends Controller
         'success'   => 'Irreversible delete has done successuflly!'
       ];
 
-      return redirect()->route('rallyes.index')->with($data);
+      return to_route('rallyes.index')->with($data);
     } catch (Exception $e) {
       return Redirect::back()->withError('E143: ' . $e->getMessage());
     }
