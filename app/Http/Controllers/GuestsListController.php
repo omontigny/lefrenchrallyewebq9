@@ -7,6 +7,7 @@ use App\Models\Invitation;
 use App\Models\Venue;
 use App\Models\Parent_Event;
 use App\Models\Parents;
+use App\Models\Rallye;
 use App\Models\Parent_Rallye;
 use App\Models\CheckIn;
 use App\Models\Group;
@@ -316,16 +317,13 @@ class GuestsListController extends Controller
           'checkins' => $checkins,
           'invitation' => $invitation
         ];
-
-        $imageInfo          = $this->imageRepository->setImageInfo($invitation);
-        $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
-
-        // $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
-        // $imageExpirationDate = Carbon::create($invitation->group->eventDate)->addMonths(2);
-        // $imageMetadata = ["name" => $imageName, "expirationDate" => $imageExpirationDate];
-        // $destination_dir = "/assets/images/invitations/";
-        // $full_image_path = $destination_dir . $imageName;
-        // $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $full_image_path);
+        $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
+        $group_name = "std";
+        if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
+          $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
+        }
+        $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
+        $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
 
         $imageUrl = URL::asset($imageInfo["imagePath"]);
         Log::stack(['single', 'stdout'])->debug("[REMINDER MAIL] - image_url: " . $imageUrl);

@@ -11,6 +11,7 @@ use App\Models\Parents;
 use App\Models\Parent_Rallye;
 use App\Models\CheckIn;
 use App\Models\Group;
+use App\Models\Rallye;
 use App\Models\Children;
 use App\Models\Application;
 use Illuminate\Http\Request;
@@ -134,8 +135,14 @@ class InvitationsController extends Controller
 
     try {
       DB::beginTransaction();
+      $parent = Parents::where('user_id', Auth::user()->id)->first();
+      $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
+      $group = Group::find($request->input('calendar_id'));
+      $invitation = Invitation::where('theme_dress_code', strtoupper($request->input('theme_dress_code')))
+        ->where('rallye_id', $parentRallye->rallye->id)
+        ->where('group_id', $group->id)
+        ->first();
 
-      $invitation = Invitation::where('theme_dress_code', strtoupper($request->input('theme_dress_code')))->first();
       if ($invitation == null) {
         // Add an invitation
         $invitation = new Invitation();
@@ -146,12 +153,13 @@ class InvitationsController extends Controller
         $invitation->start_time = strtoupper($request->input('start_time'));
         $invitation->end_time = strtoupper($request->input('end_time'));
         $invitation->rallye_id = Group::find($invitation->group_id)->rallye_id;
-
+        $rallye_name = preg_replace("/\s+/", "", Rallye::find($invitation->rallye_id)->title);
+        Log::stack(['stdout'])->debug('Rallye Name: ' . $rallye_name);
         // Log::stack(['single', 'stdout'])->debug('fichier uploadé: ' . $_FILES["invitationFile"]["name"]);
         $target_filename = basename($_FILES["invitationFile"]["name"]);
         // Log::stack(['single', 'stdout'])->debug('target_filename: ' . $target_filename);
 
-        $temp_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/invitations/";
+        $temp_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/invitations/" . $rallye_name . "/";
         if (!File::isDirectory($temp_dir)) {
           File::makeDirectory($temp_dir, 0777, true, true);
         };
@@ -254,7 +262,7 @@ class InvitationsController extends Controller
         return Redirect::back()->with('success', 'M030: The invitation has been added successfully');
       } else {
         DB::rollback();
-        return redirect('/invitations')->withErrors('E011: There is already an invitation with the same theme  ' . strtoupper($request->input('theme_dress_code')));
+        return redirect('/invitations')->withErrors('E011: There is already an invitation with the same theme  ' . strtoupper($request->input('theme_dress_code')) . ' for this group');
       }
     } catch (Exception $e) {
       DB::rollback();
@@ -272,7 +280,7 @@ class InvitationsController extends Controller
   {
     //
     $application = Application::find($id);
-    $applications  = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
+    $applications = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
 
     $groupsID = collect();
     foreach ($applications as $application) {
@@ -331,26 +339,25 @@ class InvitationsController extends Controller
       $deleted = false;
       $errorMsg = '';
       DB::beginTransaction();
-      $invitation = Invitation::find($id);
+      $invitation = Invitation::where('id', $id)
+        ->where('user_id', Auth::user()->id)->get()->first();
 
       if ($invitation != null) {
-        $invitations = invitation::where('user_id', $invitation->user_id)->get();
-        $countinvitations = count($invitations);
-
-        $invitationOwner = User::where('id', $invitation->user_id)->first();
-
         // The current user is the invitation owner
-        if ($invitationOwner->id == Auth::user()->id) {
-          $invitation->checkins()->delete();
-          $invitation->delete();
-          $deleted = true;
-        } else {
-          $errorMsg = "E300: you are not owner, you can't delete, please contact your admin.";
+        //$invitation->checkins()->delete();
+        $invitation->delete();
+        $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
+        $group_name = "std";
+        if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
+          $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
         }
-      } else {
-        $errorMsg = 'E301: invitation not found, please contact your admin.';
-      }
+        $imageInfo  = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
+        $this->imageRepository->destroyImage64($rallye_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
 
+        $deleted = true;
+      } else {
+        $errorMsg = "E300: you are not owner, you can't delete, please contact your admin.";
+      }
       if ($deleted) {
         DB::commit();
         return redirect('/invitations')->with('success', 'M007: invitation deleted');

@@ -13,6 +13,7 @@ npm-debug.log
 yarn-error.log
 /public/loadedImages/*
 /public/loadedImagesInvitations/*
+/public/assets/images/invitations
 /public/loadedThumbnail/*
 /public/loadedThumbnailInvitations/*
 public/php_errors.log

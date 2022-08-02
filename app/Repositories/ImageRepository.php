@@ -10,16 +10,16 @@ use Cloudinary\Cloudinary;
 class ImageRepository
 {
 
-  public function setImageInfo($invitation)
+  public function setImageInfo($invitation, $rallye_name, $group_name)
   {
-    $imageName = $invitation->id . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
+    $imageName = $invitation->id . '_' . $group_name . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
     $imageExpirationDate = Carbon::create($invitation->group->eventDate)->addMonths(2);
-    $imageMetadata = ["dress code" => $invitation->theme_dress_code, "name" => $imageName, "expiration date" => $imageExpirationDate];
-    $fullImagePath = "/assets/images/invitations/" . $imageName;
+    $imageMetadata = ["dress code" => $invitation->theme_dress_code, "name" => $imageName, "expiration date" => $imageExpirationDate, "rallye" => $rallye_name, "group" => $group_name];
+    $fullImagePath = "/assets/images/invitations/" . $rallye_name . "/" . $imageName;
     return ["imageName" => $imageName, "imagePath" => $fullImagePath, "imageMetadata" => $imageMetadata];
   }
 
-  public function UploadFromImage64($image64, $extension, $image_full_path, $imageMetadata)
+  public function UploadFromImage64($image64, $extension, $rallye_name, $group_name, $image_full_path, $imageMetadata)
   {
     $image = $image64;  // your base64 encoded
     $image = str_replace('data:image/' . $extension . ';base64,', '', $image);
@@ -30,26 +30,61 @@ class ImageRepository
     # upload in local filesystem
     Storage::disk('public')->put($image_full_path, base64_decode($image));
     Log::stack(['single', 'stdout'])->debug("Image stored in UploadFromImage64() : " . public_path($image_full_path));
+    Log::stack(['single', 'stdout'])->debug("Image name  for cloudinary search : " . $imageMetadata["name"]);
 
     # upload in Cloudinary
-    $expression = $imageMetadata["name"] . ' AND folder=Invitations';
+    $expression = $imageMetadata["name"] . ' AND folder=Invitations/' . $rallye_name;
+    //$expression = $imageMetadata["name"];
 
     $cloudinary = new Cloudinary();
     $resultSearch = $cloudinary->searchApi()
       ->expression($expression)
       ->maxResults(1)
       ->execute();
-    # dd($resultSearch);
-    # Log::stack(['single'])->debug("[MYSELF MAIL] : Search result count" . $resultSearch["total_count"]);
+    // Log::stack(['stdout'])->debug("[MYSELF MAIL] : Search result count : " . $resultSearch["total_count"]);
+    // dd($resultSearch);
 
     if ($resultSearch["total_count"] > 0) {
       $imageURL = $resultSearch["resources"][0]["secure_url"];
     } else {
-      $imageURL = cloudinary()->upload($image64, ["folder" => "Invitations",  "filename_override" => $imageMetadata["name"], "tags" => [$imageMetadata["name"], $imageMetadata["dress code"]], "context" => $imageMetadata])->getSecurePath();
+      $imageURL = cloudinary()->upload($image64, ["folder" => "Invitations/" . $rallye_name,  "filename_override" => $imageMetadata["name"], "tags" => [$imageMetadata["name"], $imageMetadata["dress code"]], "context" => $imageMetadata])->getSecurePath();
     }
     Log::stack(['single', 'stdout'])->debug("Public Image URL in UploadFromImage64() : " . public_path($image_full_path));
 
     return $imageURL;
+  }
+
+
+  public function destroyImage64($rallye_name, $image_full_path, $imageMetadata)
+  {
+    // $image = $image64;  // your base64 encoded
+    // $image = str_replace('data:image/' . $extension . ';base64,', '', $image);
+    // $image = str_replace(' ', '+', $image);
+
+    // Log::stack(['single', 'stdout'])->debug("Image Path in UploadFromImage64() : " . $image_full_path);
+
+    // # upload in local filesystem
+    // Storage::disk('public')->put($image_full_path, base64_decode($image));
+    Log::stack(['single', 'stdout'])->debug("Image stored in UploadFromImage64() : " . public_path($image_full_path));
+    Log::stack(['single', 'stdout'])->debug("Image name for cloudinary search : " . $imageMetadata["name"]);
+
+    # upload in Cloudinary
+    $expression = $imageMetadata["name"] . ' AND folder=Invitations/' . $rallye_name;
+    //$expression = $imageMetadata["name"];
+
+    $cloudinary = new Cloudinary();
+    $resultSearch = $cloudinary->searchApi()
+      ->expression($expression)
+      ->maxResults(1)
+      ->execute();
+    //dd($resultSearch);
+
+    if ($resultSearch["total_count"] > 0) {
+      $public_id = $resultSearch["resources"][0]["public_id"];
+      $cloudinary->uploadApi()->destroy($public_id);
+      Log::stack(['stdout'])->info("[CLOUDINARY]:  asset " . $public_id . " successfully deleted");
+    }
+    return true;
   }
   /**
    * Rezise an image with a max value
@@ -144,6 +179,7 @@ class ImageRepository
 
     return $result;
   }
+
   /**
    * This method is just for debug and showing Bytes converted in Ko or Mo.
    *
