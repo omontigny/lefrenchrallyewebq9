@@ -47,6 +47,6 @@ class GroupsExtraController extends Controller
       'success'   => 'Irreversible delete has done successuflly!'
     ];
 
-    return redirect()->route('groups.index')->with($data);
+    return to_route('groups.index')->with($data);
   }
 }
