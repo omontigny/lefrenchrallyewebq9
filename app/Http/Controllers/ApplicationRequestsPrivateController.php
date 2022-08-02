@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use DateTime;
 use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Models\Coordinator;
 use App\Models\Coordinator_Rallye;
