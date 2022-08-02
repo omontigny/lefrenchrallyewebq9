@@ -17,10 +17,10 @@ class CreateParentRallyeTable extends Migration
       $table->bigIncrements('id');
 
       $table->bigInteger('parent_id')->unsigned();
-      $table->foreign('parent_id')->references('id')->on('parents');
+      $table->foreign('parent_id')->references('id')->on('parents')->onDelete('cascade');
 
       $table->bigInteger('rallye_id')->unsigned();
-      $table->foreign('rallye_id')->references('id')->on('rallyes');
+      $table->foreign('rallye_id')->references('id')->on('rallyes')->onDelete('cascade');
 
       $table->string('active_rallye')->nullable()->default('');
 
