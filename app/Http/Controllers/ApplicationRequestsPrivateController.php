@@ -121,8 +121,7 @@ class ApplicationRequestsPrivateController extends Controller
           // We do resize only if filesize > 150Ko
           if (filesize($source_file) > 152400) {
             Log::stack(['single', 'stdout'])->info("***** We have to resize this picture *********");
-
-            $destination_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/childphoto/";
+            $destination_dir = Storage::disk('temp')->get("images/childphoto/");
             if (!File::isDirectory($destination_dir)) {
               File::makeDirectory($destination_dir, 0777, true, true);
             };

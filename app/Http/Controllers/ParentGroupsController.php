@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\User;
 use App\Models\Rallye;
 use App\Models\Application;
-use App\Models\School;
-use App\Models\Schoolyear;
-use Intervention\Image\Facades\Image;
-use App\User;
-use App\Models\Coordinator_Rallye;
-use Illuminate\Support\Facades\DB;
 use App\Models\Admin_Rallye;
 use App\Models\CheckIn;
 use App\Models\Invitation;
-use Illuminate\Support\Facades\Config;
+use App\Models\School;
+use App\Models\Schoolyear;
 use App\Models\Parents;
 use App\Models\Children;
 use App\Models\Group;
-use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use App\Models\Coordinator_Rallye;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Coordinator;
 use App\Models\Parent_Group;
 use App\Repositories\EmailRepository;
+use Exception;
 
 
 class ParentGroupsController extends Controller

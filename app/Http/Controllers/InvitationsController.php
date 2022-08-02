@@ -159,7 +159,7 @@ class InvitationsController extends Controller
         $target_filename = basename($_FILES["invitationFile"]["name"]);
         // Log::stack(['single', 'stdout'])->debug('target_filename: ' . $target_filename);
 
-        $temp_dir = Storage::disk('temp')->getAdapter()->getPathPrefix() . "images/invitations/" . $rallye_name . "/";
+        $temp_dir = Storage::disk('temp')->get("images/invitations/" . $rallye_name . "/");
         if (!File::isDirectory($temp_dir)) {
           File::makeDirectory($temp_dir, 0777, true, true);
         };
