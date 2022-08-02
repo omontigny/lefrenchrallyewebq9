@@ -55,7 +55,7 @@ class CoordinatorRallyeSeeder extends Seeder
 
     if ($cylia) {
       Coordinator_Rallye::create([
-        'coordinator_id'  => $oli->id,
+        'coordinator_id'  => $cylia->id,
         'rallye_id'       => $rallye1->id,
         'active_rallye'   => '0'
       ]);
