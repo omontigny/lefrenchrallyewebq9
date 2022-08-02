@@ -8,7 +8,7 @@
         @endif
 
         <p><strong>Mail sent to test email feature in Admin Control Panel</strong> <br/>
-             Please click on the link below to be redirected to the Apply Page:<a href="{{$domainLink}}/apply">{{$domainLink}}/apply</a> </p>
+             Please click on the link below to be redirected to the <a href="{{$domainLink}}apply">Application Page</a> </p>
 
 <p>See you,</p>
 <p>{{$recipient}}</p>
