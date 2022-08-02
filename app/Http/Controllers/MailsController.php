@@ -9,6 +9,7 @@ use App\Models\Invitation;
 use App\Models\Application;
 use App\Models\Group;
 use App\Models\CheckIn;
+use App\Models\Rallye;
 use App\Models\Coordinator;
 use App\Models\Admin_Rallye;
 use App\Models\Coordinator_Rallye;
@@ -445,8 +446,13 @@ class MailsController extends Controller
 
 
       if ($invitation != null) {
-        $imageInfo          = $this->imageRepository->setImageInfo($invitation);
-        $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
+        $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
+        $group_name = "std";
+        if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
+          $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
+        }
+        $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
+        $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
 
 
         $imageUrl = URL::asset($imageInfo["imagePath"]);
@@ -592,13 +598,19 @@ class MailsController extends Controller
   public function SendInvitationMail($invitation, $user)
   {
     $domainLink         = $this->emailRepository->getKeyValue('OFFICIAL_LINK');
-    $imageInfo          = $this->imageRepository->setImageInfo($invitation);
-    $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
+    $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
+    $group_name = "std";
+    if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
+      $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
+    }
+    $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
+    $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
 
     $imageUrl = URL::asset($imageInfo["imagePath"]);
 
     $htmlData = [
       'invitation' => $invitation,
+      'rallye_name' => $rallye_name,
       'domainLink' => $domainLink,
       'invitationFile' => $invitation->invitationFile,
       'imageName' => $imageInfo["imageName"],

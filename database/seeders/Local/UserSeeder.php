@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     // User::factory()->times(30)->create();
     //factory(App\User::class, 50)->create();
     User::factory()->create([
-      'email' => 'olivier@lefrenchrallye.local',
+      'email' => 'olivier@' . env('APP_DOMAIN'),
       'name' => 'omontigny',
       'active_profile' => 'SUPERADMIN',
       'admin' => 2,
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
     ]);
 
     User::factory()->create([
-      'email' => 'webmaster@lefrenchrallye.local',
+      'email' => 'webmaster@' . env('APP_DOMAIN'),
       'name' => 'cylia',
       'active_profile' => 'COORDINATOR',
       'admin' => 1,
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
     ]);
 
     User::factory()->create([
-      'email' => 'elfi@lefrenchrallye.local',
+      'email' => 'elfi@' . env('APP_DOMAIN'),
       'name' => 'elfi',
       'active_profile' => 'COORDINATOR',
       'admin' => 1,
