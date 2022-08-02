@@ -1,0 +1,56 @@
+# For more information: https://laravel.com/docs/sail
+version: '3.7'
+services:
+  mysql:
+    image: 'mysql:5.7.32'
+    ports:
+      - '${FORWARD_DB_PORT:-3308}:3306'
+    command: --max_allowed_packet=32505856
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - './db2:/var/lib/mysql'
+    networks:
+      - sail2
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
+      retries: 3
+      timeout: 5s
+  phpmyadmin:
+    image: 'phpmyadmin:5.0.4'
+    networks:
+      - sail2
+    ports:
+      - 8484:80
+    environment:
+      - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=400M
+  redis:
+    image: 'redis:5.0.13'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - './redis3:/data'
+    tty: true
+    networks:
+      - sail2
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      retries: 3
+      timeout: 5s
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1181:1080"
+      - "1125:1025"
+
+networks:
+  sail2:
+    driver: bridge
+volumes:
+  sailredis:
+    driver: local
