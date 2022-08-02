@@ -59,9 +59,9 @@ class ApplicationRequestsPrivateController extends Controller
 
       //
       $application = Application::find($id);
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
-      $schools = School::orderBy('name', 'asc')->get();
-      $schoolyears = Schoolyear::orderBy('id', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
+      $schools = School::oldest('name')->get();
+      $schoolyears = Schoolyear::oldest('id')->get();
       $userDebug = $application->parentemail;
       $data = [
         'application' => $application,

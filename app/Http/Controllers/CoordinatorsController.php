@@ -40,7 +40,7 @@ class CoordinatorsController extends Controller
     try {
       // Checking if the user is allowed to go here
       if (Auth::user()->active_profile == config('constants.roles.SUPERADMIN')) {
-        $coordinators = Coordinator::orderBy('lastname', 'asc')->paginate(10);
+        $coordinators = Coordinator::oldest('lastname')->paginate(10);
         $allowed = true;
         return view('coordinators.index')->with('coordinators', $coordinators);
       } else {

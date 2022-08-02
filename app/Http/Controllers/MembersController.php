@@ -43,7 +43,7 @@ class MembersController extends Controller
     //$rallyes = Rallye::all();
     //$rallyes = Rallye::orderBy('title', 'asc')->take(1)->get();
     //$rallyes = Rallye::orderBy('title', 'asc')->paginate(10);
-    $rallyes = Rallye::orderBy('title', 'asc')->get();
+    $rallyes = Rallye::oldest('title')->get();
     return view('members.invitations')->with('rallyes', $rallyes);
   }
 
@@ -298,7 +298,7 @@ class MembersController extends Controller
 
     //$rallyes = Rallye::all();
     //$rallyes = Rallye::orderBy('title', 'asc')->take(1)->get();
-    $rallyes = Rallye::orderBy('title', 'asc')->paginate(10);
+    $rallyes = Rallye::oldest('title')->paginate(10);
     //$rallyes = Rallye::orderBy('title', 'asc')->get();
     return view('members.myrallye')->with('rallyes', $rallyes);
   }
@@ -312,10 +312,10 @@ class MembersController extends Controller
   {
     //
     $parents = Parents::where('has_event', false)
-      ->orderBy('parentlastname', 'asc')
-      ->orderBy('parentfirstname', 'asc')->get();
-    $rallyes    = Rallye::orderBy('title', 'asc')->get();
-    $calendars  = Calendar::orderBy('calendar_date', 'asc')->get();
+      ->oldest('parentlastname')
+      ->oldest('parentfirstname')->get();
+    $rallyes    = Rallye::oldest('title')->get();
+    $calendars  = Calendar::oldest('calendar_date')->get();
 
     $data = [
       'rallyes'   => $rallyes,
