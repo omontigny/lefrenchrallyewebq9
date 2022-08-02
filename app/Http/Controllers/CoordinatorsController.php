@@ -85,14 +85,14 @@ class CoordinatorsController extends Controller
     try {
       DB::beginTransaction();
       // Creating a coordinator user account
-      $user = User::where('email', strtolower($request->input('mail')))->first();
+      $user = User::where('email', Str::lower($request->input('mail')))->first();
       if ($user == null) {
         // create user
         $user = new User();
-        $user->name = strtolower($request->input('username'));
+        $user->name = Str::lower($request->input('username'));
         $userPassword =  $this->emailRepository->generatePassword();
         $user->password = Hash::make($userPassword);
-        $user->email = strtolower($request->input('mail'));
+        $user->email = Str::lower($request->input('mail'));
         // affecting active_profile to COORDINATOR
         $user->active_profile = config('constants.roles.COORDINATOR');
         $user->coordinator = 2;
@@ -107,10 +107,10 @@ class CoordinatorsController extends Controller
 
         // Add a coordinator
         $coordinator = new  Coordinator;
-        $coordinator->username = strtolower($request->input('username'));
-        $coordinator->lastname = strtoupper($request->input('lastname'));
-        $coordinator->firstname = strtoupper($request->input('firstname'));
-        $coordinator->mail = strtolower($request->input('mail'));
+        $coordinator->username = Str::lower($request->input('username'));
+        $coordinator->lastname = Str::upper($request->input('lastname'));
+        $coordinator->firstname = Str::upper($request->input('firstname'));
+        $coordinator->mail = Str::lower($request->input('mail'));
         $coordinator->user_id = $user->id;
         $coordinator->save();
         DB::commit();
@@ -150,7 +150,7 @@ class CoordinatorsController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($coordinator->mail, Mail::failures(), "CoordinatorPasswordReset", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($coordinator->mail, Mail::flushMacros(), "CoordinatorPasswordReset", Auth::user()->name);
 
         return redirect('/coordinators')->with('success', 'M018: A coordinator has been added');
       } else {
@@ -172,16 +172,16 @@ class CoordinatorsController extends Controller
         } else {
           $isNewCoordinator = false;
           DB::commit();
-          return Redirect::back()->withError('E062: ' . strtolower($request->input('mail')) . ' has already has already the coordinator profile!');
+          return Redirect::back()->withError('E062: ' . Str::lower($request->input('mail')) . ' has already has already the coordinator profile!');
         }
 
         if ($isNewCoordinator) {
           // Add a coordinator
           $coordinator = new  Coordinator;
-          $coordinator->username = strtolower($request->input('username'));
-          $coordinator->lastname = strtoupper($request->input('lastname'));
-          $coordinator->firstname = strtoupper($request->input('firstname'));
-          $coordinator->mail = strtolower($request->input('mail'));
+          $coordinator->username = Str::lower($request->input('username'));
+          $coordinator->lastname = Str::upper($request->input('lastname'));
+          $coordinator->firstname = Str::upper($request->input('firstname'));
+          $coordinator->mail = Str::lower($request->input('mail'));
           $coordinator->user_id = $user->id;
           $coordinator->save();
           DB::commit();
@@ -241,15 +241,15 @@ class CoordinatorsController extends Controller
 
       // updating coordinator
       $coordinator = Coordinator::find($id);
-      $coordinator->lastname = strtoupper($request->input('lastname'));
-      $coordinator->firstname = strtoupper($request->input('firstname'));
-      $coordinator->mail = strtolower($request->input('mail'));
+      $coordinator->lastname = Str::upper($request->input('lastname'));
+      $coordinator->firstname = Str::upper($request->input('firstname'));
+      $coordinator->mail = Str::lower($request->input('mail'));
       $coordinator->save();
 
       // updateing coordinator
-      $user = User::where('email', strtolower($request->input('mail')))->first();
+      $user = User::where('email', Str::lower($request->input('mail')))->first();
       if ($user != null) {
-        $user->email = strtolower($request->input('mail'));
+        $user->email = Str::lower($request->input('mail'));
         $user->save();
       }
 

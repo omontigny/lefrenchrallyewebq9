@@ -111,19 +111,19 @@ class ApplicationRequestsExtraController extends Controller
       // parent can not update his request/must done by coordinator
       $application->submitted = true;
       // check if user already exists by its email
-      $user = User::where('email', strtolower($application->parentemail))->first();
+      $user = User::where('email', Str::lower($application->parentemail))->first();
       $userPassword = '';
       Log::stack(['single', 'stdout'])->debug("userpassword: " . $userPassword);
 
       if ($user == null) {
         // create user account
         $user = new User();
-        $user->name = strtoupper($application->parentlastname);
+        $user->name = Str::upper($application->parentlastname);
         $user->password = '$2y$10$';
       }
 
       Log::stack(['single', 'stdout'])->debug("user id exist? : " . $user->id);
-      $user->email = strtolower($application->parentemail);
+      $user->email = Str::lower($application->parentemail);
       $user->save();
 
       // affecting active_profile to PARENT
@@ -155,11 +155,11 @@ class ApplicationRequestsExtraController extends Controller
         // parent info
         $parent = new Parents();
         $parent->parentfirstname  = ucfirst($application->parentfirstname);
-        $parent->parentlastname   = strtoupper($application->parentlastname);
-        $parent->parentaddress    = strtoupper($application->parentaddress);
+        $parent->parentlastname   = Str::upper($application->parentlastname);
+        $parent->parentaddress    = Str::upper($application->parentaddress);
         $parent->parenthomephone  = $application->parenthomephone;
         $parent->parentmobile     = $application->parentmobile;
-        $parent->parentemail      = strtolower($application->parentemail);
+        $parent->parentemail      = Str::lower($application->parentemail);
         $parent->user_id          = $user->id;
         $parent->save();
       } else {
@@ -169,10 +169,10 @@ class ApplicationRequestsExtraController extends Controller
       // child info
       $child =  new Children();
       $child->childfirstname  = ucfirst($application->childfirstname);
-      $child->childlastname   = strtoupper($application->childlastname);
+      $child->childlastname   = Str::upper($application->childlastname);
       $child->childbirthdate  = $application->childbirthdate;
-      $child->childgender     = strtoupper($application->childgender);
-      $child->childemail      = strtolower($application->childemail);
+      $child->childgender     = Str::upper($application->childgender);
+      $child->childemail      = Str::lower($application->childemail);
       $child->childphotopath  = $application->childphotopath;
       $child->rallye_id       = $application->rallye_id;
       $child->parent_id       = $parent->id;
@@ -251,7 +251,7 @@ class ApplicationRequestsExtraController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($application->childfirstname, Mail::failures(), "membershipConfirmedEmail", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($application->childfirstname, Mail::flushMacros(), "membershipConfirmedEmail", Auth::user()->name);
       } else {
         $application->status = 4;
         $application->mailto = 1;
@@ -296,7 +296,7 @@ class ApplicationRequestsExtraController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($application->parentemail, Mail::failures(), "acceptanceEmail", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($application->parentemail, Mail::flushMacros(), "acceptanceEmail", Auth::user()->name);
       }
 
       $application->parent_id = $parent->id;
@@ -376,7 +376,7 @@ class ApplicationRequestsExtraController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($application->childfirstname, Mail::failures(), "parentPasswordReset", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($application->childfirstname, Mail::flushMacros(), "parentPasswordReset", Auth::user()->name);
       }
       DB::commit();
       return Redirect::back()->with('success', 'M074: The password has been reset successfully.');

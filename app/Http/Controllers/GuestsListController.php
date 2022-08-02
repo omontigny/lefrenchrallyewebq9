@@ -169,7 +169,7 @@ class GuestsListController extends Controller
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
             ->where('checkins.group_id', '=', $invitation->group->id)
-            ->where('applications.group_name', '=', strtoupper($invitation->group->name))
+            ->where('applications.group_name', '=', Str::upper($invitation->group->name))
 
             ->get();
         } else {
@@ -280,7 +280,7 @@ class GuestsListController extends Controller
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
             ->where('checkins.group_id', '=', $invitation->group->id)
-            ->where('applications.group_name', '=', strtoupper($invitation->group->name))
+            ->where('applications.group_name', '=', Str::upper($invitation->group->name))
             ->where('checkins.checkStatus', '=', 0)
             ->get();
         } else {
@@ -370,7 +370,7 @@ class GuestsListController extends Controller
           //////////////////////////////////////////////////////////////////////
 
           //Use CheckMailSent to log and check if sending OK
-          $this->emailRepository->CheckMailSent($checkin->parentemail . " for " . $invitation->rallye->title, Mail::failures(), "reminderInvitationEmail to", Auth::user()->name);
+          $this->emailRepository->CheckMailSent($checkin->parentemail . " for " . $invitation->rallye->title, Mail::flushMacros(), "reminderInvitationEmail to", Auth::user()->name);
         }
         return Redirect::back()->with('success', 'M033: Reminder “reply to invitation” mails have been sent');
       }

@@ -71,8 +71,8 @@ class SchoolsController extends Controller
 
       // Add a school
       $school = new  School;
-      $school->name = strtoupper($request->input('name'));
-      $school->state = strtoupper($request->input('state'));
+      $school->name = Str::upper($request->input('name'));
+      $school->state = Str::upper($request->input('state'));
       $school->user_id = Auth::user()->id;
       $school->added_by = Auth::user()->name;
       $school->save();
@@ -130,8 +130,8 @@ class SchoolsController extends Controller
 
       // Add a school
       $school = School::find($id);
-      $school->name = strtoupper($request->input('name'));
-      $school->state = strtoupper($request->input('state'));
+      $school->name = Str::upper($request->input('name'));
+      $school->state = Str::upper($request->input('state'));
       if (isset($request['isApproved'])) {
         $school->user_id = Auth::user()->id;
         $school->added_by = Auth::user()->name;
