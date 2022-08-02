@@ -16,7 +16,7 @@ class AddApplicationIdToParentRallyeTable extends Migration
     Schema::table('parent_rallye', function (Blueprint $table) {
       //
       $table->bigInteger('application_id')->unsigned()->nullable();
-      $table->foreign('application_id')->references('id')->on('applications');
+      $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
     });
   }
 

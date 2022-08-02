@@ -18,6 +18,7 @@ use App\Models\Parents;
 use App\Models\Parent_Rallye;
 use App\Models\Role_User;
 use App\Models\Invitation;
+use App\Models\Payment;
 use App\Models\CheckIn;
 use App\Models\Role;
 use Illuminate\Http\Request;

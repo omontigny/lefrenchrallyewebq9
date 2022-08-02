@@ -18,10 +18,10 @@ class CreatePaymentsTable extends Migration
       $table->string('payment_id');
 
       $table->bigInteger('application_id')->unsigned();
-      $table->foreign('application_id')->references('id')->on('applications');
+      $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
 
       $table->bigInteger('rallye_id')->unsigned();
-      $table->foreign('rallye_id')->references('id')->on('rallyes');
+      $table->foreign('rallye_id')->references('id')->on('rallyes')->onDelete('cascade');
 
       $table->string('payer_email');
       $table->float('amount');
