@@ -30,6 +30,7 @@ use App\Repositories\ImageRepository;
 use Intervention\Image\Size;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 use Cloudinary\Cloudinary;
+use Symfony\Component\Mime\Email;
 
 class MailsController extends Controller
 {
@@ -115,7 +116,7 @@ class MailsController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($application->childfirstname, Mail::failures(), "membershipConfirmedEmail", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($application->childfirstname, Mail::flushMacros(), "membershipConfirmedEmail", Auth::user()->name);
       } else {
         return Redirect::back()->withError('E208: No application is found.');
       }
@@ -191,7 +192,7 @@ class MailsController extends Controller
           //////////////////////////////////////////////////////////////////////
 
           //Use CheckMailSent to log and check if sending OK
-          $this->emailRepository->CheckMailSent($application->parentemail, Mail::failures(), "paymentReminderEmail", Auth::user()->name);
+          $this->emailRepository->CheckMailSent($application->parentemail, Mail::flushMacros(), "paymentReminderEmail", Auth::user()->name);
         }
         DB::commit();
         return Redirect::back()->with('success', 'M076: The payment reminder mail has been sent successfully.');
@@ -266,7 +267,7 @@ class MailsController extends Controller
           //////////////////////////////////////////////////////////////////////
 
           //Use CheckMailSent to log and check if sending OK
-          $this->emailRepository->CheckMailSent($application->parentemail, Mail::failures(), "waitingListEmail", Auth::user()->name);
+          $this->emailRepository->CheckMailSent($application->parentemail, Mail::flushMacros(), "waitingListEmail", Auth::user()->name);
         }
         return Redirect::back()->with('success', 'M073: You will receive an email test with your event group invitation');
       } else {
@@ -305,7 +306,7 @@ class MailsController extends Controller
           $m->to($rallyeEmail)
             ->bcc($bccArrayList)
             ->subject($subject)
-            ->setBody($body, 'text/html');
+            ->html($body);
         });
 
         //////////////////////////////////////////////////////////////////////
@@ -324,7 +325,7 @@ class MailsController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($bccArrayList, Mail::failures(), "sendMailToAllRallyeMembers", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($bccArrayList, Mail::flushMacros(), "sendMailToAllRallyeMembers", Auth::user()->name);
 
 
         return Redirect::back()->with('success', 'M032: You will receive an email as all group Members');
@@ -363,7 +364,7 @@ class MailsController extends Controller
           $m->to($to)
             ->bcc($bcc)
             ->subject($subject)
-            ->setBody($body, 'text/html');
+            ->html($body);
         });
 
         //////////////////////////////////////////////////////////////////////
@@ -382,7 +383,7 @@ class MailsController extends Controller
         //////////////////////////////////////////////////////////////////////
 
         //Use CheckMailSent to log and check if sending OK
-        $this->emailRepository->CheckMailSent($tolist, Mail::failures(), "sendCustomEmails", Auth::user()->name);
+        $this->emailRepository->CheckMailSent($tolist, Mail::flushMacros(), "sendCustomEmails", Auth::user()->name);
 
 
         return Redirect::back()->with('success', 'M032: You will receive this custom email as all cc recipients');
@@ -432,7 +433,7 @@ class MailsController extends Controller
   public function show($id)
   {
     $sentList       = [];
-    $emailTempo     = strtolower(env('EMAIL_TEMPO'));
+    $emailTempo     = Str::lower(env('EMAIL_TEMPO'));
     $emailsPaquet   = env('EMAIL_PAQUET');
     $emailSleep     = env('EMAIL_SLEEP');
 
@@ -463,7 +464,7 @@ class MailsController extends Controller
         if ($app_ID->rallye->isPetitRallye) {
           $applications = Application::where('rallye_id', $app_ID->rallye_id)
             ->where('status', 1)
-            ->where('group_name', strtoupper($app_ID->group_name))
+            ->where('group_name', Str::upper($app_ID->group_name))
             ->get();
         } else {
           // CASE 2: RALLYE STANDARD
@@ -538,7 +539,7 @@ class MailsController extends Controller
           //////////////////////////////////////////////////////////////////////
 
           //Use CheckMailSent to log and check if sending OK
-          $this->emailRepository->CheckMailSent($application->parentemail, Mail::failures(), "Invitation EMail", Auth::user()->name);
+          $this->emailRepository->CheckMailSent($application->parentemail, Mail::flushMacros(), "Invitation EMail", Auth::user()->name);
 
           $countMail++;
           if ($emailTempo === 'true' && $countMail % $emailsPaquet == 0) {
@@ -597,55 +598,62 @@ class MailsController extends Controller
 
   public function SendInvitationMail($invitation, $user)
   {
-    $domainLink         = $this->emailRepository->getKeyValue('OFFICIAL_LINK');
-    $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
-    $group_name = "std";
-    if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
-      $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
+    try {
+
+      $domainLink         = $this->emailRepository->getKeyValue('OFFICIAL_LINK');
+      $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
+      $group_name = "std";
+      if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
+        $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
+      }
+      $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
+      $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
+
+      $imageUrl = URL::asset($imageInfo["imagePath"]);
+
+      $htmlData = [
+        'invitation' => $invitation,
+        'rallye_name' => $rallye_name,
+        'domainLink' => $domainLink,
+        'invitationFile' => $invitation->invitationFile,
+        'imageName' => $imageInfo["imageName"],
+        'imageUrl' => $imageUrl,
+        'cloudinaryImageUrl' => $cloudinaryImageUrl
+      ];
+
+      //////////////////////////////////////////////////////////////////////
+      // MAIL 11: Send Invitation to Myself (SMTP)
+      //////////////////////////////////////////////////////////////////////
+
+      Mail::send('mails/sendInvitationToMyself', $htmlData, function ($m) use ($user, $invitation) {
+        $m->from($invitation->rallye->rallyemail, env('APP_NAME'));
+        $m->replyTo($invitation->rallye->rallyemail);
+        $m->to($user->email, $user->name);
+        $m->subject('[' . env('APP_NAME') . '] - Send invitation to myself');
+      });
+
+      //////////////////////////////////////////////////////////////////////
+      // MAIL 11: Send Invitation to Myself (Mailgun)
+      //////////////////////////////////////////////////////////////////////
+      // $data = array(
+      //   'from'        => env('APP_NAME') . '<' . $invitation->rallye->rallyemail . '>',
+      //   'subject'     => '[' . env('APP_NAME') . '] - Send invitation to myself',
+      //   'to'          => $user->name . ' <' . $user->email . '>',
+      //   "h:Reply-To"  => $invitation->rallye->rallyemail,
+      // );
+
+      // $html = view('mails/sendInvitationToMyself', $htmlData)->render();
+      // $this->emailRepository->sendMailGun($data, $html);
+      //////////////////////////////////////////////////////////////////////
+
+      //Use CheckMailSent to log and check if sending OK
+      $this->emailRepository->CheckMailSent($user->name, Mail::flushMacros(), "sendInvitationToMyself", Auth::user()->name);
+    } catch (Exception $e) {
+      Log::stack(['single'])->error("[EXCEPTION] - [Email] : ça passe  pas !" .  $e->getMessage());
+      return Redirect::back()->withError('E250: ' . $e->getMessage());
     }
-    $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
-    $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
-
-    $imageUrl = URL::asset($imageInfo["imagePath"]);
-
-    $htmlData = [
-      'invitation' => $invitation,
-      'rallye_name' => $rallye_name,
-      'domainLink' => $domainLink,
-      'invitationFile' => $invitation->invitationFile,
-      'imageName' => $imageInfo["imageName"],
-      'imageUrl' => $imageUrl,
-      'cloudinaryImageUrl' => $cloudinaryImageUrl
-    ];
-
-    //////////////////////////////////////////////////////////////////////
-    // MAIL 11: Send Invitation to Myself (SMTP)
-    //////////////////////////////////////////////////////////////////////
-
-    Mail::send('mails/sendInvitationToMyself', $htmlData, function ($m) use ($user, $invitation) {
-      $m->from($invitation->rallye->rallyemail, env('APP_NAME'));
-      $m->replyTo($invitation->rallye->rallyemail);
-      $m->to($user->email, $user->name);
-      $m->subject('[' . env('APP_NAME') . '] - Send invitation to myself');
-    });
-
-    //////////////////////////////////////////////////////////////////////
-    // MAIL 11: Send Invitation to Myself (Mailgun)
-    //////////////////////////////////////////////////////////////////////
-    // $data = array(
-    //   'from'        => env('APP_NAME') . '<' . $invitation->rallye->rallyemail . '>',
-    //   'subject'     => '[' . env('APP_NAME') . '] - Send invitation to myself',
-    //   'to'          => $user->name . ' <' . $user->email . '>',
-    //   "h:Reply-To"  => $invitation->rallye->rallyemail,
-    // );
-
-    // $html = view('mails/sendInvitationToMyself', $htmlData)->render();
-    // $this->emailRepository->sendMailGun($data, $html);
-    //////////////////////////////////////////////////////////////////////
-
-    //Use CheckMailSent to log and check if sending OK
-    $this->emailRepository->CheckMailSent($user->name, Mail::failures(), "sendInvitationToMyself", Auth::user()->name);
   }
+
 
   public function sendTestMail()
   {

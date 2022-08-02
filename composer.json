@@ -8,15 +8,14 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2.5|^8.0",
+        "php": "^8.0.2",
         "cloudinary-labs/cloudinary-laravel": "^1.0|^2.0",
-        "fideloper/proxy": "^4.4",
         "google/cloud-storage": "^1.20",
         "guzzlehttp/guzzle": "^7.4.2|^6.3.1|^7.0.1",
         "intervention/image": "^2.5",
         "laravel/framework": "^9.0",
         "laravel/helpers": "^1.5",
-        "laravel/tinker": "^2.5",
+        "laravel/tinker": "^2.7",
         "laravel/ui": "^2.4|^3.4|^4.0",
         "laravelcollective/html": "~6.0",
         "league/omnipay": "^3.2",
@@ -25,18 +24,19 @@
         "omnipay/stripe": "^3.1",
         "predis/predis": "^1.1|^2.0",
         "stripe/stripe-php": "^7.28|^8.12",
-        "superbalist/flysystem-google-storage": "^7.2",
-        "symfony/http-client": "^5.4"
+        "symfony/http-client": "^6.0",
+        "symfony/mailgun-mailer": "^6.0",
+        "symfony/postmark-mailer": "^6.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "3.4.2|^3.6",
         "beyondcode/laravel-dump-server": "^1.0",
-        "facade/ignition": "^1.16.4|^2.0",
         "fakerphp/faker": "^1.9.1",
         "filp/whoops": "^2.0",
-        "mockery/mockery": "^1.0",
+        "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^3.0|^4.3|^5.10|^6.1",
-        "phpunit/phpunit": "^9"
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -72,6 +72,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

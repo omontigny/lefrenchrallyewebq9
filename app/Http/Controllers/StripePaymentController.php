@@ -100,7 +100,7 @@ class StripePaymentController extends Controller
           //////////////////////////////////////////////////////////////////////
 
           //Use CheckMailSent to log and check if sending OK
-          $this->emailRepository->CheckMailSent($application->parentemail, Mail::failures(), "paymentConfirmationEmail", "Guest");
+          $this->emailRepository->CheckMailSent($application->parentemail, Mail::flushMacros(), "paymentConfirmationEmail", "Guest");
 
           Session::flash('success-message', 'Payment done successfully !');
           return redirect('/postPayment');

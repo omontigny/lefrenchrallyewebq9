@@ -169,12 +169,12 @@ class ApplicationRequestsController extends Controller
         $application->is_boarder = ($request->has('is_boarder')) ? true : false;
 
         // child info
-        $application->childfirstname  = ucwords(strtolower($request->input('childfirstname')));
-        $application->childlastname   = strtoupper($request->input('childlastname'));
+        $application->childfirstname  = ucwords(Str::lower($request->input('childfirstname')));
+        $application->childlastname   = Str::upper($request->input('childlastname'));
         $application->childbirthdate  = $this->formatDateToMySQLFormat($request->input('childbirthdate'));
-        $application->childgender     = strtoupper($request->input('childgender'));
-        $application->childemail      = strtoupper($request->input('childemail'));
-        $application->simblingList    = strtoupper($request->input('simblingList'));
+        $application->childgender     = Str::upper($request->input('childgender'));
+        $application->childemail      = Str::upper($request->input('childemail'));
+        $application->simblingList    = Str::upper($request->input('simblingList'));
 
         // Child Photo upload and resize
         // chek Valid file extensions
@@ -183,7 +183,7 @@ class ApplicationRequestsController extends Controller
         Log::stack(['single', 'stdout'])->debug('target_file: ' . $target_file);
 
         // Select file type
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $imageFileType = Str::lower(pathinfo($target_file, PATHINFO_EXTENSION));
         Log::stack(['single', 'stdout'])->debug('imageFileType: ' . $imageFileType);
 
         // if extension correct
@@ -250,26 +250,26 @@ class ApplicationRequestsController extends Controller
         }
 
         // parent info
-        $application->parentfirstname  = ucwords(strtolower($request->input('parentfirstname')));
-        $application->parentlastname   = strtoupper($request->input('parentlastname'));
-        $application->parentaddress    = strtoupper($request->input('parentaddress'));
+        $application->parentfirstname  = ucwords(Str::lower($request->input('parentfirstname')));
+        $application->parentlastname   = Str::upper($request->input('parentlastname'));
+        $application->parentaddress    = Str::upper($request->input('parentaddress'));
         $application->parenthomephone  = $request->input('parenthomephone');
         $application->parentmobile     = $request->input('parentmobile');
-        $application->parentemail      = strtolower($request->input('parentemail'));
+        $application->parentemail      = Str::lower($request->input('parentemail'));
 
-        $application->signingcodeconduct = strtoupper($request->input('signingcodeconduct'));
+        $application->signingcodeconduct = Str::upper($request->input('signingcodeconduct'));
 
         if (strcmp($request->input('school_id'), "OTHER") != 0) {
           $application->school_id = $request->input('school_id');
         } else {
           $school = new School;
-          $school->name = strtoupper($request->input('newSchool'));
-          $school->state = strtoupper($request->input('schoolState'));
+          $school->name = Str::upper($request->input('newSchool'));
+          $school->state = Str::upper($request->input('schoolState'));
           $school->added_by = config('constants.roles.PARENT');
           $school->save();
           $application->school_id = $school->id;
         }
-        $application->schoolstate = strtoupper($request->input('schoolState'));
+        $application->schoolstate = Str::upper($request->input('schoolState'));
 
         $application->schoolyear_id = $request->input('schoolyear_id');
 

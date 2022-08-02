@@ -49,17 +49,17 @@ class AccessControlController extends Controller
       ]);
 
       // Creating a coordinator user account
-      $accessControl = AccessControl::where('menuoption', strtoupper($request->input('menuoption')))->first();
+      $accessControl = AccessControl::where('menuoption', Str::upper($request->input('menuoption')))->first();
       if ($accessControl == null) {
         // create new access control
         $accessControl = new AccessControl();
-        $accessControl->menuoption = strtoupper($request->input('menuoption'));
+        $accessControl->menuoption = Str::upper($request->input('menuoption'));
         $accessControl->status = false;
         $accessControl->save();
 
         return Redirect::back()->with('success', 'M001: new access control has been added successfully!');
       } else {
-        return Redirect::back()->withError('E027: ' . 'an access control is already exists for ' . strtoupper($request->input('menuoption')));
+        return Redirect::back()->withError('E027: ' . 'an access control is already exists for ' . Str::upper($request->input('menuoption')));
       }
     } catch (Exception $e) {
       return Redirect::back()->withError('E028: ' . $e->getMessage());

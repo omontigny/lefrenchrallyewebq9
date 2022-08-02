@@ -162,7 +162,7 @@ class SmallGroupsController extends Controller
         foreach ($groups as $group) {
           if (
             $group->rallye_id != $rallye->id
-            && strtoupper($group->name) == strtoupper($request->input('name'))
+            && Str::upper($group->name) == Str::upper($request->input('name'))
           ) {
             return back()->withErrors('E022: The choosen group name is already use in an other rallye/group.');
           }
@@ -174,7 +174,7 @@ class SmallGroupsController extends Controller
           foreach ($groups as $group) {
             if (
               $group->rallye->id == $rallye->id
-              && $group->name == strtoupper($request->input('name'))
+              && $group->name == Str::upper($request->input('name'))
               && $group->eventDate != null && $group->eventDate == $eventDate
             ) {
               return back()->withErrors('E023: The is already an event for the choosen rallye with the same date');
@@ -185,7 +185,7 @@ class SmallGroupsController extends Controller
 
       // adding new group
       $group = new  Group;
-      $group->name = strtoupper($request->input('name'));
+      $group->name = Str::upper($request->input('name'));
       $group->rallye_id = $request->input('rallye_id');
       $group->user_id = Auth::user()->id;
 
@@ -225,7 +225,7 @@ class SmallGroupsController extends Controller
 
         $applications = Application::where('rallye_id', $group->rallye->id)
           ->where('status', '1')
-          ->where('event_id', strtoupper($group->id))
+          ->where('event_id', Str::upper($group->id))
           ->get();
 
         Log::stack(['single', 'stdout'])->debug('nbAppblications:' . count($applications));
@@ -267,7 +267,7 @@ class SmallGroupsController extends Controller
 
         $applications = Application::where('rallye_id', $group->rallye->id)
           ->where('status', '1')
-          ->where('group_name', strtoupper($group->name))
+          ->where('group_name', Str::upper($group->name))
           ->get();
 
 
@@ -425,7 +425,7 @@ class SmallGroupsController extends Controller
       // updating the group
 
       if ($request->has('name')) {
-        $group->name = strtoupper($request->input('name'));
+        $group->name = Str::upper($request->input('name'));
       }
 
       if ($request->has('rallye_id')) {

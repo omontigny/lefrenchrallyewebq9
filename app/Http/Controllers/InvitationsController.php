@@ -138,7 +138,7 @@ class InvitationsController extends Controller
       $parent = Parents::where('user_id', Auth::user()->id)->first();
       $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
       $group = Group::find($request->input('calendar_id'));
-      $invitation = Invitation::where('theme_dress_code', strtoupper($request->input('theme_dress_code')))
+      $invitation = Invitation::where('theme_dress_code', Str::upper($request->input('theme_dress_code')))
         ->where('rallye_id', $parentRallye->rallye->id)
         ->where('group_id', $group->id)
         ->first();
@@ -149,9 +149,9 @@ class InvitationsController extends Controller
         $invitation->group_id = $request->input('calendar_id');
         $invitation->venue_address = $request->input('venue_address');
         $invitation->user_id = Auth::user()->id;
-        $invitation->theme_dress_code = strtoupper($request->input('theme_dress_code'));
-        $invitation->start_time = strtoupper($request->input('start_time'));
-        $invitation->end_time = strtoupper($request->input('end_time'));
+        $invitation->theme_dress_code = Str::upper($request->input('theme_dress_code'));
+        $invitation->start_time = Str::upper($request->input('start_time'));
+        $invitation->end_time = Str::upper($request->input('end_time'));
         $invitation->rallye_id = Group::find($invitation->group_id)->rallye_id;
         $rallye_name = preg_replace("/\s+/", "", Rallye::find($invitation->rallye_id)->title);
         Log::stack(['stdout'])->debug('Rallye Name: ' . $rallye_name);
@@ -168,7 +168,7 @@ class InvitationsController extends Controller
         Log::stack(['single', 'stdout'])->debug('full path temp file: ' . $temp_file);
 
         // Select file type
-        $imageFileType = strtolower(pathinfo($temp_file, PATHINFO_EXTENSION));
+        $imageFileType = Str::lower(pathinfo($temp_file, PATHINFO_EXTENSION));
         Log::stack(['single', 'stdout'])->debug('imageFileType:' . $imageFileType);
 
         // Valid file extensions
@@ -262,7 +262,7 @@ class InvitationsController extends Controller
         return Redirect::back()->with('success', 'M030: The invitation has been added successfully');
       } else {
         DB::rollback();
-        return redirect('/invitations')->withErrors('E011: There is already an invitation with the same theme  ' . strtoupper($request->input('theme_dress_code')) . ' for this group');
+        return redirect('/invitations')->withErrors('E011: There is already an invitation with the same theme  ' . Str::upper($request->input('theme_dress_code')) . ' for this group');
       }
     } catch (Exception $e) {
       DB::rollback();
