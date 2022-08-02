@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
 class KeyValuesController extends Controller
 {
