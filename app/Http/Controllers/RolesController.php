@@ -28,7 +28,7 @@ class RolesController extends Controller
   {
     try {
       //
-      $roles = Role::orderBy('rolename', 'asc')->get();
+      $roles = Role::oldest('rolename')->get();
       return view('roles.index')->with('roles', $roles);
     } catch (Exception $e) {
       return Redirect::back()->withError('E144: ' . $e->getMessage());

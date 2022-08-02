@@ -76,7 +76,7 @@ class InvitationsController extends Controller
           $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
           $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
 
-          $groups = Group::orderBy('eventDate', 'asc')->get();
+          $groups = Group::oldest('eventDate')->get();
           $groupsID = $groupsID->unique();
           $data = [
             'application' => $application,

@@ -125,7 +125,7 @@ class RallyesExtraController extends Controller
         $rallye->save();
       }
 
-      $rallyes = Rallye::orderBy('title', 'asc')->paginate(3);
+      $rallyes = Rallye::oldest('title')->paginate(3);
 
       $data = [
         'rallyes'  => $rallyes,
@@ -148,7 +148,7 @@ class RallyesExtraController extends Controller
         $rallye->save();
       }
 
-      $rallyes = Rallye::orderBy('title', 'asc')->paginate(3);
+      $rallyes = Rallye::oldest('title')->paginate(3);
 
       $data = [
         'rallyes'  => $rallyes,
