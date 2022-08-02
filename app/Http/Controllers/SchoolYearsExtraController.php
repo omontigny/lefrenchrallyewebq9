@@ -25,6 +25,6 @@ class SchoolYearsExtraController extends Controller
             'success'   => 'Irreversible delete has done successuflly!'
         ];
 
-        return redirect()->route('schoolyears.index')->with($data);        
+        return to_route('schoolyears.index')->with($data);        
     }
 }

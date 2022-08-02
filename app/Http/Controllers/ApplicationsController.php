@@ -37,9 +37,9 @@ class ApplicationsController extends Controller
   {
     try {
 
-      $rallyes = Rallye::orderBy('title', 'asc')->get();
-      $schools = School::where('added_by', '!=', config('constants.roles.PARENT'))->orderBy('name', 'asc')->get();
-      $schoolyears = Schoolyear::orderBy('id', 'asc')->get();
+      $rallyes = Rallye::oldest('title')->get();
+      $schools = School::where('added_by', '!=', config('constants.roles.PARENT'))->oldest('name')->get();
+      $schoolyears = Schoolyear::oldest('id')->get();
 
       $data = [
         'rallyes'   => $rallyes,
@@ -55,7 +55,7 @@ class ApplicationsController extends Controller
 
   public function apply()
   {
-    $rallyes = Rallye::orderBy('title', 'asc')->paginate(10);
+    $rallyes = Rallye::oldest('title')->paginate(10);
     $applications = Application::all();
     $data = [
       'rallyes'  => $rallyes,
@@ -73,7 +73,7 @@ class ApplicationsController extends Controller
   public function index()
   {
     //
-    $rallyes = Rallye::orderBy('title', 'asc')->paginate(100);
+    $rallyes = Rallye::oldest('title')->paginate(100);
     // return view('applications.index')->with('rallyes', $rallyes);
     return view('applicationsrequest.index')->with('rallyes', $rallyes);
   }

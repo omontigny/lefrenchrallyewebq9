@@ -22,7 +22,7 @@ class GuestsController extends Controller
     public function index()
     {
         //
-        $rallyes = Rallye::orderBy('title', 'asc')->get();
+        $rallyes = Rallye::oldest('title')->get();
         return view('guests.index')->with('rallyes', $rallyes);
     }
 

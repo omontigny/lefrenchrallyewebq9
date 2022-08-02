@@ -51,7 +51,7 @@ class RallyesController extends Controller
       //
       //$rallyes = Rallye::all();
       //$rallyes = Rallye::orderBy('title', 'asc')->take(1)->get();
-      $rallyes = Rallye::orderBy('title', 'asc')->paginate(10);
+      $rallyes = Rallye::oldest('title')->paginate(10);
       //$rallyes = Rallye::orderBy('title', 'asc')->get();
       return view('rallyes.index')->with('rallyes', $rallyes);
     } catch (Exception $e) {

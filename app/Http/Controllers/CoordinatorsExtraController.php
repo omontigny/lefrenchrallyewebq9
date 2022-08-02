@@ -50,7 +50,7 @@ class CoordinatorsExtraController extends Controller
       'success'   => 'Irreversible delete has done successuflly!'
     ];
 
-    return redirect()->route('coordinators.index')->with($data);
+    return to_route('coordinators.index')->with($data);
   }
 
   public function resetCoordinatorPasswordById($id)

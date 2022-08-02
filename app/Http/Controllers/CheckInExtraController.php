@@ -45,7 +45,7 @@ class CheckInExtraController extends Controller
 
       $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
 
-      $children = Children::orderBy('childfirstname', 'asc')->get();
+      $children = Children::oldest('childfirstname')->get();
 
       Log::stack(['single'])->debug("children: " . $children);
 

@@ -13,6 +13,7 @@ use App\Models\Invitation;
 use App\Models\Parent_Rallye;
 use App\Models\KeyValue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -91,7 +92,7 @@ class ApplicationRequestsExtraController extends Controller
         'success'   => 'Irreversible delete has done successuflly!'
       ];
 
-      return redirect()->route('applicationrequests.index')->with($data);
+      return to_route('applicationrequests.index')->with($data);
     } catch (Exception $e) {
       return Redirect::back()->withError('E041: ' . $e->getMessage());
     }

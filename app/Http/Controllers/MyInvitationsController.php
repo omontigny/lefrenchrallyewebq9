@@ -40,8 +40,8 @@ class MyInvitationsController extends Controller
                  'rallyes.title', 'invitations.theme_dress_code', 'invitations.start_time', 'invitations.end_time',
                  'groups.eventDate')
                 ->whereRaw('parents.user_id = ' . $userId)
-                ->orderby('rallyes.title', 'asc')
-                ->orderby('children.childfirstname', 'asc')
+                ->oldest('rallyes.title')
+                ->oldest('children.childfirstname')
                 ->get();
 
                // ->where('checkins.group_id', '=', $applicationEvent->event_id)

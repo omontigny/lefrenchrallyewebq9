@@ -27,7 +27,7 @@ class KeyValuesController extends Controller
   {
     try {
       //
-      $keyvalues = KeyValue::orderBy('key', 'asc')->get();
+      $keyvalues = KeyValue::oldest('key')->get();
       return view('keyvalues.index')->with('keyvalues', $keyvalues);
     } catch (Exception $e) {
       return Redirect::back()->withError('E210: ' . $e->getMessage());
