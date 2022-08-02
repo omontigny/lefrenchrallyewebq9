@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use DateTime;
 use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Mailgun\Mailgun;
 use App\Models\Rallye;
