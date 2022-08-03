@@ -103,13 +103,18 @@ class EmailRepository
     return $bcclist;
   }
 
+
+  public function replaceNameForStoring($rallyeName)
+  {
+    return preg_replace("/\s+/", "_", $rallyeName);
+  }
   public function generatePassword()
   {
     //Add password to user otherwise the user has no password until membership confirmed
-    $str_result = '**$$$$####???????0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    $strResult = '**$$$$####???????0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     // Shufle the $str_result and returns substring
     // of specified length
-    $userPassword =  substr(str_shuffle($str_result),  0, 12);
+    $userPassword =  substr(str_shuffle($strResult),  0, 12);
     return $userPassword;
   }
 }

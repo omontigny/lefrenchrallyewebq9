@@ -112,7 +112,7 @@ class StripePaymentController extends Controller
       }
     } catch (Exception $e) {
       Log::stack(['single', 'stdout'])->debug("[EXCEPTION] - [STRIPE] : ca passe  pas ! pour " . $paymentDescription . $e->getMessage());
-      return Redirect::back()->withError('E228: ' . $e->getMessage());
+      return Redirect::back()->withError('E231: ' . $e->getMessage());
     }
   }
 }

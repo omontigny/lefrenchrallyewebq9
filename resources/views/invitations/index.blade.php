@@ -31,6 +31,7 @@
                 <th>Event Date (DD-MM-YYYY)</th>
                 <th>Venue</th>
                 <th>Theme</td>
+                <th>Owner</td>
                 <th>Status</td>
                 <th>Actions</td>
               </tr>
@@ -52,6 +53,7 @@
                 @endif
                 <td>{{$invitation->venue_address}}</td>
                 <td>{{$invitation->theme_dress_code}}</td>
+                <td>{{$invitation->user->name}}</td>
                 <td class="text-warning">Finished</td>
                 <td> - </td>
               </tr>
@@ -79,6 +81,7 @@
                 @endif
                 <td>{{$invitation->venue_address}}</td>
                 <td>{{$invitation->theme_dress_code}}</td>
+                <td>{{$invitation->user->name}}</td>
                 <td>Incoming</td>
                 <td>
                   <a href={{secure_url("/sendToMyself/".$invitation->id)}}>

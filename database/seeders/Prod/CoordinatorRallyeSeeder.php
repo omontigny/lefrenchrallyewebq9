@@ -19,10 +19,10 @@ class CoordinatorRallyeSeeder extends Seeder
 
     $petitrallye1 = Rallye::where('isPetitRallye', 1)->first();
     $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY')->first();
-    $stdrallye2   = Rallye::where('title', 'RALLYE MOUNTBATTEN')->first();
+    $stdrallye2   = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
 
     $oli    = Coordinator::where('username', 'omontigny')->first();
-    $cylia  = Coordinator::where('username', 'cylia')->first();
+    $cylia  = Coordinator::where('username', 'webmaster')->first();
     $elfi   = Coordinator::where('username', 'elfi')->first();
 
     if ($oli) {

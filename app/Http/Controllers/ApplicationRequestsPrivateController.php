@@ -120,12 +120,15 @@ class ApplicationRequestsPrivateController extends Controller
 
           // We do resize only if filesize > 150Ko
           if (filesize($source_file) > 152400) {
+
             Log::stack(['single', 'stdout'])->info("***** We have to resize this picture *********");
-            $destination_dir = Storage::disk('temp')->get("images/childphoto/");
-            if (!File::isDirectory($destination_dir)) {
-              File::makeDirectory($destination_dir, 0777, true, true);
+            $childphotoTempFolder = 'images/childphoto/';
+            if (!Storage::disk('temp')->exists($childphotoTempFolder)) {
+              Storage::disk('temp')->makeDirectory($childphotoTempFolder, 0777, true, true);
             };
+            $destination_dir = Storage::disk('temp')->path($childphotoTempFolder); # storage/app/temp/images/childphoto/
             $destination_file = $destination_dir . $application->id . '_' . $target_file;
+            Log::stack(['single', 'stdout'])->info("***** Destination File : " . $destination_file . "*********");
 
             $orientation = @exif_read_data($source_file)['Orientation']; // @ for silent warning exif_read_data(php3KLADx): File not supported for some png files
             Log::stack(['single', 'stdout'])->debug("exif orientation : $orientation");

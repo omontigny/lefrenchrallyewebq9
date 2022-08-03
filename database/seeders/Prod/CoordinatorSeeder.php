@@ -21,7 +21,7 @@ class CoordinatorSeeder extends Seeder
     // Schema::enableForeignKeyConstraints();
 
     $oli    = User::where('name', 'omontigny')->first();
-    $cylia  = User::where('name', 'cylia')->first();
+    $webmaster  = User::where('name', 'webmaster')->first();
     $elfi   = User::where('name', 'elfi')->first();
 
     if ($oli) {
@@ -34,14 +34,14 @@ class CoordinatorSeeder extends Seeder
         'user_id'  => $oli->id
       ]);
     }
-    if ($cylia) {
+    if ($webmaster) {
       Coordinator::create([
         'firstname' => 'ADMIN',
         'lastname' => 'SUPER',
-        'username' => $cylia->name,
-        'mail' => $cylia->email,
+        'username' => $webmaster->name,
+        'mail' => $webmaster->email,
         'status' => 0,
-        'user_id'  => $cylia->id
+        'user_id'  => $webmaster->id
       ]);
     }
     if ($elfi) {

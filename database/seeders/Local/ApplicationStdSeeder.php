@@ -20,7 +20,7 @@ class ApplicationStdSeeder extends Seeder
   public function run()
   {
     //
-    $stdrallye1   = Rallye::where('title', 'STD 1')->first();
+    $stdrallye1   = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
     $school       = School::all()->first();
     $schoolyear1  = Schoolyear::where('current_level', '2nde - Year 11')->first();
     $lastname     =  "LASTNAME" . rand(2, 100);
@@ -66,7 +66,7 @@ class ApplicationStdSeeder extends Seeder
       ]
     );
 
-    $stdrallye2   = Rallye::where('title', 'STD 2')->first();
+    $stdrallye2   = Rallye::where('title', 'RALLYE BERKELEY')->first();
     $school       = School::all()->last();
     $schoolyear2  = Schoolyear::where('current_level', '1ere - Year 12')->first();
     $lastname     =  "LASTNAME" . rand(2, 100);

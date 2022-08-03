@@ -18,40 +18,31 @@ class AdminRallyeSeeder extends Seeder
   {
 
     $coordinator = User::where('active_profile', 'COORDINATOR')->first();
-    $rallye1 = Rallye::where('title', 'STD 1')->first();
-    $rallye2 = Rallye::where('title', 'STD 2')->first();
-    $rallye3 = Rallye::where('title', 'SMALL 1')->first();
-    $rallye4 = Rallye::where('title', 'SMALL 2')->first();
+    $petitrallye = Rallye::where('isPetitRallye', 1)->first();
+    $rallyestd1 = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
+    $rallyestd2 = Rallye::where('title', 'RALLYE BERKELEY')->first();
 
-    if ($coordinator && $rallye1) {
+    if ($coordinator && $rallyestd1) {
       Admin_Rallye::create([
-        'rallye_id'       => $rallye1->id,
+        'rallye_id'       => $rallyestd1->id,
         'user_id'         => $coordinator->id,
         'active_rallye'   => ''
       ]);
     }
 
-    if ($coordinator && $rallye2) {
+    if ($coordinator && $rallyestd2) {
       Admin_Rallye::create([
-        'rallye_id'       => $rallye2->id,
+        'rallye_id'       => $rallyestd2->id,
         'user_id'         => $coordinator->id,
         'active_rallye'   => ''
       ]);
     }
 
-    if ($coordinator && $rallye3) {
+    if ($coordinator && $petitrallye) {
       Admin_Rallye::create([
-        'rallye_id'      => $rallye3->id,
+        'rallye_id'      => $petitrallye->id,
         'user_id'        => $coordinator->id,
         'active_rallye'  => '1'
-      ]);
-    }
-
-    if ($coordinator && $rallye4) {
-      Admin_Rallye::create([
-        'rallye_id'       => $rallye4->id,
-        'user_id'         => $coordinator->id,
-        'active_rallye'   => ''
       ]);
     }
   }

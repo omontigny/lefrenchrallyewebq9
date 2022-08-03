@@ -99,6 +99,7 @@ class ImageRepository
   {
     // Content type
     //header('Content-Type: image/' . $ext);
+    Log::stack(['single', 'stdout'])->debug("destination_file: $destination");
 
     [$width, $height] = getimagesize($source);
     Log::stack(['single', 'stdout'])->debug("width: $width - height: $height");
@@ -159,7 +160,12 @@ class ImageRepository
       }
 
       //Log::stack(['single', 'stdout'])->debug( var_dump($image));
-
+      /* Orientation Values
+        * 1 : Correct
+        * 3 : complètement à l'envers
+        * 6 : plus haute que large regard à gauche
+        * 8 : plus haute que large regard à droite
+      */
       if (is_resource($image) || $this->is_gd_image($image)) {
         switch ($orientation) {
           case 3:

@@ -23,7 +23,6 @@
                                 <tr>
                                     <th width="20px;">#</th>
                                     <th>Current School year</th>
-                                    <th>Next School year</th>
                                     <th style="width:60px;" >Action</th>
                                 </tr>
                             </thead>
@@ -32,8 +31,7 @@
                                 <tr>
                                     <td>{{$schoolYear->id}}</td>
                                     <td><strong>{{$schoolYear->current_level}}</strong></td>
-                                    <td><strong>{{$schoolYear->next_level}}</strong></td>
-                                    <td> 
+                                    <td>
                                         <a href="schoolyears/{{$schoolYear->id}}"><button type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-edit"></span></button></a>
                                         <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal"
                       data-target="#deleteSchoolYearModal_{{$schoolYear->id}}"><span class="glyphicon glyphicon-remove"></span></button>
@@ -67,17 +65,17 @@
 
                         @endforeach
                           </tbody>
-                          
+
                         </table>
                         </div>
                 </div>
                 {{$schoolYears->links()}}
             </div>
         </div>
-        
+
     </div>
-    <!-- #END# Exportable Table --> 
-    
+    <!-- #END# Exportable Table -->
+
 </div>
   @else
         <p> No school year found </p>
@@ -99,29 +97,29 @@
       "use strict";
       $('.menu > ul > li:has( > ul)').addClass('menu-dropdown-icon');
       //Checks if li has sub (ul) and adds class for toggle icon - just an UI
-    
+
       $('.menu > ul > li > ul:not(:has(ul))').addClass('normal-sub');
-    
+
       $(".menu > ul > li").hover(function(e) {
         if ($(window).width() > 943) {
           $(this).children("ul").stop(true, false).fadeToggle(150);
           e.preventDefault();
         }
       });
-      //If width is more than 943px dropdowns are displayed on hover    
+      //If width is more than 943px dropdowns are displayed on hover
       $(".menu > ul > li").on('click',function() {
         if ($(window).width() <= 943) {
           $(this).children("ul").fadeToggle(150);
         }
       });
       //If width is less or equal to 943px dropdowns are displayed on click (thanks Aman Jain from stackoverflow)
-    
+
       $(".h-bars").on('click',function(e) {
         $(".menu > ul").toggleClass('show-on-mobile');
         e.preventDefault();
       });
       //when clicked on mobile-menu, normal menu is shown as a list, classic rwd menu story (thanks mwl from stackoverflow)
-    });    
+    });
 </script>
 @stop
 
