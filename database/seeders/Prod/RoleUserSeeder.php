@@ -19,7 +19,7 @@ class RoleUserSeeder extends Seeder
     $role_superadmin = Role::where('rolename', 'SUPERADMIN')->first();
     $role_coordinator = Role::where('rolename', 'COORDINATOR')->first();
     $user1 = User::where('name', 'omontigny')->first();
-    $user2 = User::where('email', 'webmaster@lefrenchrallye.com')->first();
+    $user2 = User::where('email', 'webmaster')->first();
     $user3 = User::where('name', 'tbuisson')->first();
     $user4 = User::where('name', 'elfi')->first();
 
