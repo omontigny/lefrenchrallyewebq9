@@ -108,6 +108,8 @@ class EmailRepository
   {
     return preg_replace("/\s+/", "_", $rallyeName);
   }
+
+
   public function generatePassword()
   {
     //Add password to user otherwise the user has no password until membership confirmed
