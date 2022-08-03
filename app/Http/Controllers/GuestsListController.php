@@ -95,7 +95,7 @@ class GuestsListController extends Controller
           return view('guestLists.index')->with($datas);
         } else if (count($applications) > 1) {
           $found = true;
-          return redirect('/guestLists');
+          return redirect('/parentChildren');
         } else {
           $found = false;
         }

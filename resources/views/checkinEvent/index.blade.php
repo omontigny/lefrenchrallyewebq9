@@ -66,9 +66,15 @@
 
                   <td>{{$row->id}}</td>
                   <td>
-                  <a href="/multicheckin/edit/{{$row->id}}/{{$invitation_id}}"><button type="button" class="btn btn-danger btn-sm"><span
+                    <a href="/multicheckin/edit/{{$row->id}}/{{$invitation_id}}">
+                      <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-success btn-sm glyphicon glyphicon-ok"></button>
+                        <button type="button" class="btn btn-danger btn-sm glyphicon glyphicon-remove"></button>
+                      </div>
+                    </a>
+                  {{-- <button type="button" class="btn btn-danger btn-sm"><span
                           class="glyphicon glyphicon-ok"></span> <span
-                          class="glyphicon glyphicon-remove"></span></button></a>
+                          class="glyphicon glyphicon-remove"></span></button> --}}
                   </td>
                   <td>
                     <div class="media-object"><img src="{{$row->childphotopath}}" alt="" width="35"

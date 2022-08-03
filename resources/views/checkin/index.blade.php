@@ -11,17 +11,24 @@
 @stop
 @section('content')
 @if(count($checkins) > 0)
+  <div class="btn-group-vertical float-right" role="group" aria-label="...">
+    <!-- MAIL -->
+    <a href="/guestsList/{{$invitation->id}}/reminderInvitationMail"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mails</button></a>
+    <!-- MAIL -->
+    <!-- BACK -->
+    <a href="{{ URL::previous() }}" class="btn btn-default btn-sm btn-default">Back</a>
+    <!-- BACK -->
+  </div>
 
-<!-- MAIL -->
-<!--
-<a href="mailto:?bcc=
-@foreach($checkins as $checkin)
-@if($checkin->checkStatus == 0)
-{{$checkin->parentemail}};
-@endif
-@endforeach "><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mail</button></a>
--->
-<!-- MAIL -->
+<!-- MAIL BCC-->
+  {{-- <a href="mailto:?bcc=
+  @foreach($checkins as $checkin)
+  @if($checkin->checkStatus == 0)
+  {{$checkin->parentemail}};
+  @endif
+  @endforeach ">
+  <button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mail</button></a> --}}
+<!-- MAIL BCC-->
 
 <div class="container-fluid">
 
@@ -31,7 +38,6 @@
       <div class="card">
         <div class="header">
           <h2><strong>My Guest</strong> List</h2>
-          <a href="/guestsList/{{$invitation->id}}/reminderInvitationMail"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mails</button></a>
           <p>Click on the yellow button “mails” to send a reminder to the parents who have not yet replied to the invitation</p>
         </div>
         <div class="body">

@@ -13,7 +13,7 @@
     <!-- MAIL DIRECT -->
     <a href="mailto:?bcc={{$bcclist}}"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mail</button></a>
     <!-- MAIL MODAL -->
-    {{-- <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#sendMail"><span class="glyphicon glyphicon-send"></span> Message</button> --}}
+    <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#sendMail"><span class="glyphicon glyphicon-send"></span> Message</button>
     <!-- MAIL -->
   @endif
     <!-- BACK -->

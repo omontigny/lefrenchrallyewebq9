@@ -283,6 +283,8 @@ class InvitationsController extends Controller
   public function show($id)
   {
     //
+    Log::stack(['single', 'stdout'])->debug('>>>> DANS LA SHOW de Invitation Controller');
+
     $application = Application::find($id);
     $applications = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
 
@@ -316,6 +318,7 @@ class InvitationsController extends Controller
   {
     //
     Log::stack(['single', 'stdout'])->debug('Je suis dans InvitationControlle:EDIT - empty Method');
+    return redirect('/parentChildren');
   }
 
   /**
