@@ -458,7 +458,7 @@ class MailsController extends Controller
 
 
         $imageUrl = URL::asset($imageInfo["imagePath"]);
-        # Log::stack(['single', 'stdout'])->debug("[MAIL] - imageUrl: " . $imageUrl);
+        Log::stack(['single', 'stdout'])->debug("[MAIL] - imageUrl: " . $imageUrl);
         # Log::stack(['single', 'stdout'])->debug("[MAIL] - cloudinaryImageUrl: " . $cloudinaryImageUrl);
 
         // CASE 1: PETIT RALLYE
@@ -508,6 +508,7 @@ class MailsController extends Controller
             'application' => $application,
             'invitation' => $invitation,
             'domainLink' => $domainLink,
+            'rallye_name' => $rallye_name,
             'imageName' => $imageInfo["imageName"],
             'invitationFile' => $invitation->invitationFile,
             'imageUrl' => $imageUrl,

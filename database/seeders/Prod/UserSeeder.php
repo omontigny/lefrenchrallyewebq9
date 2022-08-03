@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
       'password' => '',
       'remember_token' => Str::random(10),
       'email' => 'webmaster@lefrenchrallye.com',
-      'name' => 'cylia',
+      'name' => 'webmaster',
       'active_profile' => 'COORDINATOR',
       'admin' => 1,
       'coordinator' => 2,

@@ -18,26 +18,26 @@ class GroupSeeder extends Seeder
   public function run()
   {
     $coordinator = User::where('active_profile', 'COORDINATOR')->first();
-    $petitrallye1 = Rallye::where('isPetitRallye', 1)->first();
-    $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY 2022 2023')->first();
-    $stdrallye2   = Rallye::where('title', 'RALLYE MOUNTBATTEN 2022 2023')->first();
+    $petitrallye = Rallye::where('isPetitRallye', 1)->first();
+    $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY')->first();
+    $stdrallye2   = Rallye::where('title', 'RALLYE MOUNTBATTEN')->first();
 
-    if ($coordinator && $petitrallye1) {
+    if ($coordinator && $petitrallye) {
       Group::create([
         'name'        => 'RED',
         'user_id'     => $coordinator->id,
-        'rallye_id'   => $petitrallye1->id,
+        'rallye_id'   => $petitrallye->id,
         'eventDate'   => '2022-09-13',
         'start_year'  => 2022,
         'end_year'    => 2023
       ]);
     }
 
-    if ($coordinator && $petitrallye1) {
+    if ($coordinator && $petitrallye) {
       Group::create([
         'name'        => 'GREEN',
         'user_id'     => $coordinator->id,
-        'rallye_id'   => $petitrallye1->id,
+        'rallye_id'   => $petitrallye->id,
         'eventDate'   => '2022-09-14',
         'start_year'  => 2022,
         'end_year'    => 2023

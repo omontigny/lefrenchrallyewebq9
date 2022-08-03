@@ -55,7 +55,6 @@ class ParentEventsController extends Controller
           if ($coordinatorRallye != null) {
             $applications = Application::where('rallye_id', $coordinatorRallye->rallye->id)
               ->where('status', '1')
-              ->where('is_boarder', '0')
               ->get();
 
             if (count($applications) == 0) {
@@ -70,7 +69,6 @@ class ParentEventsController extends Controller
         if ($adminRallye != null) {
           $applications = Application::where('rallye_id', $adminRallye->rallye->id)
             ->where('status', '1')
-            ->where('is_boarder', '0')
             ->get();
 
           if (count($applications) == 0) {

@@ -13,7 +13,7 @@ return [
     |
     */
 
-  'default' => env('FILESYSTEM_DRIVER', 'local'),
+  'default' => env('FILESYSTEM_DISK', 'local'),
 
   /*
     |--------------------------------------------------------------------------
@@ -60,7 +60,6 @@ return [
       'root' => storage_path('app/temp'),
       'url' => env('APP_URL') . '/storage',
       'visibility' => 'public',
-      'throw' => true
     ],
     'public' => [
       'driver' => 'local',
@@ -88,5 +87,4 @@ return [
       'throw' => true
     ]
   ],
-
 ];

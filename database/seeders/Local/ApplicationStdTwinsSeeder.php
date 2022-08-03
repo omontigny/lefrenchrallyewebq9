@@ -20,7 +20,7 @@ class ApplicationStdTwinsSeeder extends Seeder
   public function run()
   {
     //
-    $stdrallye1   = Rallye::where('title', 'STD 1')->first();
+    $stdrallye1   = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
     $school       = School::all()->first();
     $schoolyear1  = Schoolyear::where('current_level', '2nde - Year 11')->first();
     $lastname     =  "LASTNAME-TWINS";

@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Config;
 use App\Repositories\ImageRepository;
+use App\Repositories\EmailRepository;
 use Exception;
 use Illuminate\Support\Carbon;
 
@@ -36,10 +37,11 @@ class InvitationsController extends Controller
 {
   protected $imageRepository;
 
-  public function __construct(ImageRepository $imageRepository)
+  public function __construct(EmailRepository $emailRepository, ImageRepository $imageRepository)
   {
     // if user is not identified, he will be redirected to the login page
     $this->middleware('auth');
+    $this->emailRepository = $emailRepository;
     $this->imageRepository = $imageRepository;
   }
 
@@ -73,7 +75,7 @@ class InvitationsController extends Controller
 
           $limitDate = Carbon::now()->sub(1, 'day');
 
-          $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '>=', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
+          $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->with('user')->get()->where('group.eventDate', '>=', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
           $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
 
           $groups = Group::oldest('eventDate')->get();
@@ -153,16 +155,18 @@ class InvitationsController extends Controller
         $invitation->start_time = Str::upper($request->input('start_time'));
         $invitation->end_time = Str::upper($request->input('end_time'));
         $invitation->rallye_id = Group::find($invitation->group_id)->rallye_id;
-        $rallye_name = preg_replace("/\s+/", "", Rallye::find($invitation->rallye_id)->title);
-        Log::stack(['stdout'])->debug('Rallye Name: ' . $rallye_name);
-        // Log::stack(['single', 'stdout'])->debug('fichier uploadé: ' . $_FILES["invitationFile"]["name"]);
+        $rallye_name = $this->emailRepository->replaceNameForStoring(Rallye::find($invitation->rallye_id)->title);
+        // Log::stack(['stdout'])->debug('Rallye Name: ' . $rallye_name);
+        Log::stack(['single', 'stdout'])->debug('fichier uploadé: ' . $_FILES["invitationFile"]["name"]);
         $target_filename = basename($_FILES["invitationFile"]["name"]);
-        // Log::stack(['single', 'stdout'])->debug('target_filename: ' . $target_filename);
+        Log::stack(['single', 'stdout'])->debug('target_filename: ' . $target_filename);
 
-        $temp_dir = Storage::disk('temp')->get("images/invitations/" . $rallye_name . "/");
-        if (!File::isDirectory($temp_dir)) {
-          File::makeDirectory($temp_dir, 0777, true, true);
+        $invitationTempFolder = 'images/invitations/' . $rallye_name;
+        if (!Storage::disk('temp')->exists($invitationTempFolder)) {
+          Storage::disk('temp')->makeDirectory($invitationTempFolder, 0777, true, true);
         };
+        $temp_dir = Storage::disk('temp')->path($invitationTempFolder); #storage/app/temp/images/invitations/$rallye_name
+        Log::stack(['single', 'stdout'])->debug('temp_dir: ' . $temp_dir);
 
         $temp_file = $temp_dir . Str::random(10) . "_" . $target_filename;
         Log::stack(['single', 'stdout'])->debug('full path temp file: ' . $temp_file);

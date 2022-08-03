@@ -22,8 +22,16 @@ class RallyeSeeder extends Seeder
     if ($coordinator) {
 
       Rallye::create([
-        'title'         => 'RALLYE NOTTING HILL',
+        'title'         => 'RALLYE WINDSOR',
         'isPetitRallye' => 1,
+        'user_id'       => $coordinator->id,
+        'status'        => 0,
+        'rallyemail'    => "windsor@lefrenchrallye.com"
+      ]);
+
+      Rallye::create([
+        'title'         => 'RALLYE NOTTING HILL',
+        'isPetitRallye' => 0,
         'user_id'       => $coordinator->id,
         'status'        => 0,
         'rallyemail'    => "nottinghill@lefrenchrallye.com"
@@ -35,14 +43,6 @@ class RallyeSeeder extends Seeder
         'user_id'       => $coordinator->id,
         'status'        => 0,
         'rallyemail'    => "berkeley@lefrenchrallye.com"
-      ]);
-
-      Rallye::create([
-        'title'         => 'RALLYE MOUNTBATTEN',
-        'isPetitRallye' => 0,
-        'user_id'       => $coordinator->id,
-        'status'        => 0,
-        'rallyemail'    => "mountbatten@lefrenchrallye.com"
       ]);
     }
   }

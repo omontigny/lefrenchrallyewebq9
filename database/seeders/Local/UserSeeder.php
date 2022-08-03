@@ -14,8 +14,6 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    // User::factory()->times(30)->create();
-    //factory(App\User::class, 50)->create();
     User::factory()->create([
       'email' => 'olivier@' . env('APP_DOMAIN'),
       'name' => 'omontigny',
@@ -27,7 +25,7 @@ class UserSeeder extends Seeder
 
     User::factory()->create([
       'email' => 'webmaster@' . env('APP_DOMAIN'),
-      'name' => 'cylia',
+      'name' => 'webmaster',
       'active_profile' => 'COORDINATOR',
       'admin' => 1,
       'coordinator' => 2,

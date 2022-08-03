@@ -30,12 +30,7 @@ class SchoolYearsController extends Controller
   {
 
     try {
-      //
-      //$rallyes = Rallye::all();
-      //$rallyes = Rallye::orderBy('title', 'asc')->take(1)->get();
-      //$schoolYears = SchoolYear::orderBy('current_level', 'asc')->paginate(2);
-      $schoolYears = SchoolYear::oldest('current_level')->paginate(2);
-      //$rallyes = Rallye::orderBy('title', 'asc')->get();
+      $schoolYears = SchoolYear::oldest('current_level')->paginate(3);
       return view('schoolyears.index')->with('schoolYears', $schoolYears);
     } catch (Exception $e) {
       return Redirect::back()->withError('E159: ' . $e->getMessage());

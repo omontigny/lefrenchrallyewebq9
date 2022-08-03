@@ -167,6 +167,9 @@ class GroupsController extends Controller
       // adding new group
       $group = new  Group;
       $group->name = '';
+      if ($request->has('name')) {
+        $group->name = $request->input('name');
+      }
       $group->rallye_id = $request->input('rallye_id');
       $group->user_id = Auth::user()->id;
 

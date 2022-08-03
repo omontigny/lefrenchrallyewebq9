@@ -46,6 +46,11 @@ class RoleUserSeeder extends Seeder
     }
     if ($user3) {
       Role_User::create([
+        'role_id' => $role_superadmin->id,
+        'user_id' => $user3->id
+      ]);
+
+      Role_User::create([
         'role_id' => $role_coordinator->id,
         'user_id' => $user3->id
       ]);

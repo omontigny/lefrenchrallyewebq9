@@ -338,6 +338,7 @@ class GuestsListController extends Controller
           $htmlData = [
             'checkin'    => $checkin,
             'domainLink' => $domainLink,
+            'rallye_name' => $rallye_name,
             'imageName'  => $imageInfo["imageName"],
             'invitationFile' => $invitation->invitationFile,
             'imageUrl' => $imageUrl,

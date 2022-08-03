@@ -27,7 +27,7 @@ class KeyvalueSeeder extends Seeder
 
 
     if (App::environment() === 'prod') {
-      $public_url = 'https://www.lefrenchrallye.com';
+      $public_url = env('FRENCHRALLYE_WEB_URL');
     } else {
       $public_url = env('APP_URL');
     };
