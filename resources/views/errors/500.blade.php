@@ -2,7 +2,7 @@
 
 @section('title', __('Page Not Found'))
 
-@section('code', '503')
+@section('code', '500')
 
 @section('image')
 
@@ -10,4 +10,4 @@
 
 @endsection
 
-@section('message', __('Sorry, We are currently down for maintenance. We will be up in couple of hours. Thanks for patience'))
+@section('message', __("Houston, we've got a problem ! Don't worry contact your administrator"))

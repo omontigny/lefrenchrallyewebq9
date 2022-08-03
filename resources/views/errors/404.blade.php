@@ -1,60 +1,13 @@
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Not Found</title>
+@extends('errors::illustrated-layout')
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+@section('title', __('Page Not Found'))
 
-    <!-- Styles -->
-    <style>
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 100;
-            height: 100vh;
-            margin: 0;
-        }
+@section('code', '404')
 
-        .full-height {
-            height: 100vh;
-        }
+@section('image')
 
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
+<div style="background-image: url({{ asset('/assets/images/svg/404.svg') }});" class="absolute pin bg-cover bg-no-repeat md:bg-left lg:bg-center"></div>
 
-        .position-ref {
-            position: relative;
-        }
+@endsection
 
-        .code {
-            border-right: 2px solid;
-            font-size: 26px;
-            padding: 0 15px 0 15px;
-            text-align: center;
-            color: red;
-        }
-
-        .message {
-            font-size: 18px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="flex-center position-ref full-height">
-        <div class="code">
-            404            </div>
-
-        <div class="message" style="padding: 10px;">
-            Not Found            </div>
-        <a href="{{secure_url('/')}}">Welcome page</a>
-    </div>
-
-
-<script type="text/javascript" src="chrome-extension://bdkkcgmommoaeadodpmodlmcjfjeleei/js/content.js"></script></body></html>
+@section('message', __('Sorry, the page you are looking for could not be found.'))

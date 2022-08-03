@@ -317,10 +317,10 @@ class GuestsListController extends Controller
           'checkins' => $checkins,
           'invitation' => $invitation
         ];
-        $rallye_name = preg_replace("/\s+/", "_", Rallye::find($invitation->rallye_id)->title);
+        $rallye_name = $this->emailRepository->replaceNameForStoring(Rallye::find($invitation->rallye_id)->title);
         $group_name = "std";
         if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
-          $group_name = preg_replace("/\s+/", "_", Group::find($invitation->group_id)->name);
+          $group_name = $this->emailRepository->replaceNameForStoring(Group::find($invitation->group_id)->name);
         }
         $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
         $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
