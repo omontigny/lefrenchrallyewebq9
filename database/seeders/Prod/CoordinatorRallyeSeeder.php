@@ -17,18 +17,18 @@ class CoordinatorRallyeSeeder extends Seeder
   public function run()
   {
 
-    $petitrallye1 = Rallye::where('isPetitRallye', 1)->first();
+    $petitrallye = Rallye::where('isPetitRallye', 1)->first();
     $stdrallye1   = Rallye::where('title', 'RALLYE BERKELEY')->first();
     $stdrallye2   = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
 
     $oli    = Coordinator::where('username', 'omontigny')->first();
-    $cylia  = Coordinator::where('username', 'webmaster')->first();
+    $webmaster  = Coordinator::where('username', 'webmaster')->first();
     $elfi   = Coordinator::where('username', 'elfi')->first();
 
     if ($oli) {
       Coordinator_Rallye::create([
         'coordinator_id'  => $oli->id,
-        'rallye_id'       => $petitrallye1->id,
+        'rallye_id'       => $petitrallye->id,
         'active_rallye'   => '1'
       ]);
 
@@ -45,21 +45,21 @@ class CoordinatorRallyeSeeder extends Seeder
       ]);
     }
 
-    if ($cylia) {
+    if ($webmaster) {
       Coordinator_Rallye::create([
-        'coordinator_id'  => $cylia->id,
-        'rallye_id'       => $petitrallye1->id,
+        'coordinator_id'  => $webmaster->id,
+        'rallye_id'       => $petitrallye->id,
         'active_rallye'   => '1'
       ]);
 
       Coordinator_Rallye::create([
-        'coordinator_id'  => $cylia->id,
+        'coordinator_id'  => $webmaster->id,
         'rallye_id'       => $stdrallye1->id,
         'active_rallye'   => '0'
       ]);
 
       Coordinator_Rallye::create([
-        'coordinator_id'  => $cylia->id,
+        'coordinator_id'  => $webmaster->id,
         'rallye_id'       => $stdrallye2->id,
         'active_rallye'   => '0'
       ]);
@@ -68,7 +68,7 @@ class CoordinatorRallyeSeeder extends Seeder
     if ($elfi) {
       Coordinator_Rallye::create([
         'coordinator_id'  => $elfi->id,
-        'rallye_id'       => $petitrallye1->id,
+        'rallye_id'       => $petitrallye->id,
         'active_rallye'   => '1'
       ]);
     }
