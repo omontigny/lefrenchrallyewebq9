@@ -341,7 +341,23 @@ class InvitationsController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    try {
+      //$id = $request->input('invitation_id');
+      $invitation = Invitation::find($id);
+      if ($invitation  != null) {
+        $invitation->venue_address = $request->input('venue_address');
+        $invitation->theme_dress_code = $request->input('theme_dress_code');
+        $invitation->start_time = $request->input('start_time');
+        $invitation->end_time = $request->input('end_time');
+        $invitation->save();
+
+        return redirect('/invitations')->with('success', 'M050: Invitation has been updated successfully!');
+      } else {
+        return Redirect::back()->withError('E115: No invitation found');
+      }
+    } catch (Exception $e) {
+      return Redirect::back()->withError('E116: ' . $e->getMessage());
+    }
   }
 
   /**

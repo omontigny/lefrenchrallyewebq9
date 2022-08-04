@@ -40,96 +40,147 @@
             </thead>
             <tbody>
               @foreach ($oldInvitations as $invitation)
-
-              <tr class="bg-light text-muted">
-                <td><strong>{{$invitation->id}}</strong></td>
-                <td>
+                <tr class="bg-light text-muted">
+                  <td><strong>{{$invitation->id}}</strong></td>
+                  <td>
                     <div class="media-object"><img
                       src="{{$invitation->invitationFile}}"
-                      alt="" width="35" class="rounded-circle"></div>
-                </td>
-                <td>{{$invitation->rallye->title}}</td>
-                <td>{{$invitation->rallye->title}}</td>
-                @if($invitation->group != null)
-                <td>{{$invitation->group->name}}</td>
-                  <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
-                @else
-                  <td>-</td>
-                  <td>-</td>
-                @endif
-                <td>{{$invitation->venue_address}}</td>
-                <td>{{$invitation->theme_dress_code}}</td>
-                <td>{{$invitation->user->name}}</td>
-                <td class="text-warning">Finished</td>
-                <td> - </td>
-              </tr>
-
+                      alt="" width="35" class="rounded-circle">
+                    </div>
+                  </td>
+                  <td>{{$invitation->rallye->title}}</td>
+                  <td>{{$invitation->rallye->title}}</td>
+                  @if($invitation->group != null)
+                  <td>{{$invitation->group->name}}</td>
+                    <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
+                  @else
+                    <td>-</td>
+                    <td>-</td>
+                  @endif
+                  <td>{{$invitation->venue_address}}</td>
+                  <td>{{$invitation->theme_dress_code}}</td>
+                  <td>{{$invitation->user->name}}</td>
+                  <td class="text-warning">Finished</td>
+                  <td> - </td>
+                </tr>
               @endforeach
               @foreach ($invitations as $invitation)
-
-              @if($invitation->group_id == $application->event_id)
-
-              <tr class="bg-success text-white">
+                @if($invitation->group_id == $application->event_id)
+                <tr class="bg-success text-white">
                 @else
-              <tr>
+                <tr>
                 @endif
-                <td><strong>{{$invitation->id}}</strong></td>
+                  <td><strong>{{$invitation->id}}</strong></td>
 
-                <td>
-                  <div class="media-object">
-                    <img src="{{$invitation->invitationFile}}" alt="" width="35" class="rounded-circle">
+                  <td>
+                    <div class="media-object">
+                      <img src="{{$invitation->invitationFile}}" alt="" width="35" class="rounded-circle">
+                    </div>
+                  </td>
+                  <td>{{$invitation->rallye->title}}</td>
+                  @if($invitation->group != null)
+                    <td>{{$invitation->group->name}}</td>
+                    <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
+                  @else
+                    <td>-</td>
+                    <td>-</td>
+                  @endif
+                  <td>{{$invitation->venue_address}}</td>
+                  <td>{{$invitation->theme_dress_code}}</td>
+                  <td>{{$invitation->user->name}}</td>
+                  <td>Incoming</td>
+                  <td>
+                  @if($invitation->group_id == $application->event_id)
+                    <a href={{secure_url("/sendToMyself/".$invitation->id)}}>
+                      <button type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-envelope"></span><b> Myself</b></button>
+                    </a>
+                    <a href="{{secure_url("/mails/$application->id")}}">
+                      <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-send"></span><b> Send</b></button>
+                    </a>
+                    <button type="button" class="btn btn-info btn-sm  "data-toggle="modal" data-target="#EditInvitationModal_{{$invitation->id}}"><span class="glyphicon glyphicon-edit"></span><b> Edit</b></button>
+                    <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal" data-target="#DeletingInvitation_{{$invitation->id}}"><span class="glyphicon glyphicon-remove"></span><b> Del</b></button>
+                    @endif
+                  </td>
+
+                  <!-- +AJO : Modal delete section begin -->
+                  <div class="modal fade" id="DeletingInvitation_{{$invitation->id}}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content bg-danger">
+                        <div class="modal-header">
+                        <h4 class="title col-white text-center" id="defaultModalLabel">Delete Invitation</h4>
+                        </div>
+                        <div class="modal-body col-white">
+                            {{ Form::open(['method' => 'GET', 'url' => route('invitations.destroy', $invitation->id)]) }}
+                        @csrf
+
+                        <p for=""><b>Event Date : </b>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</p>
+                        <p for=""><b>Theme: </b>{{$invitation->theme_dress_code}}</p>
+                        <p for=""><b>Rallye: </b>{{$invitation->rallye->title}}</p>
+
+                        <div class="form-group">
+                            <label for="action"><b>Are you sure you want to delete this invitation ?</b></label>
+                        </div>
+                        </div>
+                        {{Form::hidden('_method', 'DELETE')}}
+                        <div class="modal-footer">
+                        <button type="submit" class="btn btn-link waves-effect col-white">Yes</button>
+                        <button type="button" class="btn btn-link waves-effect col-white" data-dismiss="modal">No,
+                            cancel</button>
+                        </div>
+                        {{ Form::close() }}
+                      </div>
+                    </div>
                   </div>
-                </td>
-                <td>{{$invitation->rallye->title}}</td>
-                @if($invitation->group != null)
-                  <td>{{$invitation->group->name}}</td>
-                  <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
-                @else
-                  <td>-</td>
-                  <td>-</td>
-                @endif
-                <td>{{$invitation->venue_address}}</td>
-                <td>{{$invitation->theme_dress_code}}</td>
-                <td>{{$invitation->user->name}}</td>
-                <td>Incoming</td>
-                <td>
-                  <a href={{secure_url("/sendToMyself/".$invitation->id)}}>
-                    <button type="button" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-envelope"></span><b> Mail to myself</b></button>
-                  </a>
-                  <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal" data-target="#DeletingInvitation_{{$invitation->id}}"><span class="glyphicon glyphicon-remove"></span></button>
-                </td>
+                  <!-- END MODAL DELETE -->
+                  <!-- +AJO : Modal EDIT section begin -->
+                  <div class="modal fade" id="EditInvitationModal_{{$invitation->id}}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="title text-center" id="defaultModalLabel">Edit Invitation</h4>
+                          </div>
 
-                <!-- +AJO : Model section begin -->
-                <div class="modal fade" id="DeletingInvitation_{{$invitation->id}}" tabindex="-1" role="dialog">
-                  <div class="modal-dialog" role="document">
-                  <div class="modal-content bg-danger">
-                      <div class="modal-header">
-                      <h4 class="title col-white text-center" id="defaultModalLabel">Delete Invitation</h4>
-                      </div>
-                      <div class="modal-body col-white">
-                          {{ Form::open(['method' => 'GET', 'url' => route('invitations.destroy', $invitation->id)]) }}
-                      @csrf
+                          <div class="modal-body">
+                              {{ Form::open(['method' => 'GET', 'url' => route('invitations.update', $invitation->id)]) }}
+                              @csrf
 
-                      <p for=""><b>Event Date : </b>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</p>
-                      <p for=""><b>Theme: </b>{{$invitation->theme_dress_code}}</p>
-                      <p for=""><b>Rallye: </b>{{$invitation->rallye->title}}</p>
+                              <p for=""><b>Rallye: </b>{{$invitation->rallye->title}}</p>
+                              <p for=""><b>Group: </b>{{$invitation->group->name}}</p>
+                              <p for=""><b>Event Date: </b>{{$invitation->group->eventDate}}</p>
 
-                      <div class="form-group">
-                          <label for="action"><b>Are you sure you want to delete this invitation ?</b></label>
+                              <div class="form-group">
+                                {!! Html::decode(Form::label('venue','<b>Venue Address</b>')) !!}
+                                {{form::text('venue_address', $invitation->venue_address, ['class' => 'form-control', 'placeholder' => 'Venue Address'])}}
+                              </div>
+                              <div class="form-group form-float">
+                                {!! Html::decode(Form::label('theme','<b>Theme/Dress Code</b>')) !!}
+                                {{form::text('theme_dress_code', $invitation->theme_dress_code, ['class' => 'form-control', 'pattern' => "^[ A-Za-z0-9_.-]*$", 'placeholder' => 'Theme/Dress Code'])}}
+                                <div class="help-info">
+                                  <p>Avoid some special caracters like (&\/$€`()[]@#+%?!~). You can use (-_.)</p>
+                                </div>
+                              </div>
+                             <div class="form-group form-float">
+                                {!! Html::decode(Form::label('start_time','<b>Start time</b>')) !!}
+                                {{form::text('start_time', $invitation->start_time, ['class' => 'form-control', 'placeholder' => 'Start time'])}}
+                              </div>
+                              <div class="form-group form-float">
+                                {!! Html::decode(Form::label('end_time','<b>End time</b>')) !!}
+                                {{form::text('end_time', $invitation->end_time, ['class' => 'form-control', 'placeholder' => 'End time'])}}
+                              </div>
+
+                              <input name="invitation_id" type="hidden"
+                                  value="{{$invitation->id}}">
+                              <div class="modal-footer">
+                                  {{form::submit('Update', ['class' => 'btn btn-primary'])}}
+                                  <button type="button" class="btn btn-default float-right"
+                                      data-dismiss="modal">Cancel</button>
+                              </div>
+                              {{ Form::close() }}
+                          </div>
+                        </div>
                       </div>
-                      </div>
-                      {{Form::hidden('_method', 'DELETE')}}
-                      <div class="modal-footer">
-                      <button type="submit" class="btn btn-link waves-effect col-white">Yes</button>
-                      <button type="button" class="btn btn-link waves-effect col-white" data-dismiss="modal">No,
-                          cancel</button>
-                      </div>
-                      {{ Form::close() }}
-                  </div>
-                  </div>
-              </div>
-              <!-- END MODAL-->
-            </tr>
+                      <!-- END MODAL EDIT -->
+                </tr>
               @endforeach
             </tbody>
           </table>
@@ -181,11 +232,6 @@
     </div>
   </div>
 
-  {{-- <div class="form-group form-float">
-    <label for="theme_dress_code"><b>Theme/Dress Code</b></label>
-    {{form::text('theme_dress_code', '', ['class' => 'form-control', 'placeholder' => 'Theme/Dress Code'])}}
-  </div> --}}
-
   <div class="form-group form-float">
     <label for="start_time"><b>Start time</b></label>
     {{form::text('start_time', '', ['class' => 'form-control', 'placeholder' => '02:00 PM'])}}
@@ -231,10 +277,10 @@
 <hr>
 
 <a href={{secure_url("/sendInvitationToMyself")}}><button type="button" class="btn btn-warning btn-md"><span
-  class="glyphicon glyphicon-plus"></span>Send test to myself</button></a>
+  class="glyphicon glyphicon-envelope"></span> Send test to myself</button></a>
 
 <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
-  class="glyphicon glyphicon-plus"></span> Send to all rallyes members / Invitation already sent</button></a>
+  class="glyphicon glyphicon-send"></span> Send to all rallyes members / Invitation already sent</button></a>
 
 
 <!-- For Material Design Colors -->
