@@ -74,7 +74,8 @@ class MembersController extends Controller
         $coordinatorRallye = $coordinatorRallyes->first();
 
         if ($coordinatorRallye != null) {
-          $rallye = $coordinatorRallye->rallye;
+          $rallye_email = $coordinatorRallye->rallye->rallyemail;
+          $rallye_title = $coordinatorRallye->rallye->title;
         }
 
         foreach ($coordinatorRallyes as $coordinatorRallye) {
@@ -88,13 +89,13 @@ class MembersController extends Controller
 
     if (count($applications) > 0) {
 
-      $mailBodyPlacehodeler = $this->getMailbody($rallye->title);
+      $mailBodyPlacehodeler = $this->getMailbody($rallye_title);
 
       $results = [
         'applications' => $applications,
         'bcclist'      => $bcclist,
-        'rallye_email' => $rallye->email,
-        'rallye_title' => $rallye->title,
+        'rallye_email' => $rallye_email,
+        'rallye_title' => $rallye_title,
         'mail_body'    => $mailBodyPlacehodeler,
       ];
 
