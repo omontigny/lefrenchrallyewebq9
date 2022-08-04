@@ -18,7 +18,7 @@ p.petit {
         <div class="col-lg-12">
             <div class="card">
                 <div class="header">
-                
+
                     <a href={{secure_url("/rallyes/create")}}><button type="button" class="btn btn-primary btn-md float-right"><span class="glyphicon glyphicon-plus"></span> Add new</button></a>
                     <h2><strong>Rallye Invitations</strong> List</h2>
                 </div>
@@ -53,7 +53,7 @@ p.petit {
                                     <td><p class="petit">2:15pm</p></td>
                                     <td><p class="petit">5:00pm</p></td>
                                     <td><p class="petit">No response</p></td>
-                                     <td> 
+                                     <td>
                                         <a href="/rallyes/{{$rallye->id}}"><button type="button" class="btn btn-primary btn-sm"><span class="glyphicon  glyphicon-check"></span></button></a>
                                         <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal" data-target="#deleteRallyeModal"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
@@ -65,13 +65,13 @@ p.petit {
                 </div>
             </div>
         </div>
-        
+
     </div>
-    <!-- #END# Exportable Table --> 
-    
+    <!-- #END# Exportable Table -->
+
 </div>
 
-<!-- +AJO : Model section begin -->
+<!-- +AJO : Modal Del section begin -->
 <div class="modal fade" id="deleteRallyeModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content bg-danger">
@@ -79,7 +79,7 @@ p.petit {
                 <h4 class="title col-white text-center" id="defaultModalLabel">Delete Rallye confirmation</h4>
             </div>
             <div class="modal-body col-white">
-                {{ Form::open(['action' => ['RallyesController@destroy', $rallye->id], 'method' => 'POST']) }}  
+                {{ Form::open(['action' => ['RallyesController@destroy', $rallye->id], 'method' => 'POST']) }}
                 @csrf
                 {{Form::hidden('_method', 'DELETE')}}
                 <div class="form-group">
@@ -95,7 +95,7 @@ p.petit {
         </div>
     </div>
   </div>
-  <!-- +AJO : Model section end -->
+  <!-- +AJO : Modal Delete section end -->
   @else
         <p> No invitations found </p>
         <a href={{secure_url("/rallyes/create")}}><button type="button" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-plus"></span> Add new</button></a>
@@ -123,29 +123,29 @@ p.petit {
       "use strict";
       $('.menu > ul > li:has( > ul)').addClass('menu-dropdown-icon');
       //Checks if li has sub (ul) and adds class for toggle icon - just an UI
-    
+
       $('.menu > ul > li > ul:not(:has(ul))').addClass('normal-sub');
-    
+
       $(".menu > ul > li").hover(function(e) {
         if ($(window).width() > 943) {
           $(this).children("ul").stop(true, false).fadeToggle(150);
           e.preventDefault();
         }
       });
-      //If width is more than 943px dropdowns are displayed on hover    
+      //If width is more than 943px dropdowns are displayed on hover
       $(".menu > ul > li").on('click',function() {
         if ($(window).width() <= 943) {
           $(this).children("ul").fadeToggle(150);
         }
       });
       //If width is less or equal to 943px dropdowns are displayed on click (thanks Aman Jain from stackoverflow)
-    
+
       $(".h-bars").on('click',function(e) {
         $(".menu > ul").toggleClass('show-on-mobile');
         e.preventDefault();
       });
       //when clicked on mobile-menu, normal menu is shown as a list, classic rwd menu story (thanks mwl from stackoverflow)
-    });    
+    });
 </script>
 @stop
 
