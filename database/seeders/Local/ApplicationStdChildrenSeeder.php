@@ -10,7 +10,7 @@ use App\Models\Application;
 use App\Models\Group;
 use App\User;
 
-class ApplicationStdTwinsSeeder extends Seeder
+class ApplicationStdChildrenSeeder extends Seeder
 {
   /**
    * Run the database seeds.
@@ -20,17 +20,19 @@ class ApplicationStdTwinsSeeder extends Seeder
   public function run()
   {
     //
-    $stdrallye1   = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
+    $smallrallye1   = Rallye::where('title', 'RALLYE WINDSOR')->first();
+    $stdrallye2   = Rallye::where('title', 'RALLYE BERKELEY')->first();
     $school       = School::all()->first();
-    $schoolyear1  = Schoolyear::where('current_level', '2nde - Year 11')->first();
-    $lastname     =  "Parentstwins" . rand(2, 100);
+    $schoolyear1  = Schoolyear::where('current_level', '3eme - Year 10')->first();
+    $schoolyear2  = Schoolyear::where('current_level', '1ere - Year 12')->first();
+    $lastname     =  "Parentschildren" . rand(2, 100);
     $imagePath = public_path('/assets/images/avatar3.jpg');
     $image_base64 = base64_encode(file_get_contents($imagePath, true));
     $childphotopath = 'data:image/jpg;base64,' . $image_base64;
 
     Application::create(
       [
-        'rallye_id'       =>  $stdrallye1->id,
+        'rallye_id'       =>  $smallrallye1->id,
         'childfirstname'  =>  'Enfant1',
         'childlastname'   =>   $lastname,
         'childbirthdate'  =>  '2007-12-24',
@@ -72,7 +74,7 @@ class ApplicationStdTwinsSeeder extends Seeder
 
     Application::create(
       [
-        'rallye_id'       =>  $stdrallye1->id,
+        'rallye_id'       =>  $stdrallye2->id,
         'childfirstname'  =>  'Enfant2',
         'childlastname'   =>   $lastname,
         'childbirthdate'  =>  '2007-12-24',
@@ -82,7 +84,7 @@ class ApplicationStdTwinsSeeder extends Seeder
         'simblingList' =>  '',
         'hasinsurancecover' =>  1,
         'school_id' => $school->id,
-        'schoolyear_id' => $schoolyear1->id,
+        'schoolyear_id' => $schoolyear2->id,
         'schoolstate' => $school->state,
         'parentfirstname' => 'Parent',
         'parentlastname' => $lastname,

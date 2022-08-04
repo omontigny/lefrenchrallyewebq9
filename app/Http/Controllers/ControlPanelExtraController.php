@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Models\AccessControl;
 use App\Models\SpecialAccess;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
-use Illuminate\Http\Request;
 
 class ControlPanelExtraController extends Controller
 {

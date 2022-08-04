@@ -23,7 +23,7 @@ class ApplicationStdSeeder extends Seeder
     $stdrallye1   = Rallye::where('title', 'RALLYE NOTTING HILL')->first();
     $school       = School::all()->first();
     $schoolyear1  = Schoolyear::where('current_level', '2nde - Year 11')->first();
-    $lastname     =  "LASTNAME" . rand(2, 100);
+    $lastname     =  "Parentstd" . rand(2, 100);
     $imagePath = public_path('/assets/images/avatar3.jpg');
     $image_base64 = base64_encode(file_get_contents($imagePath, true));
     $childphotopath = 'data:image/jpg;base64,' . $image_base64;
@@ -47,7 +47,7 @@ class ApplicationStdSeeder extends Seeder
         'parentaddress' => 'MON ADRESS, 75000 PARIS',
         'parenthomephone' => '+33201010101',
         'parentmobile' => '+33601010101',
-        'parentemail' => 'parentstd' . rand(2, 1000) . '@' . env('APP_DOMAIN'),
+        'parentemail' => $lastname . '@' . env('APP_DOMAIN'),
         'signingcodeconduct' => 'I accept',
         'dpp1' => 1,
         'dpp2' => 1,
@@ -93,7 +93,7 @@ class ApplicationStdSeeder extends Seeder
         'parentaddress' => 'MON ADRESS, 75000 PARIS',
         'parenthomephone' => '+33201010101',
         'parentmobile' => '+33601010101',
-        'parentemail' => 'parentstd' . rand(2, 1000) . '@' . env('APP_DOMAIN'),
+        'parentemail' => $lastname . '@' . env('APP_DOMAIN'),
         'signingcodeconduct' => 'I accept',
         'dpp1' => 1,
         'dpp2' => 1,
