@@ -57,6 +57,7 @@ class InvitationsController extends Controller
       $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
       $found = false;
       if ($parentRallye != null) {
+        # on verifie que le parent est bien assigné à un group (evented) et on récupere son application
         $applications = Application::where('parent_id', $parent->id)
           ->where('rallye_id', $parentRallye->rallye->id)
           ->where('evented', 1)->get();
@@ -66,11 +67,13 @@ class InvitationsController extends Controller
         if (count($applications) == 1) {
           $found = true;
 
+          # liste des applications ayant le meme event_id (group_id)
           $applications  = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
 
-          $groupsID = collect();
+          $applicationGroupIds = collect();
+          # liste des groupes concernés (cas d'enfants dans différents groups)
           foreach ($applications as $application) {
-            $groupsID[] = $application->event_id;
+            $applicationGroupIds[] = $application->event_id;
           }
 
           $limitDate = Carbon::now()->sub(1, 'day');
@@ -79,13 +82,21 @@ class InvitationsController extends Controller
           $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
 
           $groups = Group::oldest('eventDate')->get();
-          $groupsID = $groupsID->unique();
+          $applicationGroupIds = $applicationGroupIds->unique();
+
+          /* existe t'il deja une invitation pour ce rallye et ce group  */
+          $availableGroupIds = [];
+          if ($invitations->where('group_id', $application->event_id)->count() == 0) {
+            $availableGroupIds = $applicationGroupIds;
+          }
+
           $data = [
             'application' => $application,
             'groups' => $groups,
             'invitations' => $invitations,
             'oldInvitations' => $oldInvitations,
-            'groupsID' => $groupsID,
+            'groupsID' => $applicationGroupIds,
+            'availableGroupIds' => $availableGroupIds,
             'applications' => $applications
           ];
 
@@ -288,20 +299,20 @@ class InvitationsController extends Controller
     $application = Application::find($id);
     $applications = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
 
-    $groupsID = collect();
+    $applicationGroupIds = collect();
     foreach ($applications as $application) {
-      $groupsID[] = $application->event_id;
+      $applicationGroupIds[] = $application->event_id;
     }
 
     $data = Invitation::all();
 
     $groups = Group::all();
-    $groupsID = $groupsID->unique();
+    $applicationGroupIds = $applicationGroupIds->unique();
     $datas = [
       'application' => $application,
       'groups' => $groups,
       'data' => $data,
-      'groupsID' => $groupsID,
+      'applicationGroupIds' => $applicationGroupIds,
       'applications' => $applications
     ];
 

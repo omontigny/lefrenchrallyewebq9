@@ -24,7 +24,7 @@ class ApplicationSmallSeeder extends Seeder
 
     $school       = School::all()->first();
     $schoolyear2  = Schoolyear::where('current_level', '3eme - Year 10')->first();
-    $lastname     =  "LASTNAME" . rand(2, 100);
+    $lastname     =  "Parentsmall" . rand(2, 100);
     $imagePath = public_path('/assets/images/avatar1.jpg');
     $image_base64 = base64_encode(file_get_contents($imagePath, true));
     $childphotopath = 'data:image/jpg;base64,' . $image_base64;
@@ -49,7 +49,7 @@ class ApplicationSmallSeeder extends Seeder
         'parentaddress' => 'MON ADRESS, 75000 PARIS',
         'parenthomephone' => '+33201010101',
         'parentmobile' => '+33601010101',
-        'parentemail' => 'parentsmall' . rand(2, 1000) . '@' . env('APP_DOMAIN'),
+        'parentemail' => $lastname . '@' . env('APP_DOMAIN'),
         'signingcodeconduct' => 'I accept',
         'dpp1' => 1,
         'dpp2' => 1,

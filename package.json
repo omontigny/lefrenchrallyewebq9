@@ -1,6 +1,6 @@
 {
     "engines": {
-        "npm": "8.15.1",
+        "npm": "8.16.0",
         "node": "18.7.0"
     },
     "private": true,
