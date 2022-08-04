@@ -37,6 +37,7 @@
 <hr>
 
 
+
 @include('controlPanel.testMails')
 
 @include('controlPanel.administrators', $userRoles)
@@ -45,6 +46,7 @@
 
 @include('controlPanel.accessControl', $accessControl)
 
+{{-- @include('controlPanel.versions') --}}
 
   @stop
   @section('page-script')

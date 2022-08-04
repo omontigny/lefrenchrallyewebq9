@@ -28,6 +28,8 @@
               <tr>
                 <th>#</td>
                 <th>Invitation</th>
+                <th>Rallye</th>
+                <th>Group</th>
                 <th>Event Date (DD-MM-YYYY)</th>
                 <th>Venue</th>
                 <th>Theme</td>
@@ -46,9 +48,13 @@
                       src="{{$invitation->invitationFile}}"
                       alt="" width="35" class="rounded-circle"></div>
                 </td>
+                <td>{{$invitation->rallye->title}}</td>
+                <td>{{$invitation->rallye->title}}</td>
                 @if($invitation->group != null)
+                <td>{{$invitation->group->name}}</td>
                   <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
                 @else
+                  <td>-</td>
                   <td>-</td>
                 @endif
                 <td>{{$invitation->venue_address}}</td>
@@ -74,9 +80,12 @@
                     <img src="{{$invitation->invitationFile}}" alt="" width="35" class="rounded-circle">
                   </div>
                 </td>
+                <td>{{$invitation->rallye->title}}</td>
                 @if($invitation->group != null)
+                  <td>{{$invitation->group->name}}</td>
                   <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
                 @else
+                  <td>-</td>
                   <td>-</td>
                 @endif
                 <td>{{$invitation->venue_address}}</td>
@@ -85,7 +94,7 @@
                 <td>Incoming</td>
                 <td>
                   <a href={{secure_url("/sendToMyself/".$invitation->id)}}>
-                    <button type="button" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-envelope"></span> Mail to myself</button>
+                    <button type="button" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-envelope"></span><b> Mail to myself</b></button>
                   </a>
                   <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal" data-target="#DeletingInvitation_{{$invitation->id}}"><span class="glyphicon glyphicon-remove"></span></button>
                 </td>
@@ -132,7 +141,7 @@
 @endif
 <!-- #END# Exportable Table -->
 
-<h3>Invitation</h3>
+<h3>New Invitation</h3>
 <p>Below, you can enter the information about your event and then upload and send an invitation to all members of your
   Rallye.<br />
   <span class="text-danger"><strong>Note: You can not change this information after sending out the RSVP's. So be
@@ -141,16 +150,20 @@
   {{ Form::open(['action' => 'InvitationsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
   @csrf
   <div class="form-group form-float">
-    <label for="calendar_id"><b>Event date</b></label>
+    <label for="calendar_id"><b>Event date available</b></label>
      <select class="form-control show-tick ms select2" data-placeholder="Select" name="calendar_id" required>
-      <option value="" selected disabled>-- Please select a group - event date --</option>
-      @foreach ($groups as $group)
-        @foreach($groupsID as $groupID)
-            @if($group->id == $groupID)
-              <option value={{$group->id}}>{{$group->rallye->title . ' ' . $group->name . ' ' . \Illuminate\Support\Carbon::parse($group->eventDate)->format('d-m-Y')}}</option>
-            @endif
-      @endforeach
-      @endforeach
+      @if(count($availableGroupIds) > 0)
+        <option value="" selected disabled>-- Please select a group - event date --</option>
+        @foreach ($groups as $group)
+          @foreach($availableGroupIds as $availableGroupId)
+              @if($group->id == $availableGroupId)
+                <option value={{$group->id}}>{{$group->rallye->title . ' ' . $group->name . ' ' . \Illuminate\Support\Carbon::parse($group->eventDate)->format('d-m-Y')}}</option>
+              @endif
+          @endforeach
+        @endforeach
+      @else
+        <option value="" selected disabled>-- No event date available --</option>
+      @endif
     </select>
   </div>
 
@@ -217,11 +230,11 @@
 </div>
 <hr>
 
-<a href={{secure_url("/sendInvitationToMyself")}}><button type="button" class="btn btn-primary btn-md"><span
-  class="glyphicon glyphicon-plus"></span> Send test to myself</button></a>
+<a href={{secure_url("/sendInvitationToMyself")}}><button type="button" class="btn btn-warning btn-md"><span
+  class="glyphicon glyphicon-plus"></span>Send test to myself</button></a>
 
 <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
-  class="glyphicon glyphicon-plus"></span> Send to all rallyes members/Invitation already sent</button></a>
+  class="glyphicon glyphicon-plus"></span> Send to all rallyes members / Invitation already sent</button></a>
 
 
 <!-- For Material Design Colors -->
