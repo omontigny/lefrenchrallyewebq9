@@ -246,8 +246,9 @@ Route::get('profiles/{id}/switchOnCoordinatorProfileById', 'ProfilesController@s
 Route::get('profiles/{id}/switchOnParentProfileById', 'ProfilesController@switchOnParentProfileById');
 
 
-/* Guest */
+/* Extra Guest */
 Route::resource('guests', 'guestsController');
+
 /* Checkin */
 Route::get('/checkin/{id}/checkIn', 'checkinExtraController@checkIn');
 Route::resource('checkin', 'CheckinController');
