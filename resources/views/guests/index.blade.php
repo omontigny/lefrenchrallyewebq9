@@ -5,110 +5,96 @@
 <link rel="stylesheet" href="{{secure_asset('assets/css/hm-style.css')}}"/>
 @stop
 @section('content')
-<h3><span class="glyphicon glyphicon-file"></span> Applications</h3> 
+<h3><span class="glyphicon glyphicon-user"></span> Extra Guests</h3>
 <hr>
-<p> Applications will be considered based on the following criteria:</p>
-<ol> 
-  <li>A balanced ratio of Boys and Girls.</li> 
-  <li>A balanced ratio of children from French and English school systems.</li> 
-  <li>Sibling policy: We give priority to children who have brothers/sisters that were or are currently part of Le French Rallye as long as the application is submitted before the deadline.</li>
-  <li>We will prioritize applications by submission time. You will need to submit your application before the deadline for your Rallye (See below).</li> 
+<p> </p>
+<ol>
+  <li>A children can invite extra guest .</li>
+  <li>About 10 extra guest in total per year and per rallye.</li>
+  <li>One extra guest can participate only twice a year .</li>
 </ol>
-<h3>Application Openings and Deadlines</h3>
 <hr>
-<!-- Exportable Table -->
-@if(count($rallyes) > 0)
-    <div class="row clearfix">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="header">
-                    <h2><strong>Rallyes</strong> List</h2>
-                </div>
-                <div class="body">
-                    <div class="table-responsive">
-                    <table class="table dataTable js-exportable">
-                        <!--<table class="table table-bordered table-striped table-hover dataTable js-exportable">-->
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Title</th>
-                                    <th width="40px;">Level</th>
-                                    <th width="40px;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                          @foreach ($rallyes as $rallye)
-                            @if(!$rallye->status)
-                                <tr class="table-danger">
-                                    <td><strong>{{$rallye->title}}</strong></td>
-                                    <td>{{$rallye->level}}</td>
-                                      <td>Closed</td>
-                                      </tr>
-                                @else
-                                  <tr class="table-success">
-                                <td><strong>{{$rallye->title}}</strong></td>
-                                <td>{{$rallye->level}}</td>
-                                  <td>Opened</td>
-                                  </tr>
-                                @endif
-                                    
-                             
-                        @endforeach
-                          </tbody>
-                        </table>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  @else
-  <p> No rallyes found </p>
-        <a href={{secure_url("/rallyes/create")}}><button type="button" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-plus"></span> Add new</button></a>
-  @endif
-    <!-- #END# Exportable Table --> 
+<h3>Add extra Guest</h3>
+<p>Below, you can enter the information about the guest </p>
+<div class='container'>
+  {{ Form::open(['action' => 'guestsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+  @csrf
+  <div class="form-group form-float">
+    <label for="calendar_id"><b>Event date available</b></label>
+     <select class="form-control show-tick ms select2" data-placeholder="Select" name="calendar_id" required>
+      @if(count($availableGroupIds) > 0)
+        <option value="" selected disabled>-- Please select a group - event date --</option>
+        @foreach ($groups as $group)
+          @foreach($availableGroupIds as $availableGroupId)
+              @if($group->id == $availableGroupId)
+                <option value={{$group->id}}>{{$group->rallye->title . ' ' . $group->name . ' ' . \Illuminate\Support\Carbon::parse($group->eventDate)->format('d-m-Y')}}</option>
+              @endif
+          @endforeach
+        @endforeach
+      @else
+        <option value="" selected disabled>-- No event date available --</option>
+      @endif
+    </select>
+  </div>
 
-<h3>My Applications</h3>
+  <div class="form-group form-float">
+    <label for="first_name"><b>First Name</b></label>
+    {{form::text('first_name', '', ['class' => 'form-control', 'placeholder' => 'First Name'])}}
+  </div>
+
+   <div class="form-group form-float">
+    <label for="last_name"><b>Last Name</b></label>
+    {{form::text('last_name', '', ['class' => 'form-control', 'placeholder' => 'Last Name'])}}
+  </div>
+
+  <div class="form-group form-float">
+    <label for="guest_email"><b>Email</b></label>
+    {{form::text('guest_email', '', ['class' => 'form-control', 'placeholder' => 'name@domain.com'])}}
+  </div>
+
+  <div class="form-group form-float">
+    <label for="guest_mobile"><b>Guest Mobile Phone</b></label>
+    {{form::text('guest_mobile', '', ['class' => 'form-control', 'placeholder' => '+33122334455'])}}
+  </div>
+
+  <a href="/home" class="btn btn-default float-right">Go back </a>
+  {{form::submit('Add Extra Guest', ['class' => 'btn btn-primary'])}}
+  {{ Form::close() }}
+</div>
 <hr>
-<p>An application should be submitted for each of your children applying to Le French Rallye.</p>
-@foreach ($rallyes as $rallye)
-  @if ($rallye->status)
-    <!--<a href={{secure_url("/applications")}}><button type="button" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-plus"></span> Start New Application</button></a>-->
-    <a href={{secure_url("/fullApplicationForm")}}><button type="button" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-plus"></span> Start New Application</button></a>
-    
-    @break;
-  @endif
-@endforeach
-µµ
 
 @stop
 @section('page-script')
+<script src="{{secure_asset('assets/js/pages/forms/form-fileSize-validation.js')}}"></script>
+
 <script>
-    /*global $ */
+  /*global $ */
     $(document).ready(function() {
       "use strict";
       $('.menu > ul > li:has( > ul)').addClass('menu-dropdown-icon');
       //Checks if li has sub (ul) and adds class for toggle icon - just an UI
-    
+
       $('.menu > ul > li > ul:not(:has(ul))').addClass('normal-sub');
-    
+
       $(".menu > ul > li").hover(function(e) {
         if ($(window).width() > 943) {
           $(this).children("ul").stop(true, false).fadeToggle(150);
           e.preventDefault();
         }
       });
-      //If width is more than 943px dropdowns are displayed on hover    
+      //If width is more than 943px dropdowns are displayed on hover
       $(".menu > ul > li").on('click',function() {
         if ($(window).width() <= 943) {
           $(this).children("ul").fadeToggle(150);
         }
       });
       //If width is less or equal to 943px dropdowns are displayed on click (thanks Aman Jain from stackoverflow)
-    
+
       $(".h-bars").on('click',function(e) {
         $(".menu > ul").toggleClass('show-on-mobile');
         e.preventDefault();
       });
       //when clicked on mobile-menu, normal menu is shown as a list, classic rwd menu story (thanks mwl from stackoverflow)
-    });    
+    });
 </script>
-@stop 
+@stop
