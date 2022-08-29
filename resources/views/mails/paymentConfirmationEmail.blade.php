@@ -8,13 +8,13 @@
         @endif
         <p>Dear {{$application->parentfirstname}},</p>
 
-        <p>Thank you for your payment about the membership of {{$application->childfirstname}} for Rallye {{$application->rallye->title}}.</p>
+        <p>Thank you for your payment about the membership of {{$application->childfirstname}} for {{$application->rallye->title}}.</p>
 
         <p>Our team will check your payment and send you an email in few days with your authentification infos.</p>
 
         <p>Kind regards</p>
 
-        <p>The Rallye {{$application->rallye->title}} Coordinators</p>
+        <p>The {{$application->rallye->title}} Coordinators</p>
 
 </body>
 </html>

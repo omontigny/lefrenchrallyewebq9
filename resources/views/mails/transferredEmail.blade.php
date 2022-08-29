@@ -9,7 +9,7 @@
         @endif
         <p>Dear {{$application->parentfirstname}},</p>
 
-        <p>We are pleased to welcome {{$application->childfirstname}} to Rallye {{$application->rallye->title}}. The registration will only be complete once the Rallye membership is paid. To pay for the membership immediately, please use the link below:
+        <p>We are pleased to welcome {{$application->childfirstname}} to {{$application->rallye->title}}. The registration will only be complete once the Rallye membership is paid. To pay for the membership immediately, please use the link below:
         <a href="{{$paymentLink}}">{{$paymentLink}}</a>
 
         <p>All member-related information can be found under the "Member" tab on the website (<a href="{{$officialLink}}">{{$officialLink}}</a>) once you have logged in.</p>
@@ -18,6 +18,6 @@
 
         <p>Kind regards,</p>
 
-        <p>The Rallye {{$application->rallye->title}} Coordinators</p>
+        <p>The {{$application->rallye->title}} Coordinators</p>
 </body>
 </html>

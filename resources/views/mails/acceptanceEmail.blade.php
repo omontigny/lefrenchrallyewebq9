@@ -9,7 +9,7 @@
         @endif
         <p>Dear {{ucfirst($application->parentfirstname)}},</p>
 
-        <p>We are pleased to welcome {{$application->childfirstname}} to Rallye {{$application->rallye->title}}. The
+        <p>We are pleased to welcome {{$application->childfirstname}} to {{$application->rallye->title}}. The
                 registration will only be complete once the Rallye membership is paid. To pay for the membership
                 immediately, please use the link below:</p>
         <ol>
@@ -26,7 +26,7 @@
 
         <p>Kind regards,</p>
 
-        <p>The Rallye {{$application->rallye->title}} Coordinators</p>
+        <p>The {{$application->rallye->title}} Coordinators</p>
 </body>
 
 </html>
