@@ -8,13 +8,13 @@
         @endif
         <p>Dear {{$application->parentfirstname}},</p>
 
-        <p>We received your application for {{$application->childfirstname}}’s membership for Rallye {{$application->rallye->title}}.</p>
+        <p>We received your application for {{$application->childfirstname}}’s membership for {{$application->rallye->title}}.</p>
 
         <p>Confirmation of the membership will be sent within a month.</p>
 
         <p>Kind regards</p>
 
-        <p>The Rallye {{$application->rallye->title}} Coordinators</p>
+        <p>The {{$application->rallye->title}} Coordinators</p>
 
 </body>
 </html>

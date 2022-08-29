@@ -14,7 +14,7 @@
 
         <p>Kind regards</p>
 
-        <p>The Rallye {{$application->rallye->title}} Coordinators</p>
+        <p>The {{$application->rallye->title}} Coordinators</p>
 
 </body>
 </html>

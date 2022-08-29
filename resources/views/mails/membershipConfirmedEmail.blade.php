@@ -26,7 +26,7 @@ Notice: If you lose your password or if you want to change it, you can use the '
 
 <p>Kind regards,</p>
 
-<p>The Rallye {{$application->rallye->title}} Coordinators</p>
+<p>The {{$application->rallye->title}} Coordinators</p>
 
 
 
