@@ -8,16 +8,19 @@
         @endif
 <p>Dear {{$application->parentfirstname}},</p>
 
-<p>We are pleased to confirm the membership of {{$application->childfirstname}} for Rallye {{$application->rallye->title}}. We will send shortly information about your group members and the date of the event you will be organising</p>
+<p>We are pleased to confirm the membership of {{$application->childfirstname}} for {{$application->rallye->title}}. We will send shortly information about your group members and the date of the event you will be organising</p>
 
 <p>All member-related information can be found under the "Member" tab on the website (<a href="{{$domainLink}}">{{$domainLink}}</a>) once you have logged in (members of your Rallye, contact details for other parents, invitations to events, your event, guest list…).</p>
 
 @if($userPassword != '')
 <p>Your password is: <span><b>{{$userPassword}}</b></span></p>
-<p>Please keep this password safe as you will need it every time you connect to the member area of the website. If you lose your password please contact your Rallye coordinator to reset your password.</p>
+<p>Please keep this password safe as you will need it every time you connect to the member area of the website. </p>
 @else
 <p>Note: Use your current password.</b></span></p>
 @endif
+
+Notice: If you lose your password or if you want to change it, you can use the 'Forgot password' link on login page.
+
 
 <p>Looking forward to meeting you and your child,</p>
 
