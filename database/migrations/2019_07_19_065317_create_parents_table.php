@@ -6,34 +6,34 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateParentsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('parents', function (Blueprint $table) {
-            $table->bigIncrements('id');
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::create('parents', function (Blueprint $table) {
+      $table->bigIncrements('id');
 
-            // parent info
-            $table->string('parentfirstname');
-            $table->string('parentlastname');
-            $table->string('parentaddress');
-            $table->string('parenthomephone');
-            $table->string('parentmobile');
-            $table->string('parentemail');
-            $table->timestamps();
-        });
-    }
+      // parent info
+      $table->string('parentfirstname');
+      $table->string('parentlastname');
+      $table->string('parentaddress');
+      $table->string('parenthomephone')->nullable()->default('');
+      $table->string('parentmobile');
+      $table->string('parentemail');
+      $table->timestamps();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('parents');
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::dropIfExists('parents');
+  }
 }
