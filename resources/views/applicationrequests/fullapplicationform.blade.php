@@ -46,9 +46,9 @@
                 For example: If last year your child was part of Rallye Mayfair 2018-2019, you should apply for Rallye
                 Mayfair 2019-2020.</p>
               <p>If your son/daughter is joining for the first time, please make sure you have fully read through the
-                About Page before you fill out your application. There, you will find information about the different
+                <a href="https://www.lefrenchrallye.com/about">About Page</a> before you fill out your application. There, you will find information about the different
                 age categories and Rallyes. If you need additional information, please contact us by email. (Email
-                addresses can be found on the contact page.)</p>
+                addresses can be found on the <a href="https://www.lefrenchrallye.com/contact">contact page</a>.)</p>
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="is_boarder" name="is_boarder" value="false">
@@ -168,7 +168,7 @@
               </div>
 
               <div class="form-group form-float">
-                <label for="schoolyear_id"><b>Scholl Year in September {{\Illuminate\Support\Carbon::now()->format('Y')}}<span class="text-danger"> *</span></b></label>
+                <label for="schoolyear_id"><b>School Year in September {{\Illuminate\Support\Carbon::now()->format('Y')}}<span class="text-danger"> *</span></b></label>
                 <select class="form-control show-tick ms" data-placeholder="Select" name="schoolyear_id"
                   required>
                   <option value="" selected disabled>-- Please select a school level --</option>
@@ -176,8 +176,7 @@
                   <option value={{$schoolyear->id}}>{{$schoolyear->current_level}}</option>
                   @endforeach
                 </select>
-                <div class="help-info">You need to select your child's current school year, the child's next school year
-                  will be automatically selected.</div>
+                <div class="help-info">You need to select your child's current school year.</div>
               </div>
 
               <!-- Managing photo -->
@@ -328,7 +327,7 @@
           </div>
           <div class="form-group form-float ">
             <label for="signingcodeconduct" class="control-label col-xs-12" style="font-size:16px"><span class="text-danger">(*) </span>My child has read and
-              agreed to abide by the Rallye Code of Conduct</label>
+              agreed to abide by the Rallye Code of Conduct and Parents Charter (<a href="https://www.lefrenchrallye.com/about">Full version</a>)</label>
             <input type="text" name="signingcodeconduct" placeholder="Please enter “I accept” here" class="form-control" required>
             <div class="help-info">
               <p>You need to read and accept the code of conduct by entering “I accept” here.</p>
@@ -346,7 +345,8 @@
               will have their personal data permanently erased from the website at the end of their particular Rallye’s
               life, i.e. after the approvals of the accounts of the third year of their Rallye. Members can request at
               any time before that date for their personal data to be erased from the website by sending a written
-              notification to its Directors. The data will be removed swiftly.</p>
+              notification to its Directors. The data will be removed swiftly. Members commit to only using other Members’ personal data for the purpose of The French Rallye.
+              Members commit to not sharing other Members personal data or photos with third parties.</p>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="dpp1" name="dpp1" value="true" required>
               <label class="form-check-label" for="dpp1"><span class="text-danger">(*) </span>I have read and approve The French Rallye Data Protection

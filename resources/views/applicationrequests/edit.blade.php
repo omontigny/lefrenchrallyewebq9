@@ -254,7 +254,7 @@
                                   </div>
 
                                 <div class="form-group form-float col-lg-3 col-md-6">
-                                    <label for="schoolyear_id"><b>Scholl Year in September {{\Illuminate\Support\Carbon::now()->format('Y')}}</b></label>
+                                    <label for="schoolyear_id"><b>School Year in September {{\Illuminate\Support\Carbon::now()->format('Y')}}</b></label>
                                     <select class="form-control show-tick ms" data-placeholder="Select"
                                         name="schoolyear_id" required>
                                         <option value="" selected disabled>-- Please select a school --</option>
@@ -342,7 +342,7 @@
 <h4>The Code of Conduct</h4>
 <div class="form-group form-float ">
     <label for="signingcodeconduct" class="control-label col-xs-12" style="font-size:16px">My child has read and
-      agreed to abide by the Rallye Code of Conduct</label>
+      agreed to abide by the Rallye <a href="https://www.lefrenchrallye.com/about">Code of Conduct</a></label>
     <input value ="{{$application->signingcodeconduct}}" type="text" name="signingcodeconduct" placeholder="Please sign here" class="form-control" readonly>
 
   </div>
