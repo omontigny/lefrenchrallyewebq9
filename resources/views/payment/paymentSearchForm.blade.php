@@ -20,7 +20,7 @@
         <label for="childfirstname"><b>Your child firstname</b></label>
         {{form::text('childfirstname', '', ['class' => 'form-control', 'placeholder' => 'Child firstname'])}}
         <div class="help-info">
-        <p>Please enter the firstname of your child for whom you want to make the payment</p>
+        <p>Please enter the first name of your child for whom you want to make the payment</p>
       </div>
     </div>
 
@@ -29,7 +29,7 @@
         <label for="childlastname"><b>Your child lastname</b></label>
         {{form::text('childlastname', '', ['class' => 'form-control', 'placeholder' => 'Child lastname'])}}
         <div class="help-info">
-          <p>Please enter the lastname of your child for whom you want to make the payment</p>
+          <p>Please enter the last name of your child for whom you want to make the payment</p>
       </div>
     </div>
 
