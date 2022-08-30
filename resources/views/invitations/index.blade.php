@@ -91,14 +91,18 @@
                   <td>Incoming</td>
                   <td>
                   @if($invitation->group_id == $application->event_id)
+                  <div class="align-center">
                     <a href={{secure_url("/sendToMyself/".$invitation->id)}}>
                       <button type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-envelope"></span><b> Myself</b></button>
                     </a>
                     <a href="{{secure_url("/mails/$application->id")}}">
                       <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-send"></span><b> Send</b></button>
                     </a>
-                    <button type="button" class="btn btn-info btn-sm  "data-toggle="modal" data-target="#EditInvitationModal_{{$invitation->id}}"><span class="glyphicon glyphicon-edit"></span><b> Edit</b></button>
-                    <button type="button" class="btn btn-danger btn-sm  " data-toggle="modal" data-target="#DeletingInvitation_{{$invitation->id}}"><span class="glyphicon glyphicon-remove"></span><b> Del</b></button>
+                  </div>
+                  <div class="align-center">
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#EditInvitationModal_{{$invitation->id}}"><span class="glyphicon glyphicon-edit"></span><b>&nbsp;&nbsp;&nbsp;Edit&nbsp;&nbsp;</b></button>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#DeletingInvitation_{{$invitation->id}}"><span class="glyphicon glyphicon-remove"></span><b> Delete</b></button>
+                  </div>
                     @endif
                   </td>
 

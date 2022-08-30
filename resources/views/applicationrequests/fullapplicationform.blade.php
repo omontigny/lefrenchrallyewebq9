@@ -43,8 +43,8 @@
             <div class="help-info">
               <h5>How to choose which Rallye to apply for:</h5>
               <p>If your son/daughter was a member of Le French Rallye last year, they should apply for the same Rallye.
-                For example: If last year your child was part of Rallye Mayfair 2018-2019, you should apply for Rallye
-                Mayfair 2019-2020.</p>
+                For example: If last year your child was part of Rallye Notting Hill 2021-2022, you should apply for Rallye
+                Notting Hill 2022-2023.</p>
               <p>If your son/daughter is joining for the first time, please make sure you have fully read through the
                 <a href="https://www.lefrenchrallye.com/about">About Page</a> before you fill out your application. There, you will find information about the different
                 age categories and Rallyes. If you need additional information, please contact us by email. (Email
@@ -52,7 +52,8 @@
             </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="is_boarder" name="is_boarder" value="false">
-              <label class="form-check-label" for="is_boarder"><b>Full Boarder request</b></label>
+              <label class="form-check-label" for="is_boarder"><b>Full Boarder</b></label>
+              <div class="help-info text-danger">* From now on, Boarders are considered as full members and must participate to the organisation of activities and parties</div>
             </div>
             <hr />
             <h6 class="text-center">Enter Child Information</h6>
