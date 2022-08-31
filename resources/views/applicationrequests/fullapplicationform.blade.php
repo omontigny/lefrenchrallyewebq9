@@ -53,7 +53,7 @@
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="is_boarder" name="is_boarder" value="false">
               <label class="form-check-label" for="is_boarder"><b>Full Boarder</b></label>
-              <div class="help-info text-danger">* From now on, Boarders are considered as full members and must participate to the organisation of activities and parties</div>
+              <div class="help-info text-danger">* From now on, Boarders are considered as full members and must participate in the organisation of activities and parties</div>
             </div>
             <hr />
             <h6 class="text-center">Enter Child Information</h6>
@@ -328,7 +328,8 @@
           </div>
           <div class="form-group form-float ">
             <label for="signingcodeconduct" class="control-label col-xs-12" style="font-size:16px"><span class="text-danger">(*) </span>My child has read and
-              agreed to abide by the Rallye Code of Conduct and Parents Charter (<a href="https://www.lefrenchrallye.com/about">Full version</a>)</label>
+              agreed to abide by the Rallye Code of Conduct. By registering my child, I also commit to adhering to the Parents Charter.
+              I understand that not following the Code of Conduct and the Parents Charter (<a href="https://www.lefrenchrallye.com/about">Full version</a>) may lead to my child’s membership being reviewed.</label>
             <input type="text" name="signingcodeconduct" placeholder="Please enter “I accept” here" class="form-control" required>
             <div class="help-info">
               <p>You need to read and accept the code of conduct by entering “I accept” here.</p>
