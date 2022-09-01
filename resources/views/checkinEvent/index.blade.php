@@ -140,11 +140,10 @@
           <div class="table-responsive m-t-20">
             <table class="table table-filter table-hover m-b-0 js-exportable">
               <thead>
-                <th>ID</th>
-                <th>Action</th>
                 <th>Child</th>
                 <th>Extra guest Child name</th>
                 <th>Extra guest Child Phone number</th>
+                <th>Extra guest Parent Phone number</th>
                 <th>Invited by Parent name</th>
                 <th>Invited by Parent Phone number</th>
                 <th>Present</th>
@@ -153,23 +152,14 @@
                 @foreach ($extraguestList as $row)
                 <tr data-status="Expected">
 
-                  <td>-</td>
-                  <td align="center">
-                    {{-- <a href="/multicheckin/edit/{{$row->id}}/{{$invitation_id}}">
-                      <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-success btn-sm glyphicon glyphicon-ok"></button>
-                        <button type="button" class="btn btn-danger btn-sm glyphicon glyphicon-remove"></button>
-                      </div>
-                    </a> --}}
-                    -
-                  </td>
                   <td>
                     <div class="media-object"><img src="../assets/images/default_avatar.jpg" alt="" width="35"
                         class="rounded-circle"></div>
                   </td>
                   <td>{{$row->guestfirstname}} {{$row->guestlastname}}</td>
                   <td><strong><a href="sms:{{$row->guestmobile}}">{{$row->guestmobile}}</a></strong></td>
-                  <td>{{$row->parentfirstname}} {{$row->parentlastname}}</td>
+                  <td><strong><a href="sms:{{$row->guestparentmobile}}">{{$row->guestparentmobile}}</a></strong></td>
+                  <td><a href="sms:{{$row->parentmobile}}">{{$row->parentfirstname}} {{$row->parentlastname}}</a></td>
                   <td><strong><a href="sms:{{$row->parentmobile}}">{{$row->parentmobile}}</a></strong></td>
                   <td><span class="badge badge-success">Attending</span></td>
 

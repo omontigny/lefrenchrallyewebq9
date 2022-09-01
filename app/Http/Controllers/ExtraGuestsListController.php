@@ -47,6 +47,7 @@ class ExtraGuestsListController extends Controller
           'guests.guestlastname',
           'guests.guestemail',
           'guests.guestmobile',
+          'guests.guestparentmobile',
           'guests.invitedby_id',
           'guests.nb_invitations',
           'parents.parentfirstname',
@@ -131,6 +132,7 @@ class ExtraGuestsListController extends Controller
         $guest->guestlastname = $request->input('guest_lastname');
         $guest->guestemail = $request->input('guest_email');
         $guest->guestmobile = $request->input('guest_mobile');
+        $guest->guestparentmobile = $request->input('guest_parentmobile');
         $guest->save();
 
         return redirect('/extraguestsList')->with('success', 'M250: Extra guest has been updated successfully!');

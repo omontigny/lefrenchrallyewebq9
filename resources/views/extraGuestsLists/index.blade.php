@@ -28,6 +28,7 @@
               <th>Extra Guest Name</th>
               <th>Extra Guest email</th>
               <th>Extra Guest mobile</th>
+              <th>Extra Guest Parent mobile</th>
               <th>Invited by Parent Name</th>
               <th>Group Name</th>
               <th>Event Date (DD-MM-YYYY)</th>
@@ -45,7 +46,8 @@
                   <td><b>{{$extracheckin->guestfirstname . ' ' . $extracheckin->guestlastname}}</b></td>
                   <td><b>{{$extracheckin->guestemail}}</b></td>
                   <td><b><a href="sms:{{$extracheckin->guestmobile}}">{{$extracheckin->guestmobile}}</a></b></td>
-                  <td><b>{{$extracheckin->parentfirstname . ' ' . $extracheckin->parentlastname}}</b></td>
+                  <td><b><a href="sms:{{$extracheckin->guestparentmobile}}">{{$extracheckin->guestparentmobile}}</a></b></td>
+                  <td><b><a href="sms:{{$extracheckin->parentmobile}}">{{$extracheckin->parentfirstname . ' ' . $extracheckin->parentlastname}}</a></b></td>
                   @if($extracheckin != null)
                     <td><b>{{$extracheckin->group_name}}</b></td>
                     <td><strong>{{\Illuminate\Support\Carbon::parse($extracheckin->eventDate)->format('d-m-Y')}}</strong></td>
@@ -109,25 +111,31 @@
 
 
                               <div class="form-group">
-                                {!! Html::decode(Form::label('guest_firstname','<b>Guest First Name</b>')) !!}
+                                {!! Html::decode(Form::label('guest_firstname','<b>Guest First Name</b>')) !!}<span class="text-danger"> *</span>
                                 {{form::text('guest_firstname', $extracheckin->guestfirstname, ['class' => 'form-control', 'placeholder' => 'first name', 'pattern' => "^[ A-Za-z0-9_.-]*$", 'required'])}}
                                 <div class="help-info"><p>Avoid some special caracters like (&\/$€`()[]@#+%?!~). You can use (-_.)</p></div>
                               </div>
                               <div class="form-group form-float">
-                                {!! Html::decode(Form::label('guest_lastname','<b>Guest Last Name</b>')) !!}
+                                {!! Html::decode(Form::label('guest_lastname','<b>Guest Last Name</b>')) !!}<span class="text-danger"> *</span>
                                 {{form::text('guest_lastname', $extracheckin->guestlastname, ['class' => 'form-control', 'placeholder' => 'Theme/Dress Code', 'required'])}}
                               </div>
 
                               <div class="form-group form-float">
-                                {!! Html::decode(Form::label('guest_email','<b>Guest Email</b>')) !!}
+                                {!! Html::decode(Form::label('guest_email','<b>Guest Email</b>')) !!}<span class="text-danger"> *</span>
                                 {{form::text('guest_email', $extracheckin->guestemail, ['class' => 'form-control', 'placeholder' => 'name@domain.com', 'pattern' => "^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$", 'required'])}}
                                 <div class="help-info">You need to enter your guest child's email or parent email</div>
                               </div>
 
                               <div class="form-group form-float">
+                                {!! Html::decode(Form::label('guest_parentmobile','<b>Guest Parent Mobile Phone</b>')) !!}<span class="text-danger"> *</span>
+                                {{form::text('guest_parentmobile', $extracheckin->guestparentmobile, ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$", 'required'])}}
+                                <div class="help-info">You need to enter your guest child's legal representative mobile phone</div>
+                              </div>
+
+                              <div class="form-group form-float">
                                 {!! Html::decode(Form::label('guest_mobile','<b>Guest Mobile Phone</b>')) !!}
-                                {{form::text('guest_mobile', $extracheckin->guestmobile, ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$", 'required'])}}
-                                <div class="help-info">You need to enter your guest child's mobile phone or parent's child mobile phone</div>
+                                {{form::text('guest_mobile', $extracheckin->guestmobile, ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$"])}}
+                                <div class="help-info">You need to enter your guest child's mobile</div>
                               </div>
 
 

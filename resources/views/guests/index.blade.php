@@ -56,9 +56,15 @@
   </div>
 
   <div class="form-group form-float">
-    <label for="guest_mobile"><b>Guest Mobile Phone</b></label>
-    {{form::text('guest_mobile', '', ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$", 'required'])}}
+    <label for="guest_mobile"><b>Guest Parent Mobile Phone<span class="text-danger"> *</span></b></label>
+    {{form::text('guest_parentmobile', '', ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$", 'required'])}}
     <div class="help-info">You need to enter your guest child's legal representative mobile phone</div>
+  </div>
+
+  <div class="form-group form-float">
+    <label for="guest_mobile"><b>Guest Mobile Phone</b></label>
+    {{form::text('guest_mobile', '', ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$"])}}
+    <div class="help-info">You need to enter your guest child's mobile</div>
   </div>
 
   <a href="/home" class="btn btn-default float-right">Go back </a>
