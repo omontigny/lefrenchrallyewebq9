@@ -16,6 +16,7 @@
                     <li><a href="{{secure_url('groups')}}">Event date (Std Rallye)</a></li>
                     <li><a href="{{secure_url('parentGroups')}}">Parent groups (Petit Rallye)</a></li>
                     <li><a href="{{secure_url('parentEvents')}}">Parent Event groups (all Rallyes)</a></li>
+                    <li><a href="{{secure_url('extraguestsList')}}">Extra Guests list</a></li>
                 </ul>
             </li>
             <li><a href="{{secure_url('coordinators')}}">Coordinators</a>
