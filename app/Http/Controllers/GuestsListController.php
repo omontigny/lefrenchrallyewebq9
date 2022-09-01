@@ -36,6 +36,7 @@ class GuestsListController extends Controller
 
   public function __construct(EmailRepository $emailRepository, ImageRepository $imageRepository)
   {
+    $this->middleware('auth');
     $this->emailRepository = $emailRepository;
     $this->imageRepository = $imageRepository;
   }
@@ -53,7 +54,6 @@ class GuestsListController extends Controller
 
       // Get Active Rallye
       $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
-
 
       // To manage error message
       $found = false;
@@ -164,7 +164,6 @@ class GuestsListController extends Controller
           ->where('guests.rallye_id', '=', $invitation->rallye_id)
           ->where('guests.group_id', '=', $invitation->group->id)
           ->get();
-
 
         if ($invitation->rallye->isPetitRallye) {
           $checkins = DB::table('applications')

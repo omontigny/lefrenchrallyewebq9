@@ -17,7 +17,7 @@
 <h3>Add a new Extra Guest</h3>
 <p>Below, you can enter the information about the guest </p>
 <div class='container'>
-  {{ Form::open(['action' => 'guestsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+  {{ Form::open(['action' => 'GuestsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
   @csrf
   <div class="form-group form-float">
     <label for="group_id"><b>Event date available<span class="text-danger"> *</span></b></b></label>
@@ -57,8 +57,8 @@
 
   <div class="form-group form-float">
     <label for="guest_mobile"><b>Guest Mobile Phone</b></label>
-    {{form::text('guest_mobile', '', ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$"])}}
-    <div class="help-info">You need to enter your guest child's mobile phone or parent's child mobile phone</div>
+    {{form::text('guest_mobile', '', ['class' => 'form-control', 'placeholder' => '+33122334455', 'pattern' => "^(?:(?:\+|00)(33|44|1))\s*[1-9](?:[\s.-]*\d{2,}){4}$", 'required'])}}
+    <div class="help-info">You need to enter your guest child's legal representative mobile phone</div>
   </div>
 
   <a href="/home" class="btn btn-default float-right">Go back </a>

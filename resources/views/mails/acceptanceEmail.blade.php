@@ -13,7 +13,7 @@
                 registration will only be complete once the Rallye membership is paid. To pay for the membership
                 immediately, please use the link below:</p>
         <ol>
-        <li>Once your received your child's application acceptance email, go to the following payment link: <a href="{{$paymentLink}}">{{$paymentLink}}</a></li>
+        <li>Once you've received your child's application acceptance email, go to the following payment link: <a href="{{$paymentLink}}">{{$paymentLink}}</a></li>
                 <li>Fill in the form</li>
                 <li>The website will display your form search results</li>
                 <li>Click on the Pay button and enter your card information, then click on the Pay button</li>
