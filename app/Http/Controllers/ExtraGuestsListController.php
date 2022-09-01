@@ -49,42 +49,7 @@ class ExtraGuestsListController extends Controller
   {
     if (Auth::user()->active_profile == config('constants.roles.COORDINATOR') || Auth::user()->active_profile == config('constants.roles.SUPERADMIN')) {
 
-      // Get connected parent
-      $parent = Parents::where('user_id', Auth::user()->id)->first();
 
-      // Get Active Rallye
-      $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
-
-
-      // To manage error message
-      $found = false;
-
-      // At least one active rallye is found
-      if ($parentRallye != null) {
-        // Get parent's evented application of the active rallye
-        $applications = Application::where('parent_id', $parent->id)
-          ->where('rallye_id', $parentRallye->rallye->id)
-          ->where('evented', 1)->get();
-
-        // Get the first application
-        $application = $applications->first();
-
-        // Case when the parent has one application
-        if (count($applications) == 1) {
-
-          $found = true;
-
-          $applications  = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
-
-          $groupsID = collect();
-          foreach ($applications as $application) {
-            $groupsID[] = $application->event_id;
-          }
-
-          $data = Invitation::where('rallye_id', $parentRallye->rallye->id)->get();
-
-          $groups = Group::all();
-          $groupsID = $groupsID->unique();
           $datas = [
             'application' => $application,
             'groups' => $groups,
