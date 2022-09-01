@@ -247,7 +247,11 @@ Route::get('profiles/{id}/switchOnParentProfileById', 'ProfilesController@switch
 
 
 /* Extra Guest */
-Route::resource('guests', 'guestsController');
+Route::resource('guests', 'GuestsController');
+Route::get('extraguestsList', 'ExtraGuestsListController@index');
+Route::get('extraguestsList/delete/{id}', 'ExtraGuestsListController@destroy')->name('extraguestslist.destroy');
+Route::get('extraguestsList/update/{id}', 'ExtraGuestsListController@update')->name('extraguestslist.update');
+
 
 /* Checkin */
 Route::get('/checkin/{id}/checkIn', 'checkinExtraController@checkIn');

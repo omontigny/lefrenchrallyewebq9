@@ -244,7 +244,6 @@ class MultiCheckinController extends Controller
                   'guests.nb_invitations',
                   'guests.guestemail',
                   'guests.guestmobile'
-
                 )
 
                 ->where('guests.rallye_id', '=', $invitation->rallye_id)

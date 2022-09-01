@@ -2,42 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Parent_Group;
-use App\Models\Invitation;
-use App\Models\Venue;
-use App\Models\Parent_Event;
+
+use App\Models\Guest;
 use App\Models\Parents;
-use App\Models\Rallye;
+use App\Models\Coordinator;
+use App\Models\Coordinator_Rallye;
+use App\Models\Admin_Rallye;
 use App\Models\Parent_Rallye;
-use App\Models\CheckIn;
-use App\Models\Group;
-use App\Models\Children;
-use App\Models\Application;
-use App\Models\KeyValue;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Repositories\EmailRepository;
-use App\Repositories\ImageRepository;
-use Intervention\Image\Facades\Image;
 use Exception;
 
 class ExtraGuestsListController extends Controller
 {
-  protected $emailRepository;
-  protected $imageRepository;
-
-  public function __construct(EmailRepository $emailRepository, ImageRepository $imageRepository)
+  public function __construct()
   {
-    $this->emailRepository = $emailRepository;
-    $this->imageRepository = $imageRepository;
+    $this->middleware('auth');
   }
 
   /**
@@ -47,29 +30,43 @@ class ExtraGuestsListController extends Controller
    */
   public function index()
   {
-    if (Auth::user()->active_profile == config('constants.roles.COORDINATOR') || Auth::user()->active_profile == config('constants.roles.SUPERADMIN')) {
+    $rallye_id = $this->getCurrentRallyeId();
 
+    if ($rallye_id) {
 
-          $datas = [
-            'application' => $application,
-            'groups' => $groups,
-            'data' => $data,
-            'groupsID' => $groupsID,
-            'applications' => $applications
-          ];
+      $extracheckins =
+        DB::table('guests')
+        ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
+        ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
+        ->JOIN('parents', 'parents.id', '=', 'children.parent_id')
+        ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
 
-          return view('guestLists.index')->with($datas);
-        } else if (count($applications) > 1) {
-          $found = true;
-          return redirect('/parentChildren');
-        } else {
-          $found = false;
-        }
-      }
+        ->select(
+          'guests.id',
+          'guests.guestfirstname',
+          'guests.guestlastname',
+          'guests.guestemail',
+          'guests.guestmobile',
+          'guests.invitedby_id',
+          'guests.nb_invitations',
+          'parents.parentfirstname',
+          'parents.parentlastname',
+          'parents.parentmobile',
+          'rallyes.title as rallye_title',
+          'groups.name as group_name',
+          'groups.eventDate',
+        )
 
-      if (!$found) {
-        return Redirect::back()->withError('E077: You do not belong to any event group for the active rallye.');
-      }
+        ->where('guests.rallye_id', '=', $rallye_id)
+        ->get();
+
+      $datas = [
+        'extracheckins' => $extracheckins
+      ];
+
+      return view('extraGuestsLists.index')->with($datas);
+    } else {
+      return Redirect::back()->withError('E210:  - You do not belong to any rallye - Or Rallye is empty');
     }
   }
 
@@ -102,103 +99,6 @@ class ExtraGuestsListController extends Controller
    */
   public function show($id)
   {
-    //
-    //
-    if (Auth::user()->active_profile == config('constants.roles.PARENT')) {
-      $parent = Parents::where('user_id', Auth::user()->id)->first();
-      $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
-      $invitation = Invitation::find($id);
-
-      if ($parentRallye->rallye->id == $invitation->rallye->id) {
-        $checkins = null;
-        if ($invitation->rallye->isPetitRallye) {
-          $checkins = DB::table('applications')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
-            ->JOIN('children', 'children.application_id', '=', 'applications.id')
-            ->JOIN('checkins', 'checkins.child_id', '=', 'children.id')
-            ->JOIN('invitations', 'invitations.id', '=', 'checkins.invitation_id')
-            ->JOIN('groups', 'groups.id', '=', 'checkins.group_id')
-
-            ->select(
-              'checkins.id',
-              'applications.childfirstname',
-              'applications.childlastname',
-              'groups.eventDate',
-              'invitations.venue_address',
-              'invitations.theme_dress_code',
-              'invitations.start_time',
-              'invitations.end_time',
-              'checkins.checkStatus',
-              'applications.parentemail'
-            )
-
-            ->where('invitations.id', '=', $invitation->id)
-            ->where('applications.rallye_id', '=', $invitation->rallye_id)
-            ->where('checkins.group_id', '=', $invitation->group->id)
-            ->where('applications.group_name', '=', Str::upper($invitation->group->name))
-
-            ->get();
-
-
-          $extracheckins = ["toto"];
-        } else {
-          $checkins = DB::table('applications')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
-            ->JOIN('children', 'children.application_id', '=', 'applications.id')
-            ->JOIN('checkins', 'checkins.child_id', '=', 'children.id')
-            ->JOIN('invitations', 'invitations.id', '=', 'checkins.invitation_id')
-            ->JOIN('groups', 'groups.id', '=', 'checkins.group_id')
-
-            ->select(
-              'checkins.id',
-              'applications.childfirstname',
-              'applications.childlastname',
-              'groups.eventDate',
-              'invitations.venue_address',
-              'invitations.theme_dress_code',
-              'invitations.start_time',
-              'invitations.end_time',
-              'checkins.checkStatus',
-              'applications.parentemail'
-            )
-
-            ->where('invitations.id', '=', $invitation->id)
-            ->where('applications.rallye_id', '=', $invitation->rallye_id)
-            ->where('checkins.group_id', '=', $invitation->group->id)
-            ->get();
-
-          $extracheckins =
-            DB::table('guests')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
-            ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
-            ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
-
-
-            ->select(
-              'guests.id',
-              'guests.guestfirstname',
-              'guests.guestlastname',
-              'groups.eventDate',
-              'guests.nb_invitations',
-              'guests.guestemail'
-            )
-
-            ->where('guests.rallye_id', '=', $invitation->rallye_id)
-            ->where('guests.group_id', '=', $invitation->group->id)
-            ->get();
-        }
-
-        $data = [
-          'checkins' => $checkins,
-          'extracheckins' => $extracheckins,
-          'invitation' => $invitation
-        ];
-
-        return view('checkin.index')->with($data);
-      }
-    } else {
-      return Redirect::back()->withError('E078: you do not take part of check in team for the active rallye.');
-    }
   }
 
   /**
@@ -222,6 +122,24 @@ class ExtraGuestsListController extends Controller
   public function update(Request $request, $id)
   {
     //
+    // Log::stack(['single', 'stdout'])->debug("[EXTRAGUEST LIST UPDATE]");
+
+    try {
+      $guest = Guest::find($id);
+      if ($guest  != null) {
+        $guest->guestfirstname = $request->input('guest_firstname');
+        $guest->guestlastname = $request->input('guest_lastname');
+        $guest->guestemail = $request->input('guest_email');
+        $guest->guestmobile = $request->input('guest_mobile');
+        $guest->save();
+
+        return redirect('/extraguestsList')->with('success', 'M250: Extra guest has been updated successfully!');
+      } else {
+        return Redirect::back()->withError('E215: No Extra Guest found');
+      }
+    } catch (Exception $e) {
+      return Redirect::back()->withError('E216: ' . $e->getMessage());
+    }
   }
 
   /**
@@ -232,140 +150,57 @@ class ExtraGuestsListController extends Controller
    */
   public function destroy($id)
   {
-    //
+    // Log::stack(['single', 'stdout'])->debug("[EXTRAGUEST LIST DESTROY]");
+    try {
+      //
+      $rallye_id = $this->getCurrentRallyeId();
+      $deleted = false;
+      $errorMsg = '';
+      DB::beginTransaction();
+      $extraGuest = Guest::where('id', $id)->get()->first();
+
+      if ($extraGuest != null && $extraGuest->rallye_id == $rallye_id) {
+        $extraGuest->delete();
+        $deleted = true;
+      }
+      if ($deleted) {
+        DB::commit();
+        return redirect('/extraguestsList')->with('success', 'M207: Extra Guest deleted');
+      } else {
+        DB::rollback();
+        return Redirect::back()->withError($errorMsg);
+      }
+    } catch (Exception $e) {
+      DB::rollback();
+      return Redirect::back()->withError('E239: ' . $e->getMessage());
+    }
   }
 
-  public function reminderInvitationMail($id)
+  protected function getCurrentRallyeId()
   {
-    if (Auth::user()->active_profile == config('constants.roles.PARENT')) {
+    $rallye_id = null;
+    if (Auth::user()->active_profile == config('constants.roles.COORDINATOR')) {
+      $coordinator = Coordinator::where('user_id', Auth::user()->id)->get()->first();
+      if ($coordinator != null) {
+        $coordinatorRallye = Coordinator_Rallye::where('coordinator_id', $coordinator->id)
+          ->where('active_rallye', '1')->first();
+
+        if ($coordinatorRallye != null) {
+          $rallye_id = $coordinatorRallye->rallye->id;
+        }
+      }
+    } else if (Auth::user()->active_profile == config('constants.roles.SUPERADMIN')) {
+      $adminRallye = Admin_Rallye::where('user_id', Auth::user()->id)
+        ->where('active_rallye', '1')->first();
+
+      if ($adminRallye != null) {
+        $rallye_id = $adminRallye->rallye->id;
+      }
+    } else if (Auth::user()->active_profile == config('constants.roles.PARENT')) {
       $parent = Parents::where('user_id', Auth::user()->id)->first();
       $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
-      $invitation = Invitation::find($id);
-
-      if ($parentRallye->rallye->id == $invitation->rallye->id) {
-        $checkins = null;
-        if ($invitation->rallye->isPetitRallye) {
-          $checkins = DB::table('applications')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
-            ->JOIN('children', 'children.application_id', '=', 'applications.id')
-            ->JOIN('checkins', 'checkins.child_id', '=', 'children.id')
-            ->JOIN('invitations', 'invitations.id', '=', 'checkins.invitation_id')
-            ->JOIN('groups', 'groups.id', '=', 'checkins.group_id')
-
-            ->select(
-              'checkins.id',
-              'applications.childfirstname',
-              'applications.childlastname',
-              'groups.eventDate',
-              'invitations.venue_address',
-              'invitations.theme_dress_code',
-              'invitations.start_time',
-              'invitations.end_time',
-              'checkins.checkStatus',
-              'applications.parentemail',
-              'rallyes.rallyemail'
-            )
-
-            ->where('invitations.id', '=', $invitation->id)
-            ->where('applications.rallye_id', '=', $invitation->rallye_id)
-            ->where('checkins.group_id', '=', $invitation->group->id)
-            ->where('applications.group_name', '=', Str::upper($invitation->group->name))
-            ->where('checkins.checkStatus', '=', 0)
-            ->get();
-        } else {
-          $checkins = DB::table('applications')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
-            ->JOIN('children', 'children.application_id', '=', 'applications.id')
-            ->JOIN('checkins', 'checkins.child_id', '=', 'children.id')
-            ->JOIN('invitations', 'invitations.id', '=', 'checkins.invitation_id')
-            ->JOIN('groups', 'groups.id', '=', 'checkins.group_id')
-
-            ->select(
-              'checkins.id',
-              'applications.parentemail',
-              'applications.childfirstname',
-              'applications.childlastname',
-              'groups.eventDate',
-              'invitations.venue_address',
-              'invitations.theme_dress_code',
-              'invitations.start_time',
-              'invitations.end_time',
-              'checkins.checkStatus',
-              'applications.parentfirstname',
-              'rallyes.rallyemail'
-            )
-
-            ->where('invitations.id', '=', $invitation->id)
-            ->where('applications.rallye_id', '=', $invitation->rallye_id)
-            ->where('checkins.group_id', '=', $invitation->group->id)
-            ->where('checkins.checkStatus', '=', 0)
-            ->get();
-        }
-
-        $data = [
-          'checkins' => $checkins,
-          'invitation' => $invitation
-        ];
-        $rallye_name = $this->emailRepository->replaceNameForStoring(Rallye::find($invitation->rallye_id)->title);
-        $group_name = "std";
-        if (Rallye::find($invitation->rallye_id)->isPetitRallye) {
-          $group_name = $this->emailRepository->replaceNameForStoring(Group::find($invitation->group_id)->name);
-        }
-        $imageInfo          = $this->imageRepository->setImageInfo($invitation, $rallye_name, $group_name);
-        $cloudinaryImageUrl = $this->imageRepository->UploadFromImage64($invitation->invitationFile, $invitation->extension, $rallye_name, $group_name, $imageInfo["imagePath"], $imageInfo["imageMetadata"]);
-
-        $imageUrl = URL::asset($imageInfo["imagePath"]);
-        Log::stack(['single', 'stdout'])->debug("[REMINDER MAIL] - image_url: " . $imageUrl);
-        Log::stack(['single', 'stdout'])->debug("[REMINDER MAIL] - cloudinary_image_url: " . $cloudinaryImageUrl);
-
-
-        $domainLink = $this->emailRepository->getKeyValue('DOMAIN_LINK');
-
-        // Sending the invitation to each parent/child
-        foreach ($checkins as $checkin) {
-
-          $htmlData = [
-            'checkin'    => $checkin,
-            'domainLink' => $domainLink,
-            'rallye_name' => $rallye_name,
-            'imageName'  => $imageInfo["imageName"],
-            'invitationFile' => $invitation->invitationFile,
-            'imageUrl' => $imageUrl,
-            'cloudinaryImageUrl' => $cloudinaryImageUrl
-          ];
-
-          //////////////////////////////////////////////////////////////////////
-          // MAIL 08: Reminder Invitation Email (SMTP)
-          //////////////////////////////////////////////////////////////////////
-
-          Mail::send('mails/reminderInvitationEmail', $htmlData, function ($m) use ($checkin) {
-            $m->from($checkin->rallyemail, env('APP_NAME'));
-            $m->replyTo($checkin->rallyemail);
-            $m->to($checkin->parentemail);
-            $m->subject('[' . env('APP_NAME') . '] - Reminder “reply to invitation”');
-          });
-
-          //////////////////////////////////////////////////////////////////////
-          // MAIL 08: Reminder Invitation Email (MailGun)
-          //////////////////////////////////////////////////////////////////////
-          // $msgdata = array(
-          //   'from'        => env('APP_NAME') . '<' . $checkin->rallyemail . '>',
-          //   'subject'     => '[' . env('APP_NAME') . '] - Reminder “reply to invitation”',
-          //   'to'          => $checkin->parentemail . " " . $checkin->parentemail . ' <' . $checkin->parentemail . '>',
-          //   "h:Reply-To"  => $checkin->rallyemail,
-          // );
-
-          // $html = view('mails/reminderInvitationEmail', $htmlData)->render();
-          // $this->emailRepository->sendMailGun($msgdata, $html);
-          //////////////////////////////////////////////////////////////////////
-
-          //Use CheckMailSent to log and check if sending OK
-          $this->emailRepository->CheckMailSent($checkin->parentemail . " for " . $invitation->rallye->title, Mail::flushMacros(), "reminderInvitationEmail to", Auth::user()->name);
-        }
-        return Redirect::back()->with('success', 'M033: Reminder “reply to invitation” mails have been sent');
-      }
-    } else {
-      return Redirect::back()->withError('E078: you do not take part of check in team for the active rallye.');
+      $rallye_id = $parentRallye->rallye->id;
     }
+    return $rallye_id;
   }
 }

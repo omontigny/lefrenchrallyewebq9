@@ -36,6 +36,7 @@ class GuestsListController extends Controller
 
   public function __construct(EmailRepository $emailRepository, ImageRepository $imageRepository)
   {
+    $this->middleware('auth');
     $this->emailRepository = $emailRepository;
     $this->imageRepository = $imageRepository;
   }
@@ -53,7 +54,6 @@ class GuestsListController extends Controller
 
       // Get Active Rallye
       $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
-
 
       // To manage error message
       $found = false;
@@ -145,6 +145,26 @@ class GuestsListController extends Controller
 
       if ($parentRallye->rallye->id == $invitation->rallye->id) {
         $checkins = null;
+
+        $extracheckins =
+          DB::table('guests')
+          ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
+          ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
+          ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
+
+          ->select(
+            'guests.id',
+            'guests.guestfirstname',
+            'guests.guestlastname',
+            'groups.eventDate',
+            'guests.nb_invitations',
+            'guests.guestemail'
+          )
+
+          ->where('guests.rallye_id', '=', $invitation->rallye_id)
+          ->where('guests.group_id', '=', $invitation->group->id)
+          ->get();
+
         if ($invitation->rallye->isPetitRallye) {
           $checkins = DB::table('applications')
             ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
@@ -172,27 +192,6 @@ class GuestsListController extends Controller
             ->where('applications.group_name', '=', Str::upper($invitation->group->name))
 
             ->get();
-
-
-          $extracheckins =
-            DB::table('guests')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
-            ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
-            ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
-
-
-            ->select(
-              'guests.id',
-              'guests.guestfirstname',
-              'guests.guestlastname',
-              'groups.eventDate',
-              'guests.nb_invitations',
-              'guests.guestemail'
-            )
-
-            ->where('guests.rallye_id', '=', $invitation->rallye_id)
-            ->where('guests.group_id', '=', $invitation->group->id)
-            ->get();
         } else {
           $checkins = DB::table('applications')
             ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
@@ -217,26 +216,6 @@ class GuestsListController extends Controller
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
             ->where('checkins.group_id', '=', $invitation->group->id)
-            ->get();
-
-          $extracheckins =
-            DB::table('guests')
-            ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
-            ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
-            ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
-
-
-            ->select(
-              'guests.id',
-              'guests.guestfirstname',
-              'guests.guestlastname',
-              'groups.eventDate',
-              'guests.nb_invitations',
-              'guests.guestemail'
-            )
-
-            ->where('guests.rallye_id', '=', $invitation->rallye_id)
-            ->where('guests.group_id', '=', $invitation->group->id)
             ->get();
         }
 
