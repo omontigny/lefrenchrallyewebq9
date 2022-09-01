@@ -14,9 +14,9 @@
             <li><a href="javascript:void(0)">My Event</a>
                 <ul class="pullDown">
                     <li><a href="{{secure_url('invitations')}}">Invitation</a></li>
+                    <li><a href="{{secure_url('guests')}}">Extra Guest</a></li>
                     <li><a href="{{secure_url('guestsList')}}">Guest-list</a></li>
                     <li><a href="{{secure_url('multicheckin')}}">Check in</a></li>
-                    {{-- <li><a href="{{secure_url('guests')}}">Extra Guest</a></li> --}}
                 </ul>
             </li>
             <li><a href="javascript:void(0)">Rallyes</a>

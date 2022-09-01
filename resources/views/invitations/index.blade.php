@@ -154,18 +154,18 @@
 
                               <div class="form-group">
                                 {!! Html::decode(Form::label('venue','<b>Venue Address</b>')) !!}
-                                {{form::text('venue_address', $invitation->venue_address, ['class' => 'form-control', 'placeholder' => 'Venue Address'])}}
+                                {{form::text('venue_address', $invitation->venue_address, ['class' => 'form-control', 'placeholder' => 'Venue Address', 'required'])}}
                               </div>
                               <div class="form-group form-float">
                                 {!! Html::decode(Form::label('theme','<b>Theme/Dress Code</b>')) !!}
-                                {{form::text('theme_dress_code', $invitation->theme_dress_code, ['class' => 'form-control', 'pattern' => "^[ A-Za-z0-9_.-]*$", 'placeholder' => 'Theme/Dress Code'])}}
+                                {{form::text('theme_dress_code', $invitation->theme_dress_code, ['class' => 'form-control', 'pattern' => "^[ A-Za-z0-9_.-]*$", 'placeholder' => 'Theme/Dress Code', 'required'])}}
                                 <div class="help-info">
                                   <p>Avoid some special caracters like (&\/$€`()[]@#+%?!~). You can use (-_.)</p>
                                 </div>
                               </div>
                              <div class="form-group form-float">
                                 {!! Html::decode(Form::label('start_time','<b>Start time</b>')) !!}
-                                {{form::text('start_time', $invitation->start_time, ['class' => 'form-control', 'placeholder' => 'Start time'])}}
+                                {{form::text('start_time', $invitation->start_time, ['class' => 'form-control', 'placeholder' => 'Start time', 'required'])}}
                               </div>
                               <div class="form-group form-float">
                                 {!! Html::decode(Form::label('end_time','<b>End time</b>')) !!}
@@ -205,7 +205,7 @@
   {{ Form::open(['action' => 'InvitationsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
   @csrf
   <div class="form-group form-float">
-    <label for="calendar_id"><b>Event date available</b></label>
+    <label for="calendar_id"><b>Event date available<span class="text-danger"> *</span></b></label>
      <select class="form-control show-tick ms select2" data-placeholder="Select" name="calendar_id" required>
       @if(count($availableGroupIds) > 0)
         <option value="" selected disabled>-- Please select a group - event date --</option>
@@ -223,27 +223,24 @@
   </div>
 
   <div class="form-group form-float">
-    <label for="venue_address"><b>Venue Address</b></label>
-    {{form::text('venue_address', '', ['class' => 'form-control', 'placeholder' => 'Venue Address'])}}
+    <label for="venue_address"><b>Venue Address<span class="text-danger"> *</span></b></label>
+    {{form::text('venue_address', '', ['class' => 'form-control', 'placeholder' => 'Venue Address', 'required'])}}
   </div>
 
   <div class="form-group form-float ">
-    <label for="theme_dress_code"><b>Theme/Dress Code</b></label>
-    <input type="text" name="theme_dress_code" placeholder="Theme/Dress Code"
-           pattern="^[ A-Za-z0-9_.-]*$" class="form-control">
-    <div class="help-info">
-      <p>Avoid some special caracters like (&\/$€`()[]@#+%?!~). You can use (-_.)</p>
-    </div>
+    <label for="theme_dress_code"><b>Theme/Dress Code<span class="text-danger"> *</span></b></label>
+    {{form::text('theme_dress_code', '', ['class' => 'form-control', 'pattern' => "^[ A-Za-z0-9_.-]*$", 'placeholder' => 'Theme/Dress Code', 'required'])}}
+    <div class="help-info"><p>Avoid some special caracters like (&\/$€`()[]@#+%?!~). You can use (-_.)</p></div>
   </div>
 
   <div class="form-group form-float">
-    <label for="start_time"><b>Start time</b></label>
-    {{form::text('start_time', '', ['class' => 'form-control', 'placeholder' => '02:00 PM'])}}
+    <label for="start_time"><b>Start time<span class="text-danger"> *</span></b></label>
+    {{form::text('start_time', '', ['class' => 'form-control', 'placeholder' => '02:00 PM', 'required'])}}
   </div>
 
   <div class="form-group form-float">
-    <label for="end_time"><b>End time</b></label>
-    {{form::text('end_time', '', ['class' => 'form-control', 'placeholder' => '06:00 MM'])}}
+    <label for="end_time"><b>End time<span class="text-danger"> *</span></b></label>
+    {{form::text('end_time', '', ['class' => 'form-control', 'placeholder' => '06:00 MM', 'required'])}}
   </div>
   <!-- Managing photo -->
   <div class="container-fluid">

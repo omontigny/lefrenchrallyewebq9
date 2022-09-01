@@ -172,6 +172,9 @@ class GuestsListController extends Controller
             ->where('applications.group_name', '=', Str::upper($invitation->group->name))
 
             ->get();
+
+
+          $extracheckins = ["toto"];
         } else {
           $checkins = DB::table('applications')
             ->JOIN('rallyes', 'rallyes.id', '=', 'applications.rallye_id')
@@ -196,12 +199,32 @@ class GuestsListController extends Controller
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
             ->where('checkins.group_id', '=', $invitation->group->id)
+            ->get();
 
+          $extracheckins =
+            DB::table('guests')
+            ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
+            ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
+            ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
+
+
+            ->select(
+              'guests.id',
+              'guests.guestfirstname',
+              'guests.guestlastname',
+              'groups.eventDate',
+              'guests.nb_invitations',
+              'guests.guestemail'
+            )
+
+            ->where('guests.rallye_id', '=', $invitation->rallye_id)
+            ->where('guests.group_id', '=', $invitation->group->id)
             ->get();
         }
 
         $data = [
           'checkins' => $checkins,
+          'extracheckins' => $extracheckins,
           'invitation' => $invitation
         ];
 

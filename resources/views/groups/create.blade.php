@@ -24,8 +24,8 @@
 {{ Form::open(['action' => 'GroupsController@store', 'method' => 'GET']) }}
 @csrf
   <div class="form-group form-float">
-  <label for="rallye_id"><b>Rallye</b></label>
-  <select class="form-control show-tick ms select2" data-placeholder="Select" name="rallye_id">
+  <label for="rallye_id"><b>Rallye<span class="text-danger"> *</span></b></label>
+  <select class="form-control show-tick ms select2" data-placeholder="Select" name="rallye_id" required>
     <option value="" selected disabled>-- Please select a rallye --</option>
     @foreach ($rallyes as $rallye)
     @if(!$rallye->isPetitRallye)
@@ -42,18 +42,18 @@
 
 
 	<div class="form-group">
-      <label for="name"><b>Group name</b></label>
-    {{form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Group name'])}}
+      <label for="name"><b>Group name<span class="text-danger"> *</span></b></label>
+    {{form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Group name', 'required'])}}
   </div>
-  
+
   <div class="form-group">
-      <label for="name"><b>Event date</b></label>
+      <label for="name"><b>Event date<span class="text-danger"> *</span></b></label>
       <div class="input-group">
           <span class="input-group-addon">
               <i class="zmdi zmdi-calendar"></i>
           </span>
-          <input type="text" id="date" name="eventDate" class="form-control floating-label" placeholder="Date">
-          
+          <input type="text" id="date" name="eventDate" class="form-control floating-label" placeholder="Date" required>
+
       </div>
       <div class="help-info">If you want to create RED/GROUP for example and you are working on rallye(Petit Rallye), you do not need to specify a date</div>
   </div>
@@ -83,39 +83,39 @@
 <script src="{{secure_asset('assets/js/pages/forms/basic-form-elements.js')}}"></script>
 
 <script>
-  $(function() {              
+  $(function() {
            // Bootstrap DateTimePicker v4
-           
+
            $('#date').bootstrapMaterialDatePicker({ format : 'DD/MM/YYYY', weekStart : 0, time: false });
-        });      
+        });
 
     /*global $ */
     $(document).ready(function() {
       "use strict";
       $('.menu > ul > li:has( > ul)').addClass('menu-dropdown-icon');
       //Checks if li has sub (ul) and adds class for toggle icon - just an UI
-    
+
       $('.menu > ul > li > ul:not(:has(ul))').addClass('normal-sub');
-    
+
       $(".menu > ul > li").hover(function(e) {
         if ($(window).width() > 943) {
           $(this).children("ul").stop(true, false).fadeToggle(150);
           e.preventDefault();
         }
       });
-      //If width is more than 943px dropdowns are displayed on hover    
+      //If width is more than 943px dropdowns are displayed on hover
       $(".menu > ul > li").on('click',function() {
         if ($(window).width() <= 943) {
           $(this).children("ul").fadeToggle(150);
         }
       });
       //If width is less or equal to 943px dropdowns are displayed on click (thanks Aman Jain from stackoverflow)
-    
+
       $(".h-bars").on('click',function(e) {
         $(".menu > ul").toggleClass('show-on-mobile');
         e.preventDefault();
       });
       //when clicked on mobile-menu, normal menu is shown as a list, classic rwd menu story (thanks mwl from stackoverflow)
-    });    
+    });
 </script>
 @stop
