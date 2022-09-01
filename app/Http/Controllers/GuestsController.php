@@ -167,6 +167,7 @@ class GuestsController extends Controller
       $guest->guestlastname = Str::upper($request->input('last_name'));
       $guest->guestemail = Str::lower($request->input('guest_email'));
       $guest->guestmobile = Str::lower($request->input('guest_mobile'));
+      $guest->guestparentmobile = Str::lower($request->input('guest_parentmobile'));
       $guest->invitedby_id = $child->id;
       $guest->rallye_id = $parentRallye->rallye_id;
       $guest->group_id = $request->input('group_id');
