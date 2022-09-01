@@ -224,6 +224,32 @@ class MultiCheckinController extends Controller
                 ->where('checkins.child_present', '=', 0)
 
                 ->get();
+
+              $extraguestList =
+                DB::table('guests')
+                ->JOIN('rallyes', 'rallyes.id', '=', 'guests.rallye_id')
+                ->JOIN('children', 'children.id', '=', 'guests.invitedby_id')
+                ->JOIN('parents', 'parents.id', '=', 'children.parent_id')
+                ->JOIN('groups', 'groups.id', '=', 'guests.group_id')
+
+
+                ->select(
+                  'guests.id',
+                  'guests.guestfirstname',
+                  'guests.guestlastname',
+                  'parents.parentfirstname',
+                  'parents.parentlastname',
+                  'parents.parentmobile',
+                  'groups.eventDate',
+                  'guests.nb_invitations',
+                  'guests.guestemail',
+                  'guests.guestmobile'
+
+                )
+
+                ->where('guests.rallye_id', '=', $invitation->rallye_id)
+                ->where('guests.group_id', '=', $invitation->group->id)
+                ->get();
             } else {
               return Redirect::back()->withError('E090: You do not belong to any event');
             }
@@ -242,6 +268,7 @@ class MultiCheckinController extends Controller
           # $SMSBodyPlacehodeler = $this->getDefaultSMSbody();
           $data = [
             'guestList'        => $guestList,
+            'extraguestList'    => $extraguestList,
             'missingChildren'   => $missingChildren,
             'invitation_id'     => $invitation->id,
             'missingChildrenList' => $missingChildrenList,

@@ -267,7 +267,7 @@
 
           <div class="form-group form-float ">
             <label for=""><b>Your email<span class="text-danger"> *</span></b></label>
-            <input type="mail" name="parentemail" placeholder="Your email" class="form-control" required>
+            <input type="mail" name="parentemail" placeholder="Your email" class="form-control" pattern="^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$" required>
             <div class="help-info">
               <p>You need to enter your email that will be used to sign in/ to stay in touch with the rally or to send
                 invitations, reminders</p>

@@ -18,6 +18,8 @@ use App\Models\Application;
 use Illuminate\Support\Facades\Config;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 class GuestsController extends Controller
 {
@@ -66,7 +68,10 @@ class GuestsController extends Controller
 
           /* existe t'il deja une invitation pour ce rallye et ce group  */
           $availableGroupIds = [];
-          if ($invitations->where('group_id', $application->event_id)->count() == 0) {
+          $selectIvitations = $invitations->where('group_id', $application->event_id)->count();
+          Log::stack(['single', 'stdout'])->debug("nb invitations: " . $selectIvitations);
+
+          if ($invitations->where('group_id', $application->event_id)->count() != 0) {
             $availableGroupIds = $applicationGroupIds;
           }
 
@@ -116,41 +121,72 @@ class GuestsController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    // rules
+    // 1 parent can invite only 1 extra guest by Rallye and can invite twice in total in the Season
+    // One particular Extra guest can be invited only twice in the season
+
+    // TODO:
+    // voir le cas du parent ayant 2 enfants et du coup droit à 2 invitations par enfant.
+
     $this->validate($request, [
       //Rules to validate
       'guest_email' => 'required'
     ]);
     $parent = Parents::where('user_id', Auth::user()->id)->first();
-    $child = Children::where('parent_id', $parent->id)->first();
+    $child = Children::where('parent_id', $parent->id)->first(); // revoir car pas sur qu'on tape sur le bon enfant
     $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
 
-    $guest = Guest::where('guestfirstname', ucfirst(Str::lower($request->input('first_name'))))->where('guestlastname', ucfirst(Str::lower($request->input('last_name'))))->get();
+    $guest = Guest::where('guestfirstname', ucfirst(Str::lower($request->input('first_name'))))->where('guestlastname', Str::upper($request->input('last_name')))->get();
+    $guestForThisEvent = $guest->where('group_id', $request->input('group_id'));
 
-    if (count($guest) == 0) {
+    $nbGuestInvitations = $guest->sum('nb_invitations');
+    Log::stack(['single', 'stdout'])->debug("Nb invitations for this extra guest: " . $nbGuestInvitations);
+
+
+    $nbParentInvitationsForThisEvent = Guest::where('invitedby_id', $child->id)->where('group_id', $request->input('group_id'))->sum('nb_invitations');
+    Log::stack(['single', 'stdout'])->debug("Nb invitations for this parent: " . $nbParentInvitationsForThisEvent);
+
+    $nbParentTotalInvitations = Guest::where('invitedby_id', $child->id)->sum('nb_invitations');
+    Log::stack(['single', 'stdout'])->debug("Nb invitations for this parent: " . $nbParentTotalInvitations);
+
+    if ($nbParentInvitationsForThisEvent >= 1) {
+      return Redirect::back()->withError("E100: Sorry, you already invited one extra guest for this event");
+    }
+
+    if ($nbParentTotalInvitations >= 2) {
+      return Redirect::back()->withError("E101: Sorry, you have used your invitation limit count for this season.");
+    }
+
+    if ($nbGuestInvitations >= 2) {
+      return Redirect::back()->withError("E102: Sorry, {$guest->first()->guestfirstname} {$guest->first()->guestlastname} has already been invited twice.");
+    }
+    if (count($guestForThisEvent) == 0) {
       # On le crée
-      $guest = new  Guest;
+      $guest = new Guest;
       $guest->guestfirstname = ucfirst(Str::lower($request->input('first_name')));
-      $guest->guestlastname = ucfirst(Str::lower($request->input('last_name')));
+      $guest->guestlastname = Str::upper($request->input('last_name'));
       $guest->guestemail = Str::lower($request->input('guest_email'));
       $guest->guestmobile = Str::lower($request->input('guest_mobile'));
       $guest->invitedby_id = $child->id;
-      $guest->rallye_id = 2;
-      $guest->group_id = $request->input('calendar_id');
+      $guest->rallye_id = $parentRallye->rallye_id;
+      $guest->group_id = $request->input('group_id');
       $guest->nb_invitations += 1;
       $guest->save();
-      return Redirect::back()->with('success', 'M100: The extra guest  has been aded successfully.');
+      return Redirect::back()->with('success', "M103: The Extra Guest: '{$guest->guestfirstname} {$guest->guestlastname}' has been added successfully.");
     } else {
-      # on met à jour son nombre d'invitation et le group_id
-      if ($guest->first()->nb_invitations < 2) {
+      $guest_fullname = "{$guest->first()->guestfirstname} {$guest->first()->guestlastname}";
+      if ($guest->first()->group_id == $request->input('group_id')) {
+        return Redirect::back()->withError("E104: Sorry, '{$guest_fullname}' has already been invited for this event");
+      } else if ($guest->first()->nb_invitations < 2) {
+        # $guest->first()->group_id  = $request->input('group_id');
+        # guest->first()->invitedby_id = $child->id;
         $guest->first()->nb_invitations += 1;
         $guest->first()->save();
-        return Redirect::back()->with('success', 'M101: The extra guest has been updated successfully.');
+        return Redirect::back()->with('success', "M105: The extra guest '{$guest_fullname}' has been updated successfully.");
       } else {
-        # code...
-        return Redirect::back()->withError('E101: Limit reached this guest has already been invited twice. Sorry.');
+        # Stop on ne peut plus l'inviter
+        return Redirect::back()->withError("E106: Sorry, Limit reached for '{$guest_fullname}' . This guest has already been invited twice this season");
       }
-      # Stop on ne peut plus l'inviter
     }
   }
 
