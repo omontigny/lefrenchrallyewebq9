@@ -15,7 +15,7 @@ return new class extends Migration
   {
     Schema::table('guests', function (Blueprint $table) {
       //
-      $table->string('guestparentmobile');
+      $table->string('guestparentmobile')->default('');
     });
   }
 
@@ -28,6 +28,7 @@ return new class extends Migration
   {
     Schema::table('guests', function (Blueprint $table) {
       //
+      $table->dropColumn(['guestparentmobile']);
     });
   }
 };
