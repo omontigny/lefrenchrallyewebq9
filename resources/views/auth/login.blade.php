@@ -70,4 +70,7 @@
         </div>
     </div>
 </div>
+</div>
+<h5 class="text-danger" align="center"><i>Notice: All parents including previous members need to apply as a new member by filling a new application</i></p>
+</div>
 @endsection
