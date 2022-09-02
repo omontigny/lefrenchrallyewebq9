@@ -11,6 +11,7 @@ guest list and reminders and do the online check in at your event. <br>
 You can also find here the contact details of other parents in your rallye or rallye group.
 If you have any question, technical issue please contact your rallye coordinators.
 </p>
+<h6 class="text-danger" align="center"><i>Notice: All parents including previous members need to apply as a new member by filling a new application</i></p>
 @stop
 @section('page-script')
 <script>
