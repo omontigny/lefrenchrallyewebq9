@@ -47,7 +47,7 @@ class RallyesController extends Controller
   {
     try {
       if (!$this->CheckUserAccess()) {
-        return redirect('/welcome')->withError('E300: This sestion is for SUPER ADMIN only.');
+        return redirect('/welcome')->withError('E300: This section is for SUPER ADMIN only.');
       }
       //
       //$rallyes = Rallye::all();
@@ -69,7 +69,7 @@ class RallyesController extends Controller
   {
     try {
       if (!$this->CheckUserAccess()) {
-        return redirect('/welcome')->withError('E300: This sestion is for SUPER ADMIN only.');
+        return redirect('/welcome')->withError('E300: This section is for SUPER ADMIN only.');
       }
       //
       return view('rallyes.create');
@@ -88,7 +88,7 @@ class RallyesController extends Controller
   {
     try {
       if (!$this->CheckUserAccess()) {
-        return redirect('/welcome')->withError('E300: This sestion is for SUPER ADMIN only.');
+        return redirect('/welcome')->withError('E300: This section is for SUPER ADMIN only.');
       }
 
       //
@@ -146,7 +146,7 @@ class RallyesController extends Controller
     try {
       //
       if (!$this->CheckUserAccess()) {
-        return redirect('/welcome')->withError('E300: This sestion is for SUPER ADMIN only.');
+        return redirect('/welcome')->withError('E300: This section is for SUPER ADMIN only.');
       }
       $rallye = Rallye::find($id);
 
@@ -168,7 +168,7 @@ class RallyesController extends Controller
     try {
       //
       if (!$this->CheckUserAccess()) {
-        return redirect(route('welcome'))->withError('E300: This sestion is for SUPER ADMIN only.');
+        return redirect(route('welcome'))->withError('E300: This section is for SUPER ADMIN only.');
       }
       $this->validate($request, [
         //Rules to validate
@@ -201,7 +201,7 @@ class RallyesController extends Controller
     try {
       //
       if (!$this->CheckUserAccess()) {
-        return redirect('/welcome')->withError('E300: This sestion is for SUPER ADMIN only.');
+        return redirect('/welcome')->withError('E300: This section is for SUPER ADMIN only.');
       }
 
       // We can delete it if there is no attached applications

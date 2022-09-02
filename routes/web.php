@@ -29,9 +29,9 @@ Route::get('/', function () {
 Route::get('welcome', 'LeFrenchRallyeController@welcome')->name('welcome');
 Route::get('welcomeRequest', 'LeFrenchRallyeController@welcomeRequest')->name('welcome');
 
-
-Route::get('home', 'LeFrenchRallyeController@home')->name('home');
-
+Route::group(['middleware' => ['auth', 'active_user']], function () {
+  Route::get('home', 'LeFrenchRallyeController@home')->name('home');
+});
 
 /* Rallyes */
 Route::get('rallyes', 'RallyesController@index')->name('rallyes');
@@ -140,23 +140,24 @@ Route::post('applicationrequests/store', 'ApplicationRequestsController@store')-
 //Route::get('applicationrequests/{id}', 'ApplicationRequestsController@edit')->name('applicationrequests.edit');
 
 /** Private Routes **/
-Route::get('applicationrequests/{id}', 'ApplicationRequestsPrivateController@edit')->name('applicationrequests.edit');
-Route::get('applicationrequests/editphoto/{id}', 'ApplicationRequestsPrivateController@editChildPhoto')->name('applicationrequests.editphoto');
-Route::get('applicationrequests/update/{id}', 'ApplicationRequestsPrivateController@update')->name('applicationrequests.update');
-Route::post('applicationrequests/updatechildpicture', 'ApplicationRequestsPrivateController@updateChildPicture')->name('applicationrequests.updatechildpicture');
-Route::get('applicationrequests/delete/{id}', 'ApplicationRequestsPrivateController@destroy')->name('applicationrequests.destroy');
+Route::group(['middleware' => ['auth', 'active_user']], function () {
+  Route::get('applicationrequests/{id}', 'ApplicationRequestsPrivateController@edit')->name('applicationrequests.edit');
+  Route::get('applicationrequests/editphoto/{id}', 'ApplicationRequestsPrivateController@editChildPhoto')->name('applicationrequests.editphoto');
+  Route::get('applicationrequests/update/{id}', 'ApplicationRequestsPrivateController@update')->name('applicationrequests.update');
+  Route::post('applicationrequests/updatechildpicture', 'ApplicationRequestsPrivateController@updateChildPicture')->name('applicationrequests.updatechildpicture');
+  Route::get('applicationrequests/delete/{id}', 'ApplicationRequestsPrivateController@destroy')->name('applicationrequests.destroy');
 
-Route::get('applicationrequests/{id}/SendingAcceptanceEmailId', 'ApplicationRequestsExtraController@SendingAcceptanceEmailId');
-Route::get('applicationrequests/{id}/waiteApplicationById', 'ApplicationRequestsExtraController@waiteApplicationById');
-Route::get('applicationrequests/{id}/blockingApplicationById', 'ApplicationRequestsExtraController@blockingApplicationById');
-Route::get('applicationrequests/{id}/deBlockingApplicationById', 'ApplicationRequestsExtraController@deBlockingApplicationById');
-Route::get('ResetParentPassword', 'ApplicationRequestsExtraController@ResetParentPassword');
-Route::get('applicationrequests/{id}/approveApplicationById', 'ApplicationRequestsExtraController@approveApplicationById');
-Route::get('/applicationExtra/{id}/ActivateMailto', 'ApplicationRequestsExtraController@ActivateMailto');
-Route::get('/acceptAllApplications', 'ApplicationRequestsExtraController@acceptAllApplications');
-Route::get('/rejectAllApplications', 'ApplicationRequestsExtraController@rejectAllApplications');
-Route::get('deleteAllApplications', 'ApplicationRequestsExtraController@deleteAllApplications');
-
+  Route::get('applicationrequests/{id}/SendingAcceptanceEmailId', 'ApplicationRequestsExtraController@SendingAcceptanceEmailId');
+  Route::get('applicationrequests/{id}/waiteApplicationById', 'ApplicationRequestsExtraController@waiteApplicationById');
+  Route::get('applicationrequests/{id}/blockingApplicationById', 'ApplicationRequestsExtraController@blockingApplicationById');
+  Route::get('applicationrequests/{id}/deBlockingApplicationById', 'ApplicationRequestsExtraController@deBlockingApplicationById');
+  Route::get('ResetParentPassword', 'ApplicationRequestsExtraController@ResetParentPassword');
+  Route::get('applicationrequests/{id}/approveApplicationById', 'ApplicationRequestsExtraController@approveApplicationById');
+  Route::get('/applicationExtra/{id}/ActivateMailto', 'ApplicationRequestsExtraController@ActivateMailto');
+  Route::get('/acceptAllApplications', 'ApplicationRequestsExtraController@acceptAllApplications');
+  Route::get('/rejectAllApplications', 'ApplicationRequestsExtraController@rejectAllApplications');
+  Route::get('deleteAllApplications', 'ApplicationRequestsExtraController@deleteAllApplications');
+});
 
 /* ParentEvents */
 Route::get('/parentEvents/{$parent->id}/createById', 'ParentEventsController@createById');
@@ -276,6 +277,7 @@ Route::get('deleteAllSchools', 'SchoolsExtraController@deleteAllSchools');
 Route::get('apply', function () {
   return redirect('apply/apply');
 });
+
 Route::get('apply/apply', 'ApplicationsController@apply')->name('apply.apply');
 
 /* ParentChildren */

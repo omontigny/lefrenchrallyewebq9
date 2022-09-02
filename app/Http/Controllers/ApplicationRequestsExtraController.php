@@ -208,8 +208,12 @@ class ApplicationRequestsExtraController extends Controller
         if ($user->password == "$2y$10$") {
           $userPassword = $this->emailRepository->generatePassword();
           $user->password = Hash::make($userPassword);
-          $user->save();
+          # $user->save();
         }
+        if ($user->blocked_at) { # Si le compte avait ete desactive on le re-active
+          $user->blocked_at = null;
+        }
+        $user->save();
 
         $domainLink = $this->emailRepository->getKeyValue('OFFICIAL_LINK');
 
