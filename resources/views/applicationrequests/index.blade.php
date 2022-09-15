@@ -36,6 +36,7 @@
                                 <th>Child</th>
                                 <th>Child name</th>
                                 <th>Parent name</th>
+                                <th>Parent email</th>
                                 <th>Rallye</th>
                                 <th>Birth Date <br> <font size="1">(DD-MM-YYYY)</font></th>
                                 <th>School Name</th>
@@ -70,6 +71,7 @@
                                     </td>
                                     <td>{{$application->childfirstname}} {{$application->childlastname}}</td>
                                     <td>{{$application->parentfirstname}} {{$application->parentlastname}}</td>
+                                    <td>{{$application->parentemail}}</td>
                                     <td>{{$application->rallye->title}}</td>
                                     <td>{{\Illuminate\Support\Carbon::parse($application->childbirthdate)->format('d/m/Y')}}</td>
                                     <td>{{\App\Http\Middleware\TrimStrings::middle_dots($application->school->name)}}</td>
