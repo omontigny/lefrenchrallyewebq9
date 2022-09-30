@@ -59,34 +59,53 @@
                                     <!--<td><strong>Rejected</strong></td>-->
                                     @break
                                     @endswitch
-                                    @switch($application->status)
-                                    @case(0)
-                                    <td><span class="badge badge-info">Application</span></td>
-                                    @break
-                                    @case(4)
-                                    <td><span class="badge badge-danger">TO DO</span></td>
-                                    @break
-                                    @case(2)
-                                    <td><strong>Desactived</strong></td>
-                                    @break
-                                    @case(3)
-                                    <td><span class="badge badge-warning">Waiting list</span></td>
-                                    @break
-                                    @case(1)
-                                    <td><span class="badge badge-success">DONE</span></td>
-                                    @break
-                                    @case(5)
-                                    <!--<td><strong>Ready</strong></td>-->
-                                    @break
-                                    @case(9)
-                                    <td><span class="badge badge-danger">Blocked</span></td>
-                                    <!--<td><strong>Rejected</strong></td>-->
-                                    @break
-                                    @endswitch
+                                    @if ($payment != null && $payment->payment_status == "succeeded" )
+                                      <td><span class="badge badge-success">DONE</span></td>
+                                      @php
+                                        $disabled = "disabled";
+                                        $btnStyle = "";
+                                        $link = "#";
+                                        $icon = "";
+                                        $action = "NONE";
+                                      @endphp
+                                    @else
+                                      @php
+                                        $disabled = "" ;
+                                        $btnStyle ="btn-warning";
+                                        $link="/payments/$application->id/edit";
+                                        $icon = "glyphicon-edit";
+                                        $action = "PAY";
+                                      @endphp
+                                      @switch($application->status)
+                                      @case(0)
+                                      <td><span class="badge badge-info">Application</span></td>
+                                      @break
+                                      @case(4)
+                                      <td><span class="badge badge-danger">TO DO</span></td>
+                                      @break
+                                      @case(2)
+                                      <td><strong>Desactived</strong></td>
+                                      @break
+                                      @case(3)
+                                      <td><span class="badge badge-warning">Waiting list</span></td>
+                                      @break
+                                      @case(1)
+                                      <td><span class="badge badge-success">DONE</span></td>
+                                      @break
+                                      @case(5)
+                                      <!--<td><strong>Ready</strong></td>-->
+                                      @break
+                                      @case(9)
+                                      <td><span class="badge badge-danger">Blocked</span></td>
+                                      <!--<td><strong>Rejected</strong></td>-->
+                                      @break
+                                      @endswitch
+                                    @endif
+
                                     <td><strong>{{$membershipPrice->mount}} (£)</strong></td>
                                     <td>
                                         {{-- <a href="/stripes/{{$application->id}}/edit"><button type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-edit"></span> PAY</button></a> --}}
-                                        <a href="/payments/{{$application->id}}/edit"><button type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-edit"></span> PAY</button></a>
+                                        <a class="{{$disabled}}" href="{{ $link }}"><button type="button" class="btn {{$btnStyle}} btn-sm {{$disabled}}"><span class="glyphicon {{$icon}}"></span> {{$action}}</button></a>
                                     </td>
                                 </tr>
                           </tbody>

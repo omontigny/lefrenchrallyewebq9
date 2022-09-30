@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MembershipPrice;
 use App\Models\Application;
+use App\Models\Payment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -49,6 +50,7 @@ class PaymentSearchController extends Controller
         'childfirstname' => 'required'
       ]);
 
+
       $application = Application::where('parentemail', trim(Str::lower($request->input('parentemail'))))
         ->where('childlastname', trim(Str::upper($request->input('childlastname'))))
         ->where('childfirstname', ucwords(trim(Str::lower($request->input('childfirstname')))))
@@ -57,6 +59,8 @@ class PaymentSearchController extends Controller
         ->first();
 
       if ($application != null) {
+        $payment = Payment::where('application_id', $application->id)->get()->first();
+
         $membershipPrice = MembershipPrice::where('is_boarder', $application->is_boarder)
           ->where('schoolyear_id', $application->schoolyear_id)
           ->get()
@@ -66,9 +70,11 @@ class PaymentSearchController extends Controller
           if ($application->rallye->isPetitRallye) {
             return Redirect::back()->withError('E200: ' . 'No membership payment for children in a Petit Rallye.');
           } else {
+
             $data = [
               'application' => $application,
-              'membershipPrice' => $membershipPrice
+              'membershipPrice' => $membershipPrice,
+              'payment' => $payment
             ];
 
             return view('payment.paymentSearchResults')->with($data);
