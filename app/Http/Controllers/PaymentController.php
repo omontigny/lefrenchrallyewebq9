@@ -56,6 +56,10 @@ class PaymentController extends Controller
       $paymentDescription = $application->id . '# ' . $application->childfirstname . ' / ' . $application->parentfirstname . ' ' . $application->parentlastname . ' (Price: ' . $membershipPrice->mount . ' GBP - Rallye: ' . $application->rallye->title . ')';
       Log::stack(['single'])->debug("[STRIPE] Payment Description:" . $paymentDescription);
 
+      $payment = Payment::where('application_id', $application->id)->get()->first();
+      if ($payment != null && $payment->payment_status == "succeeded") {
+        return Redirect::back()->withSuccess('E255: ' . "You already paid your membership");
+      }
 
       $data = [
         'application'     => $application,
@@ -156,6 +160,8 @@ class PaymentController extends Controller
         # payment_method_data: { billing_details: {name: cardholderName},
         $arr_payment_data = $response->getData();
 
+
+
         $this->store_payment([
           'payment_id'     => $arr_payment_data['id'],
           'application_id' => session('application_id'),
@@ -184,6 +190,11 @@ class PaymentController extends Controller
   {
     try {
       $isPaymentExist = Payment::where('payment_id', $arr_data['payment_id'])->first();
+      $payment = Payment::where('application_id', $arr_data['application_id'])->get()->first();
+
+      if ($payment != null && $payment->payment_status == "succeeded") {
+        return Redirect::back()->with('success', 'I002: Thank you, you already paid your membership.');
+      }
 
       if (!$isPaymentExist) {
         $payment = new Payment;
@@ -235,10 +246,10 @@ class PaymentController extends Controller
         Session::flash('success-message', 'Payment done successfully !');
         return redirect('/postPayment');
       }
-      return Redirect::back()->withError('E233: ' . "Payment not completed - Please retry");
+      return Redirect::back()->withError('E234: ' . "Payment not completed - Please retry");
     } catch (Exception $e) {
       Log::stack(['single'])->error("[EXCEPTION] - [STRIPE] : ca passe  pas ! pour " . $arr_data['description'] . $e->getMessage());
-      return Redirect::back()->withError('E233: ' . $e->getMessage());
+      return Redirect::back()->withError('E235: ' . $e->getMessage());
     }
   }
 }
