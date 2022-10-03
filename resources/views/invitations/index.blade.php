@@ -301,8 +301,8 @@
             value="{{$invitation->id}}">
 
         <div class="modal-footer">
-          <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
-         class="glyphicon glyphicon-send button-prevent-multiple-clicks" data-target="#SendAllRallyeMembersConfirmationModal"></span> Send</button></a>
+          <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md button-prevent-multiple-clicks"><span
+         class="glyphicon glyphicon-send" data-target="#SendAllRallyeMembersConfirmationModal"></span> Send</button></a>
 
             <button type="button" class="btn btn-default float-right"
                 data-dismiss="modal">Cancel</button>
