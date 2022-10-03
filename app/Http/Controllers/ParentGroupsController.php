@@ -147,6 +147,7 @@ class ParentGroupsController extends Controller
 
         $mailBodyPlacehodeler = $this->getMailbody($rallye_title);
 
+
         $results = [
           'applications'  => $applications,
           'bcclist'       => $bcclist,

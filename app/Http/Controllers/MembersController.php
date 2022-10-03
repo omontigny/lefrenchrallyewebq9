@@ -90,6 +90,7 @@ class MembersController extends Controller
 
       $mailBodyPlacehodeler = $this->getMailbody($rallye->title);
 
+
       $results = [
         'applications' => $applications,
         'bcclist'      => $bcclist,
@@ -127,6 +128,7 @@ class MembersController extends Controller
           $bcclist = "";
           $applications = [
             'applications'  => $applications,
+            'rallye_email' => $parentRallye->rallye->rallyemail,
             'bcclist' => $bcclist
           ];
 
@@ -172,6 +174,7 @@ class MembersController extends Controller
 
       $bcclist = $this->getListParentsMail($applications);
       $mailBodyPlacehodeler = $this->getMailbody($rallye->title);
+
 
       $results = [
         'applications' => $applications,
@@ -382,15 +385,16 @@ class MembersController extends Controller
 
   private function getMailbody($rallye_title)
   {
-    $mailBodyPlacehodeler = "<p>Dear Parents</p>
-       <p><font color=\"grey\">Enter Your email body here...</font></p>
-       <br>
-       <br>
-       <br>
-       ---------------
-       <p>See you,</p>
-       <p>The $rallye_title Coordinators</p>
-       ";
+    // $mailBodyPlacehodeler = "<p>Dear Parents</p>
+    //    <p><font color=\"grey\">Enter Your email body here...</font></p>
+    //    <br>
+    //    <br>
+    //    <br>
+    //    ---------------
+    //    <p>See you,</p>
+    //    <p>The $rallye_title Coordinators</p>
+    //    ";
+    $mailBodyPlacehodeler = "";
     return $mailBodyPlacehodeler;
   }
 }

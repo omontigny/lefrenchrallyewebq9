@@ -1,4 +1,4 @@
-(function() {
+$(function() {
     $('.form-prevent-multiple-submits').on('submit',
         function() {
             console.log('submit');

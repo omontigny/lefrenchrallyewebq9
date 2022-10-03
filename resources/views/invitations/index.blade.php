@@ -92,12 +92,10 @@
                   <td>
                   @if($invitation->group_id == $application->event_id)
                   <div class="align-center">
-                    <a href={{secure_url("/sendToMyself/".$invitation->id)}}>
-                      <button type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-envelope"></span><b> Myself</b></button>
-                    </a>
-                    <a href="{{secure_url("/mails/$application->id")}}">
-                      <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-send"></span><b> Send</b></button>
-                    </a>
+                    <a href={{secure_url("/sendToMyself/".$invitation->id)}}><button type="button" class="btn btn-warning btn-sm font-weight-bold button-prevent-multiple-clicks"><span
+                    class="glyphicon glyphicon-envelope"></span> Myself</button></a>
+
+                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#SendAllRallyeMembersConfirmationModal"><span class="glyphicon glyphicon-send"></span><b> Send All</b></button>
                   </div>
                   <div class="align-center">
                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#EditInvitationModal_{{$invitation->id}}"><span class="glyphicon glyphicon-edit"></span><b>&nbsp;&nbsp;&nbsp;Edit&nbsp;&nbsp;</b></button>
@@ -136,6 +134,7 @@
                     </div>
                   </div>
                   <!-- END MODAL DELETE -->
+
                   <!-- +AJO : Modal EDIT section begin -->
                   <div class="modal fade" id="EditInvitationModal_{{$invitation->id}}" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -275,13 +274,45 @@
   {{form::submit('Upload the invitation', ['class' => 'btn btn-primary'])}}
   {{ Form::close() }}
 </div>
+
 <hr>
 
-<a href={{secure_url("/sendInvitationToMyself")}}><button type="button" class="btn btn-warning btn-md"><span
+<a href={{secure_url("/sendInvitationToMyself")}}><button type="button" class="btn btn-warning btn-md button-prevent-multiple-clicks"><span
   class="glyphicon glyphicon-envelope"></span> Send test to myself</button></a>
 
-<a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
-  class="glyphicon glyphicon-send"></span> Send to all rallyes members / Invitation already sent</button></a>
+{{-- <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
+  class="glyphicon glyphicon-send button-prevent-multiple-clicks" data-target="#SendAllRallyeMembersConfirmationModal"></span> Send to all rallyes members / Invitation already sent</button></a> --}}
+
+<button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#SendAllRallyeMembersConfirmationModal"><span class="glyphicon glyphicon-send button-prevent-multiple-clicks"></span> Send to all rallyes members</button>
+
+<!-- +AJO : Modal CONFIRMATION section begin -->
+<div class="modal fade" id="SendAllRallyeMembersConfirmationModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="title text-center" id="defaultModalLabel">Confirmation</h4>
+      </div>
+
+      <div class="modal-body">
+
+        <p for="">You are about to send or resend the invitation to <b>ALL</b> Rallye Members</p>
+
+        <input name="invitation_id" type="hidden"
+            value="{{$invitation->id}}">
+
+        <div class="modal-footer">
+          <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md"><span
+         class="glyphicon glyphicon-send button-prevent-multiple-clicks" data-target="#SendAllRallyeMembersConfirmationModal"></span> Send</button></a>
+
+            <button type="button" class="btn btn-default float-right"
+                data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MODAL CONFIRMATION -->
+
 
 
 <!-- For Material Design Colors -->
@@ -303,6 +334,7 @@
 @stop
 @section('page-script')
 <script src="{{secure_asset('assets/js/pages/forms/form-fileSize-validation.js')}}"></script>
+<script src="{{secure_asset('assets/js/double-click.js')}}"></script>
 
 <script>
   /*global $ */

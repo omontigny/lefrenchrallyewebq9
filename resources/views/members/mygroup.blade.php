@@ -11,7 +11,7 @@
 <div class="btn-group-vertical float-right" role="group" aria-label="...">
   @if(Auth::user()->active_profile == Config::get('constants.roles.COORDINATOR') || Auth::user()->active_profile == Config::get('constants.roles.SUPERADMIN'))
     <!-- MAIL DIRECT -->
-    <a href="mailto:?bcc={{$bcclist}}"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mail</button></a>
+    <a href="mailto:{{$rallye_email}}?bcc={{$bcclist}}"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mail</button></a>
     <!-- MAIL MODAL -->
     <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#sendMail"><span class="glyphicon glyphicon-send"></span> Message</button>
     <!-- MAIL -->
