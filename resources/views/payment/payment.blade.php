@@ -14,7 +14,7 @@
 @section('content')
 <div class='container'>
   <h2>Subscription Payment Form </h2>
-    <h7 class="text-warning" align="center"><i><b>Notice:</b> Be careful not double click on payment button, <br>Also, the process can take several seconds please wait and don't stop-reload the page otherwise you will be charged twice.</i></h7>
+    <h7 class="text-danger" align="center"><i><b>Notice:</b> Be careful, DO NOT double-click on the "Pay Now" . The process may take several seconds, please DO NOT reload the page</i></h7>
     <p><br></p>
     <div class="row">
       <div class="col-md-10 order-md-1">
