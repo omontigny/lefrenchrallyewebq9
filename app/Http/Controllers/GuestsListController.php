@@ -189,6 +189,7 @@ class GuestsListController extends Controller
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
             ->where('checkins.group_id', '=', $invitation->group->id)
+            ->where('applications.status', '=', 1)
             ->where('applications.group_name', '=', Str::upper($invitation->group->name))
 
             ->get();
@@ -215,6 +216,7 @@ class GuestsListController extends Controller
 
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
+            ->where('applications.status', '=', 1)
             ->where('checkins.group_id', '=', $invitation->group->id)
             ->get();
         }
@@ -299,6 +301,7 @@ class GuestsListController extends Controller
 
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
+            ->where('applications.status', '=', 1)
             ->where('checkins.group_id', '=', $invitation->group->id)
             ->where('applications.group_name', '=', Str::upper($invitation->group->name))
             ->where('checkins.checkStatus', '=', 0)
@@ -329,6 +332,7 @@ class GuestsListController extends Controller
             ->where('invitations.id', '=', $invitation->id)
             ->where('applications.rallye_id', '=', $invitation->rallye_id)
             ->where('checkins.group_id', '=', $invitation->group->id)
+            ->where('applications.status', '=', 1)
             ->where('checkins.checkStatus', '=', 0)
             ->get();
         }

@@ -13,7 +13,7 @@
 @if(count($checkins) > 0)
   <div class="btn-group-vertical float-right" role="group" aria-label="...">
     <!-- MAIL -->
-    <a href="/guestsList/{{$invitation->id}}/reminderInvitationMail"><button type="button" class="btn btn-warning btn-sm float-right"><span class="glyphicon glyphicon-envelope"></span> Mails</button></a>
+    <a href="/guestsList/{{$invitation->id}}/reminderInvitationMail"><button type="button" class="btn btn-warning btn-sm float-right button-prevent-multiple-clicks"><span class="glyphicon glyphicon-envelope"></span> Mails</button></a>
     <!-- MAIL -->
     <!-- BACK -->
     <a href="{{ URL::previous() }}" class="btn btn-default btn-sm btn-default">Back</a>
@@ -379,6 +379,8 @@
 <script src="{{secure_asset('assets/plugins/jquery-datatable/buttons/buttons.html5.min.js')}}"></script>
 <script src="{{secure_asset('assets/plugins/jquery-datatable/buttons/buttons.print.min.js')}}"></script>
 <script src="{{secure_asset('assets/js/pages/tables/jquery-datatable.js')}}"></script>
+<script src="{{secure_asset('assets/js/double-click.js')}}"></script>
+
 <script>
   /*global $ */
     $(document).ready(function() {

@@ -62,7 +62,7 @@
 
           <hr class="mb-4">
           <div class="mb-3" id="card-message"></div>
-            <!-- +AJO : Modal EDIT section begin -->
+            <!-- +AJO : Modal CONFIRMATION section begin -->
             <div class="modal fade" id="PaymentConfirmationModal_{{$application->id}}" tabindex="-1" role="dialog">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -79,7 +79,7 @@
                     <p for=""><b>Parent email: </b>{{$application->parentemail}}</p>
                     <p for=""><b>Membership Price: </b><span class="text-danger">£ {{$membershipPrice->mount}}</span></p>
 
-                    <input name="invitation_id" type="hidden"
+                    <input name="application_id" type="hidden"
                         value="{{$application->id}}">
                     <div class="modal-footer">
                         {{form::submit("Pay Now", ['class' => 'btn btn-primary button-prevent-multiple-submits'])}}
@@ -91,7 +91,7 @@
                 </div>
               </div>
             </div>
-            <!-- END MODAL EDIT -->
+            <!-- END MODAL CONFIRMATION -->
         </form>
     </div>
   </div>
