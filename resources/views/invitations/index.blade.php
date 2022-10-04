@@ -12,8 +12,8 @@
     highlighted in green</span>. Scroll down to set your event venue and theme in the next section.</p>
 
 <!-- Exportable Table -->
-@if(count($invitations) > 0)
-<!--{{var_dump($invitations)}} -->
+@if(count($invitations) > 0 || count($oldInvitations) > 0)
+{{-- {{dd($oldInvitations)}} --}}
 <div class="row clearfix">
   <div class=""> <!-- Enlarge central pannel to have access to buttons but not centered (old value : col-lg-12 -->
     <div class="card">
@@ -39,31 +39,31 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($oldInvitations as $invitation)
+              @foreach ($oldInvitations as $oldInvitation)
                 <tr class="bg-light text-muted">
-                  <td><strong>{{$invitation->id}}</strong></td>
+                  <td><strong>{{$oldInvitation->id}}</strong></td>
                   <td>
                     <div class="media-object"><img
-                      src="{{$invitation->invitationFile}}"
+                      src="{{$oldInvitation->invitationFile}}"
                       alt="" width="35" class="rounded-circle">
                     </div>
                   </td>
-                  <td>{{$invitation->rallye->title}}</td>
-                  <td>{{$invitation->rallye->title}}</td>
-                  @if($invitation->group != null)
-                  <td>{{$invitation->group->name}}</td>
-                    <td>{{\Illuminate\Support\Carbon::parse($invitation->group->eventDate)->format('d-m-Y')}}</td>
+                  <td>{{$oldInvitation->rallye->title}}</td>
+                  @if($oldInvitation->group != null)
+                    <td>{{$oldInvitation->group->name}}</td>
+                    <td>{{\Illuminate\Support\Carbon::parse($oldInvitation->group->eventDate)->format('d-m-Y')}}</td>
                   @else
                     <td>-</td>
                     <td>-</td>
                   @endif
-                  <td>{{$invitation->venue_address}}</td>
-                  <td>{{$invitation->theme_dress_code}}</td>
-                  <td>{{$invitation->user->name}}</td>
+                  <td>{{$oldInvitation->venue_address}}</td>
+                  <td>{{$oldInvitation->theme_dress_code}}</td>
+                  <td>{{$oldInvitation->user->name}}</td>
                   <td class="text-warning">Finished</td>
                   <td> - </td>
                 </tr>
               @endforeach
+
               @foreach ($invitations as $invitation)
                 @if($invitation->group_id == $application->event_id)
                 <tr class="bg-success text-white">
@@ -296,9 +296,6 @@
       <div class="modal-body">
 
         <p for="">You are about to send or resend the invitation to <b>ALL</b> Rallye Members</p>
-
-        <input name="invitation_id" type="hidden"
-            value="{{$invitation->id}}">
 
         <div class="modal-footer">
           <a href="{{secure_url("/mails/$application->id")}}"><button type="button" class="btn btn-primary btn-md button-prevent-multiple-clicks"><span

@@ -56,6 +56,7 @@ class InvitationsController extends Controller
       $parent = Parents::where('user_id', Auth::user()->id)->first();
       $parentRallye = Parent_Rallye::where('parent_id', $parent->id)->where('active_rallye', '1')->first();
       $found = false;
+
       if ($parentRallye != null) {
         # on verifie que le parent est bien assigné à un group (evented) et on récupere son application
         $applications = Application::where('parent_id', $parent->id)
@@ -71,6 +72,7 @@ class InvitationsController extends Controller
           $applications  = Application::where('rallye_id', $application->rallye_id)->where('event_id', $application->event_id)->get();
 
           $applicationGroupIds = collect();
+
           # liste des groupes concernés (cas d'enfants dans différents groups)
           foreach ($applications as $application) {
             $applicationGroupIds[] = $application->event_id;
@@ -79,6 +81,7 @@ class InvitationsController extends Controller
           $limitDate = Carbon::now()->sub(1, 'day');
 
           $invitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->with('user')->get()->where('group.eventDate', '>=', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
+
           $oldInvitations = Invitation::with('group')->where('rallye_id', $parentRallye->rallye->id)->get()->where('group.eventDate', '<', $limitDate)->sortBy('group.eventDate', SORT_REGULAR, false);
 
           $groups = Group::oldest('eventDate')->get();

@@ -188,7 +188,7 @@
 </div>
 
 @else
-<p>E184: No Checkin found </p>
+<p>E184: No Checkin found or Noboby's anwered yet</p>
 @endif
 <br />
 
