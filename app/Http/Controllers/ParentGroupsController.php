@@ -426,15 +426,16 @@ class ParentGroupsController extends Controller
 
   private function getMailbody($rallye_title)
   {
-    $mailBodyPlacehodeler = "<p>Dear Parents</p>
-       <p><font color=\"grey\">Enter Your email body here...</font></p>
-       <br>
-       <br>
-       <br>
-       ---------------
-       <p>See you,</p>
-       <p>The $rallye_title Coordinators</p>
-       ";
+    // $mailBodyPlacehodeler = "<p>Dear Parents</p>
+    //    <p><font color=\"grey\">Enter Your email body here...</font></p>
+    //    <br>
+    //    <br>
+    //    <br>
+    //    ---------------
+    //    <p>See you,</p>
+    //    <p>The $rallye_title Coordinators</p>
+    //    ";
+    $mailBodyPlacehodeler = "";
     return $mailBodyPlacehodeler;
   }
 }
