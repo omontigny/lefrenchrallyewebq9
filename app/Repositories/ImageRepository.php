@@ -12,9 +12,9 @@ class ImageRepository
 
   public function setImageInfo($invitation, $rallye_name, $group_name)
   {
-    $imageName = $invitation->id . '_' . $group_name . '_' . $invitation->theme_dress_code . '.' . $invitation->extension;
-    $imageExpirationDate = Carbon::create($invitation->group->eventDate)->addMonths(2);
-    $imageMetadata = ["dress code" => $invitation->theme_dress_code, "name" => $imageName, "expiration date" => $imageExpirationDate, "rallye" => $rallye_name, "group" => $group_name];
+    $imageName = $invitation->id . '_' . str_replace(" ", "_", $group_name) . '_' . str_replace(" ", "_", $invitation->theme_dress_code) . '.' . $invitation->extension;
+    $imageExpirationDate = Carbon::create($invitation->group->eventDate)->addMonths(3);
+    $imageMetadata = ["dress code" => str_replace(" ", "_", $invitation->theme_dress_code), "name" => $imageName, "expiration date" => $imageExpirationDate, "rallye" => $rallye_name, "group" =>  str_replace(" ", "_", $group_name)];
     $fullImagePath = "/assets/images/invitations/" . $rallye_name . "/" . $imageName;
     return ["imageName" => $imageName, "imagePath" => $fullImagePath, "imageMetadata" => $imageMetadata];
   }
@@ -33,8 +33,9 @@ class ImageRepository
     Log::stack(['single', 'stdout'])->debug("Image name  for cloudinary search : " . $imageMetadata["name"]);
 
     # upload in Cloudinary
-    $expression = $imageMetadata["name"] . ' AND folder=Invitations/' . $rallye_name;
+    $expression = "tags=" . $imageMetadata["name"] . ' AND folder=Invitations/' . $rallye_name;
     //$expression = $imageMetadata["name"];
+    //Log::stack(['stdout'])->debug("[CLOUDINARY] : expression : " . $expression);
 
     $cloudinary = new Cloudinary();
     $resultSearch = $cloudinary->searchApi()
