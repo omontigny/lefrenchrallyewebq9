@@ -122,11 +122,8 @@ class GuestsController extends Controller
   public function store(Request $request)
   {
     // rules
-    // 1 parent can invite only 1 extra guest by Rallye and can invite twice in total in the Season
-    // One particular Extra guest can be invited only twice in the season
-
-    // TODO:
-    // voir le cas du parent ayant 2 enfants et du coup droit à 2 invitations par enfant.
+    // 1. A host child can only invite 1 extra guest per event
+    // 2. One specific extra guest can only participate twice a year
 
     $this->validate($request, [
       //Rules to validate
@@ -151,10 +148,6 @@ class GuestsController extends Controller
 
     if ($nbParentInvitationsForThisEvent >= 1) {
       return Redirect::back()->withError("E100: Sorry, you already invited one extra guest for this event");
-    }
-
-    if ($nbParentTotalInvitations >= 2) {
-      return Redirect::back()->withError("E101: Sorry, you have used your invitation limit count for this season.");
     }
 
     if ($nbGuestInvitations >= 2) {

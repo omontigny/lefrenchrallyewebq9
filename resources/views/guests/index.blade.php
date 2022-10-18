@@ -9,9 +9,8 @@
 <hr>
 <p><b>Extra Guest Rules</b></p>
 <ol>
-  <li>A children can invite only 1 extra guest per event.</li>
-  <li>A children can invite only 2 extra guests in total.</li>
-  <li>One specific extra guest can participate only twice a year.</li>
+  <li>A host child can only invite 1 extra guest per event.</li>
+  <li>One specific extra guest can only participate twice a year.</li>
 </ol>
 <hr>
 <h3>Add a new Extra Guest</h3>
