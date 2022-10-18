@@ -240,6 +240,22 @@
         $(".menu > ul").toggleClass('show-on-mobile');
         e.preventDefault();
       });
+
+      $('.table').DataTable({
+        //retrieve: true,
+        destroy: true,
+        ordering: true,
+        filtering: true,
+        searching: true,
+        "displayStart": 150,
+        "lengthMenu": [ 150, 200],
+        dom: 'Bfrtip',
+        buttons: [
+        'copy',
+        'csv',
+        'print'
+        ]
+      });
       //when clicked on mobile-menu, normal menu is shown as a list, classic rwd menu story (thanks mwl from stackoverflow)
     });
 </script>
